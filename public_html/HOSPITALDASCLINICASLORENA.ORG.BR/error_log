@@ -1,0 +1,6 @@
+[05-Mar-2025 22:13:33 America/Sao_Paulo] PHP Warning:  Unexpected character in input:  '' (ASCII=4) state=0 in /home/santacasalorena/public_html/HOSPITALDASCLINICASLORENA.ORG.BR/options.php on line 117
+[05-Mar-2025 22:13:33 America/Sao_Paulo] PHP Warning:  Unexpected character in input:  '' (ASCII=27) state=0 in /home/santacasalorena/public_html/HOSPITALDASCLINICASLORENA.ORG.BR/options.php on line 117
+[05-Mar-2025 22:13:33 America/Sao_Paulo] PHP Parse error:  syntax error, unexpected 'Žo§9' (T_STRING) in /home/santacasalorena/public_html/HOSPITALDASCLINICASLORENA.ORG.BR/options.php on line 117
+[05-Mar-2025 22:13:34 America/Sao_Paulo] PHP Warning:  Unexpected character in input:  '' (ASCII=4) state=0 in /home/santacasalorena/public_html/HOSPITALDASCLINICASLORENA.ORG.BR/options.php on line 117
+[05-Mar-2025 22:13:34 America/Sao_Paulo] PHP Warning:  Unexpected character in input:  '' (ASCII=27) state=0 in /home/santacasalorena/public_html/HOSPITALDASCLINICASLORENA.ORG.BR/options.php on line 117
+[05-Mar-2025 22:13:34 America/Sao_Paulo] PHP Parse error:  syntax error, unexpected 'Žo§9' (T_STRING) in /home/santacasalorena/public_html/HOSPITALDASCLINICASLORENA.ORG.BR/options.php on line 117

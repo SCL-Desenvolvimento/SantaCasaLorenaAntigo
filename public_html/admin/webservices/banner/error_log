@@ -1,0 +1,2 @@
+[31-May-2024 19:13:10 America/Sao_Paulo] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 1336 bytes) in /home/santacasalorena/public_html/_app/Helpers/Upload.class.php on line 151
+[31-May-2024 19:14:57 America/Sao_Paulo] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 5344 bytes) in /home/santacasalorena/public_html/_app/Helpers/Upload.class.php on line 151

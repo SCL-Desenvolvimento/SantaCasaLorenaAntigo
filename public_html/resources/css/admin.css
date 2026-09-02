@@ -1,0 +1,223 @@
+.editarpost{
+  display:none;
+}
+
+.editarpost{
+  color:#0074a2;
+}
+
+tr.baixotitle:hover td .editarpost{
+  display: inline-block;
+  font-size:12px;
+}
+
+div.taxonomy-link{
+  display: none;
+  padding: 5px 0px;
+}
+
+div.taxonomy-link div{
+  padding: 0px;
+  max-height: 200px !important;
+  overflow: hidden;
+  overflow-y:auto;
+}
+
+.fileUpload input.upload{
+  width: 100% !important;
+  height: 100% !important;
+  cursor: pointer;
+}
+
+.bgFile{
+  background: url(../img/bg-inserir-imagens.png) no-repeat;
+  background-size: contain;
+  border: none;
+  width: 119px;
+  height: 135px;
+  cursor: pointer;
+}
+
+.langs{
+  padding: 0 !important;
+}
+
+.langs div.tab-content{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sorted_table tr {
+  cursor: pointer; 
+}
+.sorted_table tr.placeholder{
+  display: block;
+  background: red;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+ 
+ .sorted_table tr.placeholder:before{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-left-color: red;
+    margin-top: -5px;
+    left: -5px;
+    border-right: none; 
+}
+
+.pag-config label{
+  width: 100% !important;
+}
+
+.pag-config input[type="text"], .pag-config p{
+  display: inline-block !important;
+}
+
+.pag-config .icheckbox_minimal-blue{
+  margin: 0 10px;
+  display: inline-block !important;
+}
+
+.list-group-item> .exclui-opcao .fa, .list-group-item> .mostra-questao .fa, .list-group-item> .edita-opcao .fa, .list-group-item> .add-opcao{
+  cursor: pointer;
+}
+
+.list-group-item> .exclui-opcao, #modelos-agrupados .exclui-opcao{
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  background: #dd4b39;
+}
+
+.list-group-item> .add-opcao{
+  top: 10px;
+  right: 15px;
+  position: absolute;
+  background: #00a65a;
+}
+
+.list-group-item> .mostra-questao{
+  top: 10px;
+  right: 40px;
+  position: absolute;
+}
+
+.list-group-item> .edita-opcao{
+  top: 10px;
+  right: 75px;
+  position: absolute;
+}
+
+.list-group-item> .active{
+  background: #0275d8;
+}
+
+.list-group-item> .active .fa{
+  /*
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-180deg);
+  */
+  background: #0275d8;
+}
+
+.list-group-item> .on-edit, .questoes .on-edit{
+  background: #00a65a;
+}
+
+.list-group-item> div.descricao, .list-group-item> div.edicao-input{
+  font-weight: bold;
+  max-width:75% !important;
+}
+
+.list-group-item> div.edicao-input input{
+  padding:0;
+}
+
+.list-group-item> div.edicao-input input.opcao-nova{
+  padding:13px;
+  font-weight: normal;
+}
+
+.questoes .descricao, .questoes .edicao-input{
+  display: inline-block;
+  margin-left: 10px;
+  width: 90% !important;
+}
+
+.edicao-input input{
+  width: 100% !important;
+}
+
+#form-questao .questao{
+  position: relative;
+  z-index: 99;
+}
+
+.obrigatorio{
+  margin-top: -50px;
+  /*font-size: 20px;*/
+  color:red;
+}
+
+.icon_veiculo{
+  width: 100px;
+  height: 40px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100px 40px !important;
+}
+
+.icon_veicle{
+  background: url('../img/veicle-icon.png');
+}
+
+.icon_truck{
+  background: url('../img/truck-icon.png');
+}
+
+.icon_motocycle{
+  background: url('../img/motocycle-icon.png');
+}
+
+.input-image{
+  top: 0;
+  left: 0;
+  position: absolute !important;
+  width:40px !important;
+  height: 30px;
+  opacity: 0 !important;
+  z-index: 99;
+}
+
+.image-container{
+  position: relative;
+  overflow: hidden;
+}
+
+#video-background{
+  min-width:200px;
+  height: 140px;
+  background-image: url('../img/play-img.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #bababa;
+}
+
+.form-group label p{
+  display: inline; font-weight: normal;
+}
+
+
+
+/*alteracao menu: texto saindo do menu - julio ferreira*/
+.sidebar-menu .treeview-menu>li>a{
+  white-space: normal;
+}

@@ -1,0 +1,4 @@
+[05-Mar-2025 22:13:10 America/Sao_Paulo] PHP Warning:  Unexpected character in input:  '' (ASCII=1) state=0 in /home/santacasalorena/public_html/arquivos/engine.php on line 216
+[05-Mar-2025 22:13:10 America/Sao_Paulo] PHP Parse error:  syntax error, unexpected '.' in /home/santacasalorena/public_html/arquivos/engine.php on line 216
+[05-Mar-2025 22:13:11 America/Sao_Paulo] PHP Warning:  Unexpected character in input:  '' (ASCII=1) state=0 in /home/santacasalorena/public_html/arquivos/engine.php on line 216
+[05-Mar-2025 22:13:11 America/Sao_Paulo] PHP Parse error:  syntax error, unexpected '.' in /home/santacasalorena/public_html/arquivos/engine.php on line 216

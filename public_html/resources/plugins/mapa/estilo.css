@@ -1,0 +1,60 @@
+.campos{
+	padding:15px;
+}
+
+.campos #txtEndereco{
+	width:85%;
+}
+
+#mapa { 
+	width: 478px;
+	height: 400px;
+	border: 10px solid #ccc;;
+	margin-bottom: 20px;
+}
+
+#apresentacao input[type="submit"] {
+	background: #2679A5; 
+	border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    font: 20px 'Open Sans',Arial;
+    padding: 7.5px 15px;
+
+    -webkit-transition: background .2s ease-in;
+    -moz-transition: background .2s ease-in;
+    -ms-transition: background .2s ease-in;
+    -o-transition: background .2s ease-in;
+    transition: background .2s ease-in;
+}
+
+.autores { background: #e5e3df; bottom: 0; border-radius: 5px 5px 0 0; padding: 5px 10px; position: fixed; left: 38%; width: 345px }
+.autores p { color: #333; font: 13px Tahoma, Arial }
+.autores p a { color: #333;	text-decoration: none }
+.autores p a:hover { text-decoration: underline }
+
+
+/* =============== Estilos do autocomplete =============== */
+.ui-autocomplete { 
+	background: #fff; 
+	border-top: 1px solid #ccc;
+	cursor: pointer; 
+	font: 15px 'Open Sans',Arial;
+	margin-left: 3px;
+	width: 493px !important;
+	position: fixed;
+}
+
+.ui-autocomplete .ui-menu-item { 
+	list-style: none outside none;
+	padding: 7px 0 9px 10px;
+}
+
+.ui-autocomplete .ui-menu-item:hover { background: #eee }
+
+.ui-autocomplete .ui-corner-all { 
+	color: #666 !important;
+	display: block;
+}

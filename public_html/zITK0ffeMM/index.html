@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Santa Casa</title>
+	<style type="text/css">
+		*{
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			outline: 0;
+		}
+		html{
+			height: 100vh;
+			line-height: 100vh;
+			font-size: 0;
+			text-align: center;
+			background: black;
+		}
+		body{
+			display: inline-block;
+			vertical-align: middle;
+			background: #fff;
+			width: 10px;
+			height: 10px;
+			position: relative;
+			cursor: pointer;
+		}
+		.slide{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #fff;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			z-index: 0;
+			transition: opacity 500ms;
+			opacity: 0;
+		}
+		.slide.show{
+			opacity: 1;
+		}
+
+		#slide1{background-image: url('lib.images/P1.jpg');}
+		#slide2{background-image: url('lib.images/P2.jpg');}
+		#slide3{background-image: url('lib.images/P3.jpg');}
+		#slide4{background-image: url('lib.images/P4.jpg');}
+		#slide5{background-image: url('lib.images/P5.jpg');}
+		#slide6{background-image: url('lib.images/P6.jpg');}
+		#slide7{background-image: url('lib.images/P7.jpg');}
+		#slide8{background-image: url('lib.images/P8.jpg');}
+		#slide9{background-image: url('lib.images/P9.jpg');}
+		#slide10{background-image: url('lib.images/P10.jpg');}
+		#slide11{background-image: url('lib.images/P11.jpg');}
+		#slide12{background-image: url('lib.images/P12.jpg');}
+		#slide13{background-image: url('lib.images/P13.jpg');}
+		#slide14{background-image: url('lib.images/P14.jpg');}
+		#slide15{background-image: url('lib.images/P15.jpg');}
+		#slide16{background-image: url('lib.images/P16.jpg');}
+		#slide17{background-image: url('lib.images/P17.jpg');}
+		#slide18{background-image: url('lib.images/P18.jpg');}
+		#slide19{background-image: url('lib.images/P19.jpg');}
+		#slide20{background-image: url('lib.images/P20.jpg');}
+		#slide21{background-image: url('lib.images/P21.jpg');}
+
+		.btn-home{
+			top: 37.2%;
+			width: 9.25%;
+			height: 29%;
+		}
+		.btn{
+			display: none;
+		}
+		.btn.dis{
+			display: block;
+			top: 32%;
+			width: 20.3%;
+			height: 36%;
+			border-radius: 50%;
+			background: rgba(0,0,0,0);
+		}
+		.btn-dire{ left: 52%; }
+		.btn-esqu{ left: 27.5%; }
+		.btn-meio{ left: 39.9%; }
+		#btn-home1{ left: 6.75%; width: 8%; }
+		#btn-home2{ left: 17.2%; }
+		#btn-home3{ left: 28.3%; }
+		#btn-home4{ left: 39.45%; }
+		#btn-home5{ left: 50.65%; }
+		#btn-home6{ left: 61.7%; }
+		#btn-home7{ left: 72.9%; }
+		#btn-home8{ left: 83.9%; }
+		#next,
+		#prev,
+		#home,
+		.btn,
+		.btn-home{
+			z-index: 3;
+			position: absolute;
+		}
+		#next,
+		#prev{
+			bottom: 0;
+			width: 7%;
+			height: 24%;
+		}
+		#home{
+			top: 2.75%;
+			right: 1.5%;
+			width: 3.4%;
+			height: 6%;
+			border-radius: 50%;
+		}
+		#prev{
+			left: 0;
+		}
+		#next{
+			right: 0;
+		}
+		@media screen and (orientation:landscape){
+			body{
+				width: 177.77vh;
+				height: 100vh;
+			}
+		}
+		@media screen and (max-width: 177.77vh){
+			body{
+				width: 100vw;
+				height: 56.25vw;
+			}
+		}
+		@media screen and (orientation:portrait){
+			body{
+				width: 100vw;
+				height: 56.25vw;
+			}
+		}
+	</style>
+	<script type="text/javascript">
+		function foreach(arr, fun){
+			for (var i = 0; i < arr.length; i++) {
+				fun(arr[i], i);
+			}
+		}
+
+
+		var slide = [];
+		var btn = [];
+		var num = 21;
+		var index, comp, atual, meio;
+		var disable_next = disable_prev = disable_home = disable_seti = true;
+		var allowmeio = [[15,16],[17,18],[19,20]];
+		window.onload = function(){
+			meio = document.querySelector('.btn-meio')
+			index = 1;
+			for(var i = 1; i <= num; i++){
+				var sld = '#slide' + i;
+				slide.push(document.querySelector(sld));
+			}
+			btn = document.querySelectorAll('.btn');
+			console.log(btn);
+			draw();
+		}
+		function draw(){
+			console.log(index);
+
+			if(index == 1){
+				disable_btn();
+				disable_prev = true;
+				disable_home = true;
+				disable_next = true;
+				disable_seti = false;
+			} else if(index == num){
+				enable_btn();
+				disable_next = true;
+				disable_seti = true;
+			} else {
+				enable_btn();
+				disable_prev = false;
+				disable_home = false;
+				disable_next = false;
+				disable_seti = true;
+			}
+
+
+			foreach(slide, s=>{
+				s.classList.remove("show");	
+			});
+			comp = "#slide" + index;
+			atual = document.querySelector(comp);
+			atual.classList.add('show');
+		}
+		function prev(){
+			if(!disable_prev){
+				index--;
+				draw();
+			}
+		}
+		function next(){
+			if(!disable_next){
+				index++;
+				draw();
+			}
+		}
+		function home(){
+			if(!disable_home){
+				index = 1;
+				draw();
+			}
+		}
+		function set_index(i){
+			if(!disable_seti){
+				index = i;
+				draw();
+			}
+		}
+		function set_indexi(array){
+			foreach(array, att=>{
+				if(index == att[0]){
+					index = att[1];
+					draw();
+				}
+			});
+		}
+		function enable_btn(){
+			foreach(btn, button=>{
+				button.classList.add('dis');
+			});
+			meio.classList.remove('dis');
+			foreach(allowmeio, i=>{
+				if (i[0] == index) {
+					meio.classList.add('dis');
+				}
+			});
+		}
+		function disable_btn(){
+			foreach(btn, button=>{
+				button.classList.remove('dis');
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="slide1" class="slide"></div>
+	<div id="slide2" class="slide"></div>
+	<div id="slide3" class="slide"></div>
+	<div id="slide4" class="slide"></div>
+	<div id="slide5" class="slide"></div>
+	<div id="slide6" class="slide"></div>
+	<div id="slide7" class="slide"></div>
+	<div id="slide8" class="slide"></div>
+	<div id="slide9" class="slide"></div>
+	<div id="slide10" class="slide"></div>
+	<div id="slide11" class="slide"></div>
+	<div id="slide12" class="slide"></div>
+	<div id="slide13" class="slide"></div>
+	<div id="slide14" class="slide"></div>
+	<div id="slide15" class="slide"></div>
+	<div id="slide16" class="slide"></div>
+	<div id="slide17" class="slide"></div>
+	<div id="slide18" class="slide"></div>
+	<div id="slide19" class="slide"></div>
+	<div id="slide20" class="slide"></div>
+	<div id="slide21" class="slide"></div>
+	<a id="prev" href="javascript:prev()"></a>
+	<a id="next" href="javascript:next()"></a>
+	<a id="home" href="javascript:home()"></a>
+	<a href="javascript:set_index(2)" id="btn-home1" class="btn-home"></a>
+	<a href="javascript:set_index(3)" id="btn-home2" class="btn-home"></a>
+	<a href="javascript:set_index(6)" id="btn-home3" class="btn-home"></a>
+	<a href="javascript:set_index(9)" id="btn-home4" class="btn-home"></a>
+	<a href="javascript:set_index(12)" id="btn-home5" class="btn-home"></a>
+	<a href="javascript:set_index(15)" id="btn-home6" class="btn-home"></a>
+	<a href="javascript:set_index(17)" id="btn-home7" class="btn-home"></a>
+	<a href="javascript:set_index(19)" id="btn-home8" class="btn-home"></a>
+
+	<a href="javascript:set_indexi([[3,4],[6,7],[9,10],[12,13]])" class="btn btn-esqu"></a>
+	<a href="javascript:set_indexi([[3,5],[6,8],[9,11],[12,14]])" class="btn btn-dire"></a>
+	<a href="javascript:set_indexi([[15,16],[17,18],[19,20]])" class="btn btn-meio"></a>
+</body>
+</html>
