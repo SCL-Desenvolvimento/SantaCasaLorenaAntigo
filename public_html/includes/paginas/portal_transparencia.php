@@ -143,10 +143,35 @@ if (!function_exists('tpMunicipalDirectoryLabel')) {
     }
 }
 
+if (!function_exists('tpNormalizeKey')) {
+    function tpNormalizeKey($value)
+    {
+        $value = strtr($value, array(
+            'á' => 'a', 'à' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a',
+            'Á' => 'A', 'À' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
+            'é' => 'e', 'è' => 'e', 'ê' => 'e', 'ë' => 'e',
+            'É' => 'E', 'È' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+            'í' => 'i', 'ì' => 'i', 'î' => 'i', 'ï' => 'i',
+            'Í' => 'I', 'Ì' => 'I', 'Î' => 'I', 'Ï' => 'I',
+            'ó' => 'o', 'ò' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o',
+            'Ó' => 'O', 'Ò' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
+            'ú' => 'u', 'ù' => 'u', 'û' => 'u', 'ü' => 'u',
+            'Ú' => 'U', 'Ù' => 'U', 'Û' => 'U', 'Ü' => 'U',
+            'ç' => 'c', 'Ç' => 'C'
+        ));
+
+        $value = function_exists('mb_strtoupper')
+            ? mb_strtoupper($value, 'UTF-8')
+            : strtoupper($value);
+
+        return preg_replace('/[^A-Z0-9]+/', ' ', trim($value));
+    }
+}
+
 if (!function_exists('tpIsFomentoDirectory')) {
     function tpIsFomentoDirectory($directoryName)
     {
-        return stripos($directoryName, 'TERMO DE FOMENTO') !== false;
+        return strpos(tpNormalizeKey($directoryName), 'TERMO DE FOMENTO') !== false;
     }
 }
 
@@ -330,6 +355,18 @@ if (!function_exists('tpExistingStaticDocuments')) {
     }
 }
 
+if (!function_exists('tpAppendGroupDocument')) {
+    function tpAppendGroupDocument(&$groups, $groupTitle, $document)
+    {
+        foreach ($groups as &$group) {
+            if ($group['title'] === $groupTitle) {
+                $group['documents'][] = $document;
+                return;
+            }
+        }
+    }
+}
+
 if (!function_exists('tpRenderStaticDocument')) {
     function tpRenderStaticDocument($document)
     {
@@ -437,13 +474,11 @@ $tpInstitutionalGroups = array(
     )
 );
 
-$tpOtherGroups = array(
+$tpStateStaticGroups = array(
     array(
-        'title' => 'Convênios e termos já publicados',
+        'title' => 'Convênios estaduais já publicados',
         'documents' => array(
-            array('title' => 'Convênio estadual 383/2020', 'file' => 'convenio-383-2020.pdf'),
-            array('title' => 'Convênio municipal 01/2021', 'file' => 'convenio municipal 01_2021.pdf'),
-            array('title' => 'Termo aditivo 23 — Convênio municipal 01/2021', 'file' => 'termo-aditivo-23-convenio-01-2021.pdf')
+            array('title' => 'Convênio estadual 383/2020', 'file' => 'convenio-383-2020.pdf')
         )
     ),
     array(
@@ -456,40 +491,70 @@ $tpOtherGroups = array(
     )
 );
 
+$tpMunicipalStaticGroups = array(
+    array(
+        'title' => 'Convênio municipal e termos já publicados',
+        'documents' => array(
+            array('title' => 'Convênio municipal 01/2021', 'file' => 'convenio municipal 01_2021.pdf'),
+            array('title' => 'Termo aditivo 23 — Convênio municipal 01/2021', 'file' => 'termo-aditivo-23-convenio-01-2021.pdf')
+        )
+    )
+);
+
 $tpListedStaticFiles = array();
-foreach (array_merge($tpInstitutionalGroups, $tpOtherGroups) as $group) {
+foreach (array_merge($tpInstitutionalGroups, $tpStateStaticGroups, $tpMunicipalStaticGroups) as $group) {
     foreach ($group['documents'] as $document) {
         $tpListedStaticFiles[$document['file']] = true;
     }
 }
 
 list(, $tpAvailableStaticFiles) = tpDirectoryEntries($tpPageDirectory);
-$tpAdditionalStaticDocuments = array();
 foreach ($tpAvailableStaticFiles as $file) {
-    if (!isset($tpListedStaticFiles[$file])) {
-        $tpAdditionalStaticDocuments[] = array(
-            'title' => tpDocumentLabel($file),
-            'file' => $file
-        );
+    if (isset($tpListedStaticFiles[$file])) {
+        continue;
+    }
+
+    $document = array('title' => tpDocumentLabel($file), 'file' => $file);
+    $fileKey = tpNormalizeKey($file);
+
+    if (strpos($fileKey, 'DEMONSTRACOES FINANCEIRAS') !== false) {
+        tpAppendGroupDocument($tpInstitutionalGroups, 'Demonstrações financeiras', $document);
+    } elseif (strpos($fileKey, 'QUADRO DE DIRIGENTES') !== false) {
+        tpAppendGroupDocument($tpInstitutionalGroups, 'Quadro de dirigentes', $document);
+    } elseif (strpos($fileKey, 'EMENDA PARLAMENTAR') !== false) {
+        tpAppendGroupDocument($tpStateStaticGroups, 'Emendas parlamentares', $document);
+    } else {
+        tpAppendGroupDocument($tpStateStaticGroups, 'Convênios estaduais já publicados', $document);
     }
 }
 
-if (!empty($tpAdditionalStaticDocuments)) {
-    $tpOtherGroups[] = array(
-        'title' => 'Documentos adicionais',
-        'documents' => $tpAdditionalStaticDocuments
-    );
-}
-
-$tpStateDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . 'CONVÊNIOS ESTADUAIS';
-$tpStateRelative = 'CONVÊNIOS ESTADUAIS';
-$tpMunicipalDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . 'CONVÊNIO_MUNICIPAL';
-$tpMunicipalRelative = 'CONVÊNIO_MUNICIPAL';
+$tpStateDirectory = null;
+$tpStateRelative = null;
+$tpMunicipalDirectory = null;
+$tpMunicipalRelative = null;
 $tpMunicipalGroups = array();
 $tpFomentoDirectory = null;
 $tpFomentoRelative = null;
 
-list($tpMunicipalDirectories) = tpDirectoryEntries($tpMunicipalDirectory);
+list($tpArchiveDirectories) = tpDirectoryEntries($tpArchiveDirectory);
+foreach ($tpArchiveDirectories as $directory) {
+    $directoryKey = tpNormalizeKey($directory);
+
+    if (strpos($directoryKey, 'MUNICIPAL') !== false) {
+        $tpMunicipalDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . $directory;
+        $tpMunicipalRelative = $directory;
+    } elseif (strpos($directoryKey, 'ESTADUAL') !== false) {
+        $tpStateDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . $directory;
+        $tpStateRelative = $directory;
+    }
+}
+
+if ($tpMunicipalDirectory) {
+    list($tpMunicipalDirectories) = tpDirectoryEntries($tpMunicipalDirectory);
+} else {
+    $tpMunicipalDirectories = array();
+}
+
 foreach ($tpMunicipalDirectories as $directory) {
     $relativePath = $tpMunicipalRelative . '/' . $directory;
     $absolutePath = $tpMunicipalDirectory . DIRECTORY_SEPARATOR . $directory;
@@ -512,7 +577,7 @@ usort($tpMunicipalGroups, function ($firstGroup, $secondGroup) {
 });
 
 $tpStaticCount = 0;
-foreach (array_merge($tpInstitutionalGroups, $tpOtherGroups) as $group) {
+foreach (array_merge($tpInstitutionalGroups, $tpStateStaticGroups, $tpMunicipalStaticGroups) as $group) {
     $tpStaticCount += count(tpExistingStaticDocuments($group['documents']));
 }
 $tpArchiveCount = tpCountDocuments($tpArchiveDirectory);
@@ -831,7 +896,16 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                     <p class="tp-section-description">Termos de convênio, planos de trabalho e relatórios organizados por ano e número do convênio.</p>
                     <div class="tp-accordion">
                         <?php
-                        list($tpStateYears) = tpDirectoryEntries($tpStateDirectory);
+                        foreach ($tpStateStaticGroups as $group) {
+                            tpRenderStaticGroup($group);
+                        }
+
+                        if ($tpStateDirectory) {
+                            list($tpStateYears) = tpDirectoryEntries($tpStateDirectory);
+                        } else {
+                            $tpStateYears = array();
+                        }
+
                         rsort($tpStateYears, SORT_NATURAL);
                         foreach ($tpStateYears as $yearDirectory):
                             tpRenderDirectory(
@@ -852,6 +926,9 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                     </div>
                     <p class="tp-section-description">Termos aditivos, planos de trabalho e relatórios do convênio municipal, separados por exercício.</p>
                     <div class="tp-accordion">
+                        <?php foreach ($tpMunicipalStaticGroups as $group): ?>
+                            <?php tpRenderStaticGroup($group); ?>
+                        <?php endforeach; ?>
                         <?php foreach ($tpMunicipalGroups as $group): ?>
                             <?php tpRenderDirectory(
                                 $group['absolutePath'],
@@ -873,19 +950,6 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                         <?php if ($tpFomentoDirectory): ?>
                             <?php tpRenderDirectory($tpFomentoDirectory, $tpFomentoRelative, 'Termos de fomento', 1); ?>
                         <?php endif; ?>
-                    </div>
-                </section>
-
-                <section class="tp-section">
-                    <div class="tp-section-heading">
-                        <span class="tp-section-icon fa fa-archive" aria-hidden="true"></span>
-                        <h2>Outros documentos publicados</h2>
-                    </div>
-                    <p class="tp-section-description">Convênios, termos e demonstrativos consolidados que já faziam parte deste portal.</p>
-                    <div class="tp-accordion">
-                        <?php foreach ($tpOtherGroups as $group): ?>
-                            <?php tpRenderStaticGroup($group); ?>
-                        <?php endforeach; ?>
                     </div>
                 </section>
             </div>
