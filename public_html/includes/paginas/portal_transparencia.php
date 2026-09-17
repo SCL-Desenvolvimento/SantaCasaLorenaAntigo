@@ -543,7 +543,7 @@ foreach ($tpArchiveDirectories as $directory) {
     if (strpos($directoryKey, 'MUNICIPAL') !== false) {
         $tpMunicipalDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . $directory;
         $tpMunicipalRelative = $directory;
-    } elseif (strpos($directoryKey, 'ESTADUAL') !== false) {
+    } elseif (strpos($directoryKey, 'ESTADUA') !== false) {
         $tpStateDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . $directory;
         $tpStateRelative = $directory;
     }
