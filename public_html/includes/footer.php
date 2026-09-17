@@ -11,7 +11,7 @@
 			<p class='fonte2'>
 				Fique por dentro do detalhamento das despesas da Irmandade da Santa Casa de Misericórdia de Lorena.
 			</p>
-			<a class='upper' href='<?php  echo ROOT."institucional/portal_transparencia"; ?>'>clique aqui<i class='fa fa-fw fa-arrow-right'></i></a>
+			<a class='upper' href='<?php  echo ROOT."institucional/portal-transparencia"; ?>'>clique aqui<i class='fa fa-fw fa-arrow-right'></i></a>
 		</div>
 
 		<div class="col-md-3 col-sm-12">
