@@ -132,6 +132,65 @@ if (!function_exists('tpDirectoryLabel')) {
     }
 }
 
+if (!function_exists('tpMunicipalDirectoryLabel')) {
+    function tpMunicipalDirectoryLabel($directoryName)
+    {
+        if (preg_match('/\b(20\d{2})\b/u', $directoryName, $matches)) {
+            return $matches[1];
+        }
+
+        return tpDirectoryLabel($directoryName);
+    }
+}
+
+if (!function_exists('tpIsFomentoDirectory')) {
+    function tpIsFomentoDirectory($directoryName)
+    {
+        return stripos($directoryName, 'TERMO DE FOMENTO') !== false;
+    }
+}
+
+if (!function_exists('tpIsDocumentFile')) {
+    function tpIsDocumentFile($fileName)
+    {
+        return (bool) preg_match('/\.(?:pdf|docx?|xlsx?|ods|csv|pptx?|odt|rtf|txt|zip)$/i', $fileName);
+    }
+}
+
+if (!function_exists('tpDocumentType')) {
+    function tpDocumentType($fileName)
+    {
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        return $extension ? strtoupper($extension) : 'ARQUIVO';
+    }
+}
+
+if (!function_exists('tpDocumentIcon')) {
+    function tpDocumentIcon($fileName)
+    {
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        if ($extension === 'pdf') {
+            return 'fa-file-pdf-o';
+        }
+
+        if (in_array($extension, array('doc', 'docx', 'odt', 'rtf'), true)) {
+            return 'fa-file-word-o';
+        }
+
+        if (in_array($extension, array('xls', 'xlsx', 'ods', 'csv'), true)) {
+            return 'fa-file-excel-o';
+        }
+
+        if (in_array($extension, array('ppt', 'pptx'), true)) {
+            return 'fa-file-powerpoint-o';
+        }
+
+        return 'fa-file-o';
+    }
+}
+
 if (!function_exists('tpDirectoryEntries')) {
     function tpDirectoryEntries($directory)
     {
@@ -151,7 +210,7 @@ if (!function_exists('tpDirectoryEntries')) {
 
             if (is_dir($fullPath)) {
                 $directories[] = $entry;
-            } elseif (preg_match('/\.pdf$/i', $entry)) {
+            } elseif (is_file($fullPath) && tpIsDocumentFile($entry)) {
                 $files[] = $entry;
             }
         }
@@ -189,14 +248,15 @@ if (!function_exists('tpRenderDocument')) {
 
         $url = $tpArchiveUrl . tpEncodedPath($relativePath);
         $searchText = $label . ' ' . str_replace(array('/', '_'), ' ', $relativePath);
+        $documentType = tpDocumentType($absolutePath);
         ?>
         <a class="tp-document" href="<?php echo tpEscape($url); ?>" target="_blank" rel="noopener"
            data-search="<?php echo tpEscape($searchText); ?>"
-           aria-label="<?php echo tpEscape($label); ?>, abrir PDF em nova aba">
-            <span class="tp-document-icon" aria-hidden="true"><span class="fa fa-file-pdf-o"></span></span>
+           aria-label="<?php echo tpEscape($label); ?>, abrir arquivo em nova aba">
+            <span class="tp-document-icon" aria-hidden="true"><span class="fa <?php echo tpEscape(tpDocumentIcon($absolutePath)); ?>"></span></span>
             <span class="tp-document-text">
                 <span class="tp-document-title"><?php echo tpEscape($label); ?></span>
-                <span class="tp-document-meta">PDF <span aria-hidden="true">&bull;</span> <?php echo tpEscape(tpHumanSize(filesize($absolutePath))); ?></span>
+                <span class="tp-document-meta"><?php echo tpEscape($documentType); ?> <span aria-hidden="true">&bull;</span> <?php echo tpEscape(tpHumanSize(filesize($absolutePath))); ?></span>
             </span>
             <span class="fa fa-external-link tp-external" aria-hidden="true"></span>
         </a>
@@ -208,6 +268,11 @@ if (!function_exists('tpRenderDirectory')) {
     function tpRenderDirectory($absolutePath, $relativePath, $label, $level)
     {
         $count = tpCountDocuments($absolutePath);
+
+        if ($count === 0) {
+            return;
+        }
+
         list($directories, $files) = tpDirectoryEntries($absolutePath);
         $className = $level === 1 ? 'tp-year' : 'tp-subgroup';
         ?>
@@ -246,6 +311,25 @@ if (!function_exists('tpRenderDirectory')) {
     }
 }
 
+if (!function_exists('tpExistingStaticDocuments')) {
+    function tpExistingStaticDocuments($documents)
+    {
+        global $tpPageDirectory;
+
+        $existingDocuments = array();
+
+        foreach ($documents as $document) {
+            $path = $tpPageDirectory . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $document['file']);
+
+            if (is_file($path)) {
+                $existingDocuments[] = $document;
+            }
+        }
+
+        return $existingDocuments;
+    }
+}
+
 if (!function_exists('tpRenderStaticDocument')) {
     function tpRenderStaticDocument($document)
     {
@@ -253,15 +337,16 @@ if (!function_exists('tpRenderStaticDocument')) {
 
         $path = $tpPageDirectory . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $document['file']);
         $url = $tpPageUrl . tpEncodedPath($document['file']);
-        $size = is_file($path) ? tpHumanSize(filesize($path)) : 'PDF';
+        $documentType = tpDocumentType($document['file']);
+        $size = tpHumanSize(filesize($path));
         ?>
         <a class="tp-document" href="<?php echo tpEscape($url); ?>" target="_blank" rel="noopener"
            data-search="<?php echo tpEscape($document['title']); ?>"
-           aria-label="<?php echo tpEscape($document['title']); ?>, abrir PDF em nova aba">
-            <span class="tp-document-icon" aria-hidden="true"><span class="fa fa-file-pdf-o"></span></span>
+           aria-label="<?php echo tpEscape($document['title']); ?>, abrir arquivo em nova aba">
+            <span class="tp-document-icon" aria-hidden="true"><span class="fa <?php echo tpEscape(tpDocumentIcon($document['file'])); ?>"></span></span>
             <span class="tp-document-text">
                 <span class="tp-document-title"><?php echo tpEscape($document['title']); ?></span>
-                <span class="tp-document-meta">PDF<?php echo $size !== 'PDF' ? ' <span aria-hidden="true">&bull;</span> ' . tpEscape($size) : ''; ?></span>
+                <span class="tp-document-meta"><?php echo tpEscape($documentType); ?> <span aria-hidden="true">&bull;</span> <?php echo tpEscape($size); ?></span>
             </span>
             <span class="fa fa-external-link tp-external" aria-hidden="true"></span>
         </a>
@@ -272,7 +357,12 @@ if (!function_exists('tpRenderStaticDocument')) {
 if (!function_exists('tpRenderStaticGroup')) {
     function tpRenderStaticGroup($group)
     {
-        $count = count($group['documents']);
+        $documents = tpExistingStaticDocuments($group['documents']);
+        $count = count($documents);
+
+        if ($count === 0) {
+            return;
+        }
         ?>
         <details class="tp-disclosure tp-year">
             <summary>
@@ -284,7 +374,7 @@ if (!function_exists('tpRenderStaticGroup')) {
             </summary>
             <div class="tp-panel">
                 <div class="tp-document-list">
-                    <?php foreach ($group['documents'] as $document): ?>
+                    <?php foreach ($documents as $document): ?>
                         <?php tpRenderStaticDocument($document); ?>
                     <?php endforeach; ?>
                 </div>
@@ -366,22 +456,64 @@ $tpOtherGroups = array(
     )
 );
 
-$tpMunicipalYears = array(
-    '2025' => "CONVÊNIO_MUNICIPAL/TA'S E PLANOS DE TRABALHO 2025",
-    '2024' => "CONVÊNIO_MUNICIPAL/TA'S  E PLANOS DE TRABALHO  2024",
-    '2023' => "CONVÊNIO_MUNICIPAL/TA'S  E PLANOS DE TRABALHO 2023",
-    '2022' => "CONVÊNIO_MUNICIPAL/TA'S  E PLANOS DE TRABALHO 2022",
-    '2021' => "CONVÊNIO_MUNICIPAL/CONVENIO_TA'S 2021"
-);
+$tpListedStaticFiles = array();
+foreach (array_merge($tpInstitutionalGroups, $tpOtherGroups) as $group) {
+    foreach ($group['documents'] as $document) {
+        $tpListedStaticFiles[$document['file']] = true;
+    }
+}
+
+list(, $tpAvailableStaticFiles) = tpDirectoryEntries($tpPageDirectory);
+$tpAdditionalStaticDocuments = array();
+foreach ($tpAvailableStaticFiles as $file) {
+    if (!isset($tpListedStaticFiles[$file])) {
+        $tpAdditionalStaticDocuments[] = array(
+            'title' => tpDocumentLabel($file),
+            'file' => $file
+        );
+    }
+}
+
+if (!empty($tpAdditionalStaticDocuments)) {
+    $tpOtherGroups[] = array(
+        'title' => 'Documentos adicionais',
+        'documents' => $tpAdditionalStaticDocuments
+    );
+}
 
 $tpStateDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . 'CONVÊNIOS ESTADUAIS';
 $tpStateRelative = 'CONVÊNIOS ESTADUAIS';
-$tpFomentoRelative = 'CONVÊNIO_MUNICIPAL/TERMO DE FOMENTO';
-$tpFomentoDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $tpFomentoRelative);
+$tpMunicipalDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . 'CONVÊNIO_MUNICIPAL';
+$tpMunicipalRelative = 'CONVÊNIO_MUNICIPAL';
+$tpMunicipalGroups = array();
+$tpFomentoDirectory = null;
+$tpFomentoRelative = null;
+
+list($tpMunicipalDirectories) = tpDirectoryEntries($tpMunicipalDirectory);
+foreach ($tpMunicipalDirectories as $directory) {
+    $relativePath = $tpMunicipalRelative . '/' . $directory;
+    $absolutePath = $tpMunicipalDirectory . DIRECTORY_SEPARATOR . $directory;
+
+    if (tpIsFomentoDirectory($directory)) {
+        $tpFomentoDirectory = $absolutePath;
+        $tpFomentoRelative = $relativePath;
+        continue;
+    }
+
+    $tpMunicipalGroups[] = array(
+        'absolutePath' => $absolutePath,
+        'relativePath' => $relativePath,
+        'label' => tpMunicipalDirectoryLabel($directory)
+    );
+}
+
+usort($tpMunicipalGroups, function ($firstGroup, $secondGroup) {
+    return strnatcmp($secondGroup['label'], $firstGroup['label']);
+});
 
 $tpStaticCount = 0;
 foreach (array_merge($tpInstitutionalGroups, $tpOtherGroups) as $group) {
-    $tpStaticCount += count($group['documents']);
+    $tpStaticCount += count(tpExistingStaticDocuments($group['documents']));
 }
 $tpArchiveCount = tpCountDocuments($tpArchiveDirectory);
 $tpTotalCount = $tpStaticCount + $tpArchiveCount;
@@ -720,11 +852,11 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                     </div>
                     <p class="tp-section-description">Termos aditivos, planos de trabalho e relatórios do convênio municipal, separados por exercício.</p>
                     <div class="tp-accordion">
-                        <?php foreach ($tpMunicipalYears as $year => $relativePath): ?>
+                        <?php foreach ($tpMunicipalGroups as $group): ?>
                             <?php tpRenderDirectory(
-                                $tpArchiveDirectory . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relativePath),
-                                $relativePath,
-                                $year,
+                                $group['absolutePath'],
+                                $group['relativePath'],
+                                $group['label'],
                                 1
                             ); ?>
                         <?php endforeach; ?>
@@ -738,7 +870,9 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                     </div>
                     <p class="tp-section-description">Instrumentos, planos de trabalho, termos aditivos e relatórios de atividades.</p>
                     <div class="tp-accordion">
-                        <?php tpRenderDirectory($tpFomentoDirectory, $tpFomentoRelative, 'Termos de fomento', 1); ?>
+                        <?php if ($tpFomentoDirectory): ?>
+                            <?php tpRenderDirectory($tpFomentoDirectory, $tpFomentoRelative, 'Termos de fomento', 1); ?>
+                        <?php endif; ?>
                     </div>
                 </section>
 
