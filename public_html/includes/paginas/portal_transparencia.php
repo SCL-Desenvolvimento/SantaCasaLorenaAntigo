@@ -108,11 +108,14 @@ if (!function_exists('tpDirectoryLabel')) {
             return $matches[1];
         }
 
-        if (preg_match('/^CONV(?:Ê|E)NIO\s+(\d+)[\.\s]+(20\d{2})$/iu', $normalized, $matches)) {
+        // O caractere acentuado pode chegar em uma codificacao diferente da
+        // pagina quando o nome vem do sistema de arquivos. A correspondencia
+        // abaixo usa somente os trechos ASCII e sempre gera o rotulo em UTF-8.
+        if (preg_match('/^CONV.*NIO\s+(\d+)[\.\s]+(20\d{2})$/i', $normalized, $matches)) {
             return 'Convênio ' . $matches[1] . '/' . $matches[2];
         }
 
-        if (preg_match('/^CONV(?:Ê|E)NIO\s+(\d+)(20\d{2})$/iu', $normalized, $matches)) {
+        if (preg_match('/^CONV.*NIO\s+(\d+)(20\d{2})$/i', $normalized, $matches)) {
             return 'Convênio ' . $matches[1] . '/' . $matches[2];
         }
 
