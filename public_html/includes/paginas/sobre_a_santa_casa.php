@@ -28,12 +28,7 @@ $hasProviders = $providers || !empty($about['provedor']);
 <section id="memoria" class="about-memory" aria-labelledby="memory-title"><div class="site-container about-memory-grid <?= !$photos ? 'without-gallery' : '' ?>">
 <div class="about-memory-copy"><span class="eyebrow">NOSSA MEMÓRIA</span><h2 id="memory-title">Uma história em imagens.</h2><?php if (!empty($about['bloco4'])): ?><div class="about-prose"><?= scl_about_content($about['bloco4']) ?></div><?php endif; ?><?php if ($photos): ?><p class="about-gallery-hint">Selecione uma imagem para ampliar.</p><?php endif; ?></div>
 <?php if ($photos): ?>
-<div class="about-gallery" data-about-gallery><div class="about-gallery-track" id="about-gallery-track" tabindex="0" role="region" aria-label="Galeria da Santa Casa; role horizontalmente para ver as imagens">
-<?php foreach ($photos as $index=>$photo): $caption = trim(strip_tags($photo['descricao'] ?? '')); ?>
-<figure class="about-slide"><a class="about-photo-link" href="<?= scl_escape(scl_link($photo['img'])) ?>" aria-label="Ampliar imagem <?= $index + 1 ?><?= $caption ? ': ' . scl_escape($caption) : '' ?>"><img src="<?= scl_escape(scl_link($photo['img'])) ?>" alt="<?= scl_escape($caption ?: 'Registro da Santa Casa de Lorena') ?>" width="800" height="560" loading="lazy" decoding="async"><span class="about-zoom" aria-hidden="true"><?= scl_icon('search') ?></span></a><?php if ($caption): ?><figcaption><?= scl_escape($caption) ?></figcaption><?php endif; ?></figure>
-<?php endforeach; ?>
-</div><div class="about-gallery-controls" hidden><button type="button" data-gallery-prev aria-label="Imagem anterior" aria-controls="about-gallery-track">←</button><span data-gallery-count aria-live="polite" aria-atomic="true">1 de <?= count($photos) ?></span><button type="button" data-gallery-next aria-label="Próxima imagem" aria-controls="about-gallery-track">→</button></div></div>
-<dialog class="about-lightbox" aria-label="Imagem ampliada da Santa Casa"><div class="about-lightbox-toolbar"><span data-dialog-count aria-live="polite" aria-atomic="true"></span><button type="button" data-dialog-close autofocus>Fechar <span aria-hidden="true">×</span></button></div><figure><img data-dialog-image alt=""><figcaption data-dialog-caption></figcaption></figure><div class="about-dialog-controls"><button type="button" data-dialog-prev aria-label="Imagem anterior">← Anterior</button><button type="button" data-dialog-next aria-label="Próxima imagem">Próxima →</button></div></dialog>
+<?php $galleryId = 'about-gallery-track'; $galleryLabel = 'Galeria da Santa Casa'; require __DIR__ . '/../institutional_gallery.php'; ?>
 <?php endif; ?>
 </div></section>
 <?php endif; ?>

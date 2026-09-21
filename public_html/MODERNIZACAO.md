@@ -41,7 +41,7 @@ Antes da publicação, homologar com o banco de dados: conteúdo de todas as pá
 php -S 127.0.0.1:8094 -t . tests/preview.php
 ```
 
-Abra `http://127.0.0.1:8094/`. Esse roteador é exclusivo para o servidor de desenvolvimento, usa notícias demonstrativas e não testa os endpoints reais. Ele exibe a página inicial, Sobre a Santa Casa e a página 404 com os componentes compartilhados; não substitui a homologação integrada. Não use esse comando para publicar o site.
+Abra `http://127.0.0.1:8094/`. Esse roteador é exclusivo para o servidor de desenvolvimento, usa notícias demonstrativas e não testa os endpoints reais. Ele exibe a página inicial, Sobre a Santa Casa, Humanização, Ações sociais e ambientais, Programa de segurança do paciente e a página 404 com os componentes compartilhados; não substitui a homologação integrada. Não use esse comando para publicar o site.
 
 ## Sobre a Santa Casa — página convertida
 
@@ -54,3 +54,35 @@ A formatação básica do conteúdo é preservada por uma lista de elementos per
 Validação: php tests/about.php — 27 verificações gerais e 18 específicas. Verificadas no navegador: telas de desktop e celular, navegação da galeria, ampliação, Escape, restauração do foco, estado vazio e imagem única. A homologação com o banco real permanece pendente.
 
 Na prévia local, abra /institucional/sobre-a-santa-casa. Acrescente ?fixture=empty ou ?fixture=single para verificar os estados alternativos. Os textos em tests/fixtures/about.php são exclusivamente demonstrativos e não são carregados pela aplicação de produção.
+
+## Humanização — página convertida
+
+A página pública Humanização usa os quatro blocos originais da tabela pagina_humanizacao e os registros da galeria_humanizacao, com a ordenação anterior. O contexto histórico de 2010 e a seção Sempre evoluindo foram preservados. Não houve alteração do banco ou do painel.
+
+A interface ganhou navegação por seções, leitura responsiva, galeria única para desktop e celular, legendas, ampliação e controles por teclado. Bootstrap, jQuery, Owl Carousel, Font Awesome e CSS legado não são carregados nesta página.
+
+O componente includes/institutional_gallery.php é compartilhado com Sobre a Santa Casa; a extração preserva os controles e o comportamento anterior. A apresentação específica está em resources/css/humanization.css. Casos sem conteúdo, sem galeria, com foto única e com blocos parcialmente preenchidos são tratados.
+
+Teste: php tests/humanization.php — 27 verificações gerais, 18 de Sobre a Santa Casa e 16 de Humanização. Prévia: /institucional/humanizacao; estados alternativos: ?fixture=empty e ?fixture=single. Dados demonstrativos ficam apenas em tests/fixtures/humanization.php. A validação com o banco real segue pendente antes da publicação.
+
+## Ações sociais e ambientais — página convertida
+
+A página preserva os quatro blocos de pagina_acoes_sociais_ambientais, a imagem img1 e a galeria_acao. Apoio religioso, voluntariado e notícias continuam presentes; não foram criadas iniciativas ou informações institucionais fictícias nos templates de produção.
+
+A interface usa navegação por seções, conteúdo formatado com segurança, imagem responsiva, galeria compartilhada com ampliação e cartões de notícias. Não carrega Bootstrap, jQuery, Owl Carousel, Font Awesome ou CSS legado. Os estilos específicos estão em resources/css/social-actions.css.
+
+A consulta de notícias mantém status publicado, categoria acoes-sociais, ordem decrescente de publicação e limite de três registros. Usa EXISTS para evitar duplicações por associação de tags e não depende de ANY_VALUE. A execução SQL com o banco real ainda precisa ser homologada; os testes locais verificam o contrato da consulta e renderização com dados isolados.
+
+Teste: php tests/social-actions.php — 83 verificações (27 gerais, 18 de Sobre, 16 de Humanização e 22 desta página). Verificação visual em desktop e celular: ausência de overflow, imagens, diálogo, avanço da galeria, Escape e retorno do foco. Casos vazios, dados parciais, datas inválidas e imagem única tratados.
+
+Prévia: /institucional/acoes-sociais-ambientais. ?fixture=empty e ?fixture=single exercitam estados alternativos. Os dados de tests/fixtures/social-actions.php são demonstrativos; notícias e serviços externos não estão conectados na prévia. Sem publicação em produção.
+
+## Programa de segurança do paciente — página convertida
+
+A página mantém os blocos bloco1 e bloco2 e a imagem img1 da tabela pagina_programa_nacional_seguranca, consultando o registro mais recente como antes. Os títulos Programa nacional de segurança do paciente e Núcleo de segurança do paciente foram preservados. Nenhuma orientação clínica ou protocolo foi acrescentado aos conteúdos de produção.
+
+A interface usa atalhos de seção, leitura responsiva, imagem sem recorte com link para tamanho original e acessos ao manual do paciente e aos canais de contato já existentes. Não carrega Bootstrap, jQuery, Owl Carousel, Font Awesome, CSS legado ou JavaScript de galeria. Estilos específicos: resources/css/patient-safety.css.
+
+Teste: php tests/patient-safety.php — 101 verificações, sendo 18 específicas desta página. Casos de dados ausentes, apenas programa, apenas núcleo, apenas imagem, HTML inseguro, imagens inválidas e alias com underscore tratados. Layout desktop e móvel, imagem original, ausência de imagem e estado vazio verificados no navegador.
+
+Prévia: /institucional/programa-nacional-seguranca. Estados alternativos: ?fixture=empty e ?fixture=no-image. Os textos demonstrativos estão isolados em tests/fixtures/patient-safety.php e não representam recomendações clínicas. A homologação com o banco real permanece pendente antes da publicação.

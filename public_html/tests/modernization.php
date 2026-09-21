@@ -14,8 +14,10 @@ require DIR . '_app/Helpers/Check.class.php';
 require DIR . '_app/Models/Url.class.php';
 class Read {
     public static $fixtures = array();
+    public static $queries = array();
     private $result = array();
     public function fullRead($sql, $params = '') {
+        self::$queries[] = array('sql'=>$sql, 'params'=>$params);
         parse_str($params ?? '', $values);
         $this->result = array();
         foreach (self::$fixtures as $table => $rows) {

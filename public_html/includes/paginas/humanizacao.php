@@ -1,164 +1,69 @@
-<?php 
-	$getPagina->fullRead("SELECT * FROM ".PREFIX."pagina_humanizacao ORDER BY data DESC LIMIT 1");
-	$info = $getPagina->getResult()[0];
+<?php
+require_once __DIR__ . '/../about_helpers.php';
+$getPagina->fullRead('SELECT * FROM ' . PREFIX . 'pagina_humanizacao ORDER BY data DESC LIMIT 1');
+$humanization = ($getPagina->getResult() ?: array())[0] ?? array();
+$galleryQuery = new Read();
+$galleryQuery->fullRead('SELECT * FROM ' . PREFIX . 'galeria_humanizacao ORDER BY data_criacao ASC');
+$photos = array_values(array_filter($galleryQuery->getResult() ?: array(), function ($photo) {
+    return !empty($photo['img']) && scl_link($photo['img']) !== '';
+}));
+$hasIntroduction = !empty($humanization['bloco1']) || !empty($humanization['bloco2']) || !empty($humanization['bloco3']);
+$hasEvolution = !empty($humanization['bloco4']);
 ?>
-
-<section class='bloco-conteudo humanizacao'>
-	<div class='bloco-conteudo-padding bloco-conteudo-conteudo'>
-		<div class="titulos">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<h2><?php echo nl2br($info['bloco1']); ?></h2>
-				<hr>
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-		<div class="clearBoth"></div>
-		<div class="textos">
-			<div class="col-md-1"></div>
-			<div class="col-md-5">
-				<p class="fonte2"><?php echo nl2br($info['bloco2']); ?></p>
-			</div>
-			<div class="col-md-5">
-				<p class="fonte2"><?php echo nl2br($info['bloco3']); ?></p>
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-		<div class="clearBoth"></div>
-	</div>
-	<div class="clearBoth"></div>
+<div class="humanization-page">
+<?php if ($hasIntroduction || $photos || $hasEvolution): ?>
+<nav class="about-section-nav site-container" aria-label="Nesta página">
+    <span>Nesta página</span>
+    <?php if ($hasIntroduction): ?><a href="#humanizacao-cuidado">Nosso cuidado</a><?php endif; ?>
+    <?php if ($photos): ?><a href="#humanizacao-galeria">Humanização em imagens</a><?php endif; ?>
+    <?php if ($hasEvolution): ?><a href="#humanizacao-evolucao">Sempre evoluindo</a><?php endif; ?>
+</nav>
+<?php else: ?>
+<section class="site-container section-space">
+    <h2>Humanização na Santa Casa</h2>
+    <p class="about-empty">As informações sobre humanização serão disponibilizadas nesta página. Para saber mais, <a href="<?= scl_url('fale-conosco') ?>">fale com a nossa equipe</a>.</p>
 </section>
-<div class="clearBoth"></div>
-
-<!--Carousel-->
-<section class="bloco-conteudo">
-	<div class='bloco-conteudo-padding bg-blue control-nav-alt'>
-		<?php 
-			$controle_humanizacao = 0;
-			$getHumanizacao = new Read(); 
-			$getHumanizacao->fullRead("SELECT * FROM ".PREFIX."galeria_humanizacao ORDER BY data_criacao ASC"); 
-			if($getHumanizacao->getResult()){
-				echo "<div id='galeria-humanizacao'>";
-
-				foreach ($getHumanizacao->getResult() AS $key => $item) {
-					//var_dump($item);
-					if($controle_humanizacao == 0){
-						echo "<div class='item-humanizacao '>";
-					}
-					echo "<div class='no-text mozaico-item mozaico$controle_humanizacao  "; 
-
-					switch ($controle_humanizacao) {
-						case 0: 
-							echo "col-md-6 h-100";
-							break;
-						case 1: 
-							echo "col-md-3 h-50";
-							break;
-						case 2: 
-							echo "col-md-3 h-50";
-							break;
-						case 3: 
-							echo "col-md-6 h-50";
-							break;
-					}
-					echo "'>";
-						echo "<div class='mozaico-content' style='background-image: url(../{$item['img']}); background-size: cover; background-position:center center;'></div>";
-						echo "<div class='clearBoth'></div>";
-					echo "</div>";
-					if($controle_humanizacao == 3 || (($key +1) == $getHumanizacao->getRowCount())){
-						echo "</div>";
-						$controle_humanizacao = 0;
-					}
-					else{
-						$controle_humanizacao += 1;
-					}
-				}
-				echo "</div>";
-
-
-				echo "<div id='galeria-humanizacao-mobile'>";
-
-				foreach ($getHumanizacao->getResult() AS $key => $item) {
-					echo "<div class='item-humanizacao-mobile'>";
-						echo "<img src='../{$item['img']}' alt='{$item['descricao']}'>";
-					echo "</div>";
-				}
-				echo "</div>";
-			}
-
-		?>
-	</div>
+<?php endif; ?>
+<?php if ($hasIntroduction): ?>
+<section id="humanizacao-cuidado" class="site-container humanization-intro" aria-labelledby="humanization-title">
+    <div class="humanization-intro-heading">
+        <span class="humanization-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span>
+        <div><span class="eyebrow">NOSSO CUIDADO</span>
+            <h2 id="humanization-title"><?= !empty($humanization['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $humanization['bloco1']))) : 'Humanização na Santa Casa' ?></h2>
+        </div>
+    </div>
+    <div class="about-story-columns">
+        <?php foreach (array('bloco2', 'bloco3') as $field): if (!empty($humanization[$field])): ?>
+        <div class="about-prose"><?= scl_about_content($humanization[$field]) ?></div>
+        <?php endif; endforeach; ?>
+    </div>
 </section>
-<div class="clearBoth"></div>
-<!--/Carousel-->
-
-<section class="bloco-conteudo">
-	<div class='bloco-conteudo-padding'>
-		<div class="titulos">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<div class="tleft col-md-6">
-					<h2>Sempre Evoluindo</h2>
-					<div class="barra">
-						<div class="parte1"></div>
-						<div class="parte2"></div>
-					</div>
-				</div>
-				<div class="tright col-md-6 fonte2-small">
-					A partir de 2010 várias melhorias foram criadas pela instituição objetivando a humanização:
-				</div>
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-		<div class="clearBoth"></div>
-		<div class="textos">
-			<div class="col-md-1"></div>
-			<div class="col-md-10 fonte2">
-				<?php echo nl2br($info['bloco4']); ?>
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-		<div class="clearBoth"></div>
-	</div>
-	<div class="clearBoth"></div>
+<?php endif; ?>
+<?php if ($photos): ?>
+<section id="humanizacao-galeria" class="humanization-gallery-section" aria-labelledby="humanization-gallery-title">
+    <div class="site-container humanization-gallery-layout">
+        <div class="humanization-gallery-copy">
+            <span class="eyebrow">GESTOS QUE ACOLHEM</span>
+            <h2 id="humanization-gallery-title">Humanização em imagens.</h2>
+            <p>Conheça os registros de humanização da Santa Casa de Lorena.</p>
+            <p class="about-gallery-hint">Selecione uma imagem para ampliar.<?php if (count($photos) > 1): ?> Use as setas para explorar a galeria.<?php endif; ?></p>
+        </div>
+        <?php $galleryId = 'humanization-gallery-track'; $galleryLabel = 'Galeria de humanização'; require __DIR__ . '/../institutional_gallery.php'; ?>
+    </div>
 </section>
-<div class="clearBoth"></div>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#galeria-humanizacao').owlCarousel({
-			loop:true,
-			items:1
-		});
-		$('#galeria-humanizacao-mobile').owlCarousel({
-		    stagePadding: 180,
-		    loop:true,
-		    margin:30,
-		    responsive:{
-		        0:{
-		            items:1,
-		            stagePadding: 0
-		        },
-		        480:{
-		            items:2,
-		            stagePadding: 0
-		        },
-		        740:{
-		            items:2,
-		            stagePadding: 60
-		        },
-		        840:{
-		            items:2,
-		            stagePadding: 160
-		        },
-		        900:{
-		            items:3,
-		            stagePadding: 50
-		        },
-		        1170:{
-		            items:3
-		        }
-		    }
-		});
-	});
-</script>
+<?php endif; ?>
+<?php if ($hasEvolution): ?>
+<section id="humanizacao-evolucao" class="site-container humanization-evolution" aria-labelledby="humanization-evolution-title">
+    <div class="humanization-evolution-heading">
+        <span class="eyebrow">UM COMPROMISSO CONTÍNUO</span>
+        <h2 id="humanization-evolution-title">Sempre evoluindo</h2>
+        <p>A partir de 2010, várias melhorias foram criadas pela instituição com o objetivo de promover a humanização.</p>
+    </div>
+    <div class="about-prose humanization-evolution-content"><?= scl_about_content($humanization['bloco4']) ?></div>
+</section>
+<?php endif; ?>
+<section class="site-container humanization-contact">
+    <div><span class="eyebrow">ESTAMOS AQUI PARA OUVIR</span><h2>Conte com a nossa equipe.</h2><p>Encontre orientações para pacientes e visitantes ou entre em contato com a Santa Casa.</p></div>
+    <div class="hero-actions"><a class="scl-button" href="<?= scl_url('fale-conosco') ?>">Fale conosco <?= scl_icon('arrow') ?></a><a class="text-link" href="<?= scl_url('servicos/manual-do-paciente-e-visitantes') ?>">Guia do paciente e visitante <?= scl_icon('arrow') ?></a></div>
+</section>
+</div>
