@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/ui.php';
 $isHome = empty($r_DIR);
+$isAbout = in_array($r_DIR['page'] ?? '', array('sobre-a-santa-casa', 'sobre_a_santa_casa'), true);
+$needsLegacy = !$isHome && !$isAbout;
 $pageTitle = $r_DIR['info']['titulo'] ?? ($isHome ? 'Cuidado que acolhe. Saúde que transforma.' : 'Página não encontrada');
 $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pagina'] ?? 'Santa Casa de Lorena: conheça nossos serviços, encontre orientações para pacientes e acompanhe as notícias da instituição.');
 ?>
@@ -19,7 +21,7 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <meta property="og:image" content="<?= scl_escape(scl_asset($r_DIR['info']['imagem'])) ?>">
 <?php endif; ?>
 <link rel="icon" href="<?= scl_url('favicon.ico') ?>">
-<?php if (!$isHome): // Compatibility for existing CMS forms and galleries. ?>
+<?php if ($needsLegacy): // Compatibility for existing CMS forms and galleries. ?>
 <link rel="stylesheet" href="<?= scl_url('resources/bootstrap/css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= scl_url('resources/plugins/owlcarousel/owl.carousel.min.css') ?>">
 <link rel="stylesheet" href="<?= scl_url('resources/plugins/owlcarousel/owl.theme.default.min.css') ?>">
@@ -31,6 +33,10 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <?php endif; ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/modern.js') ?>?v=1" defer></script>
+<?php if ($isAbout): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
+<script src="<?= scl_url('resources/js/about.js') ?>?v=1" defer></script>
+<?php endif; ?>
 </head>
 <body class="scl-site <?= $isHome ? 'scl-home' : 'scl-inner' ?>">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>

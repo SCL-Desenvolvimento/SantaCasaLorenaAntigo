@@ -10,7 +10,7 @@ A interface foi reorganizada com uma página inicial nova, navegação responsiv
 - `resources/css/modern.css`: cores, tipografia, espaçamento, CSS Grid/Flexbox, estados de foco e layouts responsivos.
 - `resources/js/modern.js`: menu móvel, navegação por teclado e integração com a aba de currículos.
 
-A página inicial não carrega jQuery, Bootstrap, Owl Carousel, jQuery UI ou SDK do Facebook. As páginas internas ainda carregam Bootstrap 3, jQuery 2 e Owl Carousel para manter o funcionamento dos formulários e galerias existentes. A substituição integral dessas dependências e do painel administrativo **não está concluída**.
+A página inicial não carrega jQuery, Bootstrap, Owl Carousel, jQuery UI ou SDK do Facebook. As páginas internas ainda não convertidas carregam Bootstrap 3, jQuery 2 e Owl Carousel para manter o funcionamento dos formulários e galerias existentes. A substituição integral dessas dependências e do painel administrativo **não está concluída**.
 
 O formulário de newsletter ganhou validação no servidor, token contra requisições forjadas e lista explícita dos campos gravados. Notícias e metadados são escapados na nova interface. O rastreador Universal Analytics antigo foi removido; nenhuma nova medição foi configurada.
 
@@ -41,4 +41,16 @@ Antes da publicação, homologar com o banco de dados: conteúdo de todas as pá
 php -S 127.0.0.1:8094 -t . tests/preview.php
 ```
 
-Abra `http://127.0.0.1:8094/`. Esse roteador é exclusivo para o servidor de desenvolvimento, usa notícias demonstrativas e não testa os endpoints reais. Ele exibe a página inicial e a página 404 com os componentes compartilhados; não substitui a homologação integrada. Não use esse comando para publicar o site.
+Abra `http://127.0.0.1:8094/`. Esse roteador é exclusivo para o servidor de desenvolvimento, usa notícias demonstrativas e não testa os endpoints reais. Ele exibe a página inicial, Sobre a Santa Casa e a página 404 com os componentes compartilhados; não substitui a homologação integrada. Não use esse comando para publicar o site.
+
+## Sobre a Santa Casa — página convertida
+
+A página pública foi reestruturada por completo: história, navegação por seções, galeria, missão, visão, valores, provedores e acesso a contato/transparência. Os mesmos campos das tabelas pagina_sobre, galeria_sobre e provedor continuam sendo utilizados, sem alteração de esquema ou edição dos registros.
+
+Esta página não carrega Bootstrap, jQuery, Owl Carousel, Font Awesome ou o CSS legado. Usa CSS responsivo e JavaScript nativo, em resources/css/about.css e resources/js/about.js. A galeria mantém links de imagens utilizáveis sem JavaScript e ganha controles, contador e ampliação em diálogo nativo nos navegadores compatíveis. Não há reprodução automática.
+
+A formatação básica do conteúdo é preservada por uma lista de elementos permitidos; scripts, estilos e atributos executáveis são removidos. Sem a extensão DOM do PHP, o conteúdo continua legível como texto. Ausência de conteúdo, foto única, provedores sem retrato e períodos incompletos são tratados.
+
+Validação: php tests/about.php — 27 verificações gerais e 18 específicas. Verificadas no navegador: telas de desktop e celular, navegação da galeria, ampliação, Escape, restauração do foco, estado vazio e imagem única. A homologação com o banco real permanece pendente.
+
+Na prévia local, abra /institucional/sobre-a-santa-casa. Acrescente ?fixture=empty ou ?fixture=single para verificar os estados alternativos. Os textos em tests/fixtures/about.php são exclusivamente demonstrativos e não são carregados pela aplicação de produção.

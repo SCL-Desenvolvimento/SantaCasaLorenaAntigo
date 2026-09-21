@@ -31,7 +31,7 @@ if (isset($_POST['newsletter']) && is_string($_POST['newsletter'])) {
 <div><h2>Encontre a Santa Casa</h2><p class="footer-contact"><?= scl_icon('pin') ?><span><?= scl_escape(strip_tags($localizacao['localizacao'] ?? 'Lorena · São Paulo')) ?></span></p><?php if (!empty($localizacao['telefone'])): ?><a class="footer-contact" href="tel:<?= scl_escape(preg_replace('/[^0-9+]/', '', $localizacao['telefone'])) ?>"><?= scl_icon('phone') ?><?= scl_escape($localizacao['telefone']) ?></a><?php endif; ?><a class="footer-contact" href="tel:+551231593349"><?= scl_icon('phone') ?>(12) 3159-3349</a><a class="footer-location" href="<?= scl_url('fale-conosco') ?>">Localização e contatos →</a></div>
 <div><h2>Vamos manter contato?</h2><p>Receba novidades e acompanhe nossas ações.</p><form method="post" action="#footer" id="form_news"><label for="newsletter">Seu e-mail</label><div class="newsletter-field"><input type="email" id="newsletter" name="newsletter" autocomplete="email" placeholder="voce@exemplo.com" required maxlength="254"><button type="submit" aria-label="Cadastrar e-mail"><?= scl_icon('arrow') ?></button></div><input type="hidden" name="newsletter_token" value="<?= scl_escape($_SESSION['newsletter_token']) ?>"><?php if ($newsletterMessage): ?><p class="newsletter-message <?= $newsletterSuccess ? 'success' : 'error' ?>" role="status"><?= scl_escape($newsletterMessage) ?></p><?php endif; ?></form></div>
 </div><div class="footer-bottom"><span>© <?= date('Y') ?> Santa Casa de Lorena. Todos os direitos reservados.</span><a href="#conteudo">Voltar ao topo ↑</a></div></div></footer>
-<?php if (!$isHome): ?>
+<?php if ($needsLegacy): ?>
 <script>
 function validaEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
 jQuery(function ($) {

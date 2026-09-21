@@ -2,8 +2,11 @@
 // Local visual fixture: never connects to the production database.
 if (PHP_SAPI !== 'cli-server') { http_response_code(404); exit; }
 $root = dirname(__DIR__);
+$aboutFixtures = require __DIR__ . '/fixtures/about.php';
+if (($_GET['fixture'] ?? '') === 'empty') $aboutFixtures = array_fill_keys(array_keys($aboutFixtures), array());
+if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_sobre'] = array_slice($aboutFixtures['galeria_sobre'], 0, 1);
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-if ((str_starts_with($path, '/resources/') && preg_match('~\\.(css|js|png|jpe?g|svg|gif|webp|woff2?|ttf|otf|ico)$~i', $path)) || $path === '/favicon.ico') return false;
+if (((str_starts_with($path, '/resources/') || str_starts_with($path, '/arquivos/galeria_sobre/')) && preg_match('~\\.(css|js|png|jpe?g|svg|gif|webp|woff2?|ttf|otf|ico)$~i', $path)) || $path === '/favicon.ico') return false;
 chdir($root);
 session_start();
 // The preview must never process submissions.
@@ -12,6 +15,10 @@ define('ROOT', '/'); define('HOME', '/'); define('DIR', $root . '/'); define('PR
 class Read {
     private $rows = array();
     public function fullRead($sql, $params = null) {
+        global $aboutFixtures;
+        foreach ($aboutFixtures as $table=>$rows) {
+            if (str_contains($sql, PREFIX . $table)) { $this->rows=$rows; return; }
+        }
         if (str_contains($sql, 'noticia')) $this->rows = array(
             array('titulo'=>'Cuidado e acolhimento em cada encontro', 'subtitulo'=>'Acompanhe as ações da nossa instituição e sua conexão com a comunidade.', 'img'=>'resources/img/santa-casa-home/pronto-atendimento.png', 'link'=>'exemplo', 'data_criacao'=>'2026-09-21'),
             array('titulo'=>'Uma história feita por pessoas', 'subtitulo'=>'Conheça a Santa Casa e as ações de humanização.', 'img'=>'resources/img/santa-casa-home/acoes-sociais-ambientais-img.png', 'link'=>'exemplo-2', 'data_criacao'=>'2026-09-20'),
@@ -24,11 +31,18 @@ class Read {
 }
 $localizacao = array('localizacao'=>'Lorena · São Paulo','telefone'=>'(12) 3159-3349');
 $r_DIR = $path === '/' ? null : array('page'=>'404', 'info'=>array('titulo'=>'Página não encontrada','sub_titulo'=>'Vamos ajudar você a encontrar o caminho.','descricao_pagina'=>''));
-if ($r_DIR) http_response_code(404);
+if (in_array(rtrim($path, '/'), array('/institucional/sobre-a-santa-casa','/institucional/sobre_a_santa_casa'), true)) {
+    $r_DIR = array('page'=>'sobre-a-santa-casa', 'info'=>array('titulo'=>'Sobre a Santa Casa', 'sessao'=>'Institucional', 'sub_titulo'=>'Conheça nossa história e o que orienta nosso cuidado.', 'descricao_pagina'=>''));
+}
+if (($r_DIR['page'] ?? '') === '404') http_response_code(404);
 require 'includes/header.php';
-echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · Notícias demonstrativas · Dados, envios e páginas internas não conectados</aside>';
+echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · Conteúdo demonstrativo · Banco de dados e envios não conectados</aside>';
 require 'includes/navbar.php';
 echo '<main id="conteudo" tabindex="-1">';
 if (!$r_DIR) require 'includes/home.php';
-else {require 'includes/topo_paginas.php'; require 'includes/paginas/404.php';}
+else {
+    require 'includes/topo_paginas.php';
+    if ($r_DIR['page'] === 'sobre-a-santa-casa') { $getPagina = new Read(); require 'includes/paginas/sobre_a_santa_casa.php'; }
+    else require 'includes/paginas/404.php';
+}
 echo '</main>';require 'includes/footer.php';
