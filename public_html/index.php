@@ -15,24 +15,19 @@ $r_QueryString = explode('/', substr(QUERY_STRING, 3));
 $Url = new Url;
 $r_DIR = $Url->setUrlAmigavel(REDIRECT_URL);
 
+if (isset($r_DIR['page']) && $r_DIR['page'] === '404') {
+    http_response_code(404);
+}
+
 //Inicia o HTML
 require_once('includes/header.php');
 require_once('includes/navbar.php');
+echo '<main id="conteudo" tabindex="-1">';
 
 //Checa se existe conteudo ou se é a Home
 if(empty($r_DIR)):
 
-require_once('includes/banner.php');
-
-require_once('includes/instalacoes.php');
-
-require_once('includes/convenios.php');
-
-require_once('includes/noticias.php');
-
-require_once('includes/servicos.php');
-
-require_once('includes/institucional.php');
+require_once('includes/home.php');
 
 else:
 
@@ -108,4 +103,4 @@ endif;
 
 ?>
 
-<?php require_once('includes/footer.php'); ?>
+<?php echo '</main>'; require_once('includes/footer.php'); ?>

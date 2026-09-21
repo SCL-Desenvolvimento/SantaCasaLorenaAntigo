@@ -1,70 +1,14 @@
-<section class='bloco-conteudo bg-topo-paginas'>
-
-	<div class='bloco-conteudo-padding bloco-paginas-padding'>
-
-		<?php 
-
-			if(!isset($r_DIR['noticia'])){
-		?>
-
-			<div class="col-md-5 col-sm-12 titulo-pagina">
-				<a href='<?php echo HOME; ?>'>Home <i class="fa fa-fw fa-angle-right"></i> </a>
-				<?php echo (isset($r_DIR['info']['sessao']) && $r_DIR['info']['sessao'] != "" ? "<a>".$r_DIR['info']['sessao']."<i class='fa fa-fw fa-angle-right'></i> </a>"  : "" ); ?> 
-				<h1><?php echo $r_DIR['info']['titulo']; ?></h1>
-				<h2><?php echo $r_DIR['info']['sub_titulo']; ?></h2>
-				<div class="barra">
-					<div class="parte1"></div>
-					<div class="parte2"></div>
-				</div>
-
-				<?php 
-
-					if(isset($r_DIR['info']['imagem']) && $r_DIR['info']['imagem'] != "" ){
-						echo "<p class='contra-titulo tleft'>
-							{$r_DIR['info']['descricao_pagina']}
-						</p>";
-					}
-
-				?>
-
-			</div>
-
-			<?php 
-
-				if(isset($r_DIR['info']['imagem']) && $r_DIR['info']['imagem'] != "" ){
-					echo "<div class='col-md-7 col-sm-12 contra-image' style='background-image: url(".ROOT.$r_DIR['info']['imagem'].");'></div>";
-					$clear = 0;
-				}else{
-					echo "<p class='col-md-6 col-sm-12 contra-titulo contra-titulo-paginas pull-right'>
-						".(isset($r_DIR['info']['descricao_pagina']) ? $r_DIR['info']['descricao_pagina'] : "" )."
-					</p>";
-					$clear = 50;
-				}
-
-			}else{
-		?>
-
-			<div class="col-md-9 col-sm-12 titulo-pagina titulo-pagina-noticia">
-				<a href='#'>DE <span>#<?php echo $r_DIR['noticia']['tag']; ?></span></a>
-				<h1><?php echo $r_DIR['noticia']['titulo']; ?></h1>
-				<div class="barra">
-					<div class="parte1"></div>
-					<div class="parte2"></div>
-				</div>
-
-			</div>
-
-			<p class='col-md-3 col-sm-12 contra-titulo contra-titulo-paginas contra-titulo-noticia pull-right'>
-				postado <?php echo date("d/m/Y", strtotime($r_DIR['noticia']['data_criacao'])); ?>
-				<br>
-				por <?php echo $r_DIR['noticia']['criador']; ?>
-			</p>
-
-		<?php
-			}
-		?>
-		
-	</div>
-	<div class="clear" <?php echo (isset($clear) ? "style='height:{$clear}px;'" : "") ?>></div>
-</section>
-<div class="clear"></div>
+<?php
+$introTitle = $r_DIR['noticia']['titulo'] ?? $r_DIR['info']['titulo'] ?? 'Página não encontrada';
+$introSubtitle = $r_DIR['info']['sub_titulo'] ?? '';
+$introDescription = $r_DIR['info']['descricao_pagina'] ?? '';
+$introImage = empty($r_DIR['noticia']) ? ($r_DIR['info']['imagem'] ?? '') : '';
+?>
+<section class="page-intro"><div class="site-container">
+<nav class="breadcrumbs" aria-label="Você está aqui"><a href="<?= scl_url() ?>">Início</a><span aria-hidden="true">/</span><?php if (!empty($r_DIR['info']['sessao'])): ?><span><?= scl_escape(strip_tags($r_DIR['info']['sessao'])) ?></span><span aria-hidden="true">/</span><?php endif; ?><span aria-current="page"><?= scl_escape(strip_tags($introTitle)) ?></span></nav>
+<div class="page-intro-grid <?= $introImage ? 'with-image' : '' ?>"><div><h1><?= scl_escape(strip_tags($introTitle)) ?></h1>
+<?php if ($introSubtitle && empty($r_DIR['noticia'])): ?><p class="page-subtitle"><?= scl_escape(strip_tags($introSubtitle)) ?></p><?php endif; ?>
+<?php if ($introDescription && empty($r_DIR['noticia'])): ?><p class="page-description"><?= scl_escape(strip_tags($introDescription)) ?></p><?php endif; ?>
+<?php if (!empty($r_DIR['noticia'])): ?><p class="article-meta"><time datetime="<?= date('Y-m-d', strtotime($r_DIR['noticia']['data_criacao'])) ?>"><?= date('d/m/Y', strtotime($r_DIR['noticia']['data_criacao'])) ?></time><?php if (!empty($r_DIR['noticia']['criador'])): ?> · <?= scl_escape($r_DIR['noticia']['criador']) ?><?php endif; ?></p><?php endif; ?>
+</div><?php if ($introImage): ?><img src="<?= scl_escape(scl_asset($introImage)) ?>" alt="" width="600" height="360"><?php endif; ?></div>
+</div></section>

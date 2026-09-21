@@ -30,7 +30,7 @@ define('JS', '/scl/');
 //Produção
 define('HOME', 'http://docker-w3.sp.santacasalorena.org.br:8080/');
 define('ROOT', "/");
-define('DIR', '/var/www/html/');
+define('DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 
 define('HOST', 'mysql57');
 define('USER', 'usr_www-santacasalorena-org-br');
@@ -45,12 +45,13 @@ $secret = "6LfM4TkUAAAAANX5puo7Yau-AI_jZ-DdoFrjY79i";
 
 define('PA', $_SERVER['REQUEST_URI']);
 define('QUERY_STRING', (isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : ""));
-$REDIRECT_URL = explode("=", QUERY_STRING);
+parse_str(QUERY_STRING, $routeParameters);
+$REDIRECT_URL = array('', $routeParameters['url'] ?? $routeParameters['qs'] ?? '');
 define('REDIRECT_URL', (isset($REDIRECT_URL[1]) && $REDIRECT_URL[1] != "" ? $REDIRECT_URL[1] : ""));
 
 date_default_timezone_set('America/Sao_Paulo');
 
-function __autoload($Class){
+spl_autoload_register(function ($Class) {
 
 	$cDir = array("Conn", "Helpers", "Models", "PHPMailer-master");
 	$iDir = null;
@@ -66,7 +67,7 @@ function __autoload($Class){
 		trigger_error(__DIR__ . "/{$dirName}/{$Class}.class.php", E_USER_ERROR);
 		die;
 	endif;
-}
+});
 
 define('System_ACCEPT', 'callout-success');
 define('System_INFOR', 'callout-info');

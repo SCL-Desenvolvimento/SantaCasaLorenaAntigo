@@ -1,15 +1,6 @@
-<section class='bloco-conteudo '>
-	<div class='bloco-conteudo-padding'>
-		
-		<div class="textos">
-			<div class="col-md-12">
-				<p><center style='color:#29b6f6; font-size: 40px; font-weight: 700;'>ERRO 404</center></p>
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-
-		<div class="clearBoth"></div>
-	</div>
-	<div class="clearBoth"></div>
+<section class="site-container section-space error-page">
+<span class="eyebrow">VAMOS ENCONTRAR O CAMINHO</span>
+<h2>O cuidado continua por aqui.</h2>
+<p>A página que você procurou não está disponível. Você pode voltar ao início ou falar com a nossa equipe.</p>
+<div class="hero-actions"><a class="scl-button" href="<?= scl_url() ?>">Voltar ao início <?= scl_icon('arrow') ?></a><a class="text-link" href="<?= scl_url('fale-conosco') ?>">Fale conosco <?= scl_icon('arrow') ?></a></div>
 </section>
-<div class="clearBoth"></div>

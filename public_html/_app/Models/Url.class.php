@@ -85,7 +85,7 @@ class Url{
 
 				$getSessao = new Read();
 				$getSessao->fullRead("SELECT * FROM ".PREFIX."paginas WHERE sessao_url = :sessao", "sessao=".$dados);
-				if(!$getSessao->getResult() || $dados >= 1){
+				if(!$getSessao->getResult() || (is_numeric($dados) && $dados >= 1)){
 
 					if($dados != "" && $dados != "teste" && $dados != "home" && !preg_match("/file-/",$dados)):
 						$this->r_URL[$i] = $dados;
@@ -229,7 +229,7 @@ class Url{
 			}
 		endif;
 
-		if($this->r_DIR['page'] == '404'){
+		if(isset($this->r_DIR['page']) && $this->r_DIR['page'] == '404'){
 
 			$this->r_DIR['info']['titulo'] = "Erro 404";
 			$this->r_DIR['info']['sub_titulo'] = "Página não encontrada";

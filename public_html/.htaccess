@@ -1,8 +1,10 @@
+DirectoryIndex index.php index.html
+
 RewriteEngine On
 
 RewriteBase /
 
-# Se n„o for arquivo nem pasta, manda pro index.php
+# Se n√£o for arquivo nem pasta, encaminha para index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 

@@ -1,92 +1,24 @@
-<header>
-  <div id="navbar">
-    <nav class="navbar navbar-default navbar-static-top" role="navigation">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="<?php echo ROOT; ?>">
-          <img src="<?php echo ROOT; ?>resources/img/logo.svg" alt="Santa Casa Lorena" class="logo-scl">
-        </a>
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
-      <!--Opçõe-->
-      <div class="collapse navbar-collapse menu-principal" id="navbar-collapse-1">
-        <ul class="nav navbar-nav pull-right">
-          
-          <li>
-            <a id="menu-item-home" href="<?php echo ROOT; ?>">Home</a> 
-          </li>
-
-          <li class="dropdown">
-            <a id="menu-item-institucional" href="#" class="dropdown-toggle" data-toggle="dropdown">Institucional <i class="arrow down"></i></a> 
-            <ul class="dropdown-menu">
-              <li><a href="<?php echo ROOT; ?>institucional/sobre-a-santa-casa">Sobre a santa casa</a></li>
-              <li><a href="<?php echo ROOT; ?>institucional/humanizacao">Humanização</a></li>
-              <li><a href="<?php echo ROOT; ?>institucional/acoes-sociais-ambientais">Ações sociais e ambientais</a></li>
-              <li><a href="<?php echo ROOT; ?>institucional/programa-nacional-seguranca">Programa nacional de segurança do paciente</a></li>
-              <li><a href="<?php echo ROOT; ?>institucional/portal-transparencia">Portal da transparência</a></li>
-            </ul>
-          </li>
-
-          <li class="dropdown">
-            <a id="menu-item-instalacoes" href="#" class="dropdown-toggle" data-toggle="dropdown">Instalações <i class="arrow down"></i></a> 
-            <ul class="dropdown-menu">
-              <li><a href="<?php echo ROOT; ?>instalacoes/pronto-atendimento">Pronto atendimento SUS</a></li>
-              <li><a href="<?php echo ROOT; ?>instalacoes/hotelaria">Hotelaria</a></li>
-              <li><a href="<?php echo ROOT; ?>instalacoes/clinica-emilia">Clínica Emília</a></li>
-              <li><a href="<?php echo ROOT; ?>instalacoes/centro-diagnostico-por-imagem">Centro de diagnóstico por imagem</a></li>
-              <li><a href="<?php echo ROOT; ?>instalacoes/unidades-de-internacao">Unidade de internação</a></li>
-              <li><a href="<?php echo ROOT; ?>instalacoes/particular_convenio">Particular / Convênio</a></li>
-            </ul>
-          </li>
-
-          <li class="dropdown">
-            <a  id="menu-item-servicos" href="#" class="dropdown-toggle" data-toggle="dropdown">Serviços <i class="arrow down"></i></a> 
-            <ul class="dropdown-menu">
-              <li><a href="<?php echo ROOT; ?>servicos/convenios">Convênios</a></li>
-              <li><a href="<?php echo ROOT; ?>servicos/especialidades">Especialidades</a></li>
-              <li><a href="<?php echo ROOT; ?>servicos/capacidade-instalacao-producao">Capacidade de instalação e produção</a></li>
-              <li><a href="<?php echo ROOT; ?>servicos/manual-do-paciente-e-visitantes">Manual do paciente e visitante</a></li>
-            </ul>
-          </li>
-
-          <li>
-            <a id="menu-item-noticias" href="<?php echo ROOT; ?>noticias">Notícias</a> 
-          </li>
-
-          <li>
-            <a id="menu-item-fale-conosco" href="<?php echo ROOT; ?>fale-conosco">Fale Conosco</a> 
-          </li>
-
-          <li>
-            <a href="http://www.emendasdasantacasadelorena.com.br/" target="_blank">
-              Emendômetro
-            </a>
-          </li>
-
-          <li>
-            <a href="<?php echo ROOT; ?>doacoes">
-              <span class='btn-doacao'>
-                Doação
-              </span>
-            </a> 
-          </li>
-
-          <li class="btn-facebook" style="margin-top: 3px">
-            <a href='https://1741prd-vivace-portal.cloudmv.com.br:432/login' target="_blank">
-              <span style="padding: 11px 10px 11px 10px;">
-                Resultado de Exame
-              </span>
-            </a>
-          </li>
-
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-
-    </nav>
-  </div>
+<div class="utility-bar"><div class="site-container utility-content"><span>Santa Casa de Lorena <span class="utility-motto">· Cuidar faz parte da nossa história</span></span><div><a href="<?= scl_url('institucional/portal-transparencia') ?>">Transparência</a><a href="<?= scl_url('fale-conosco') ?>">Fale conosco</a></div></div></div>
+<header class="site-header">
+<div class="site-container header-content">
+<a class="site-brand" href="<?= scl_url() ?>" aria-label="Santa Casa de Lorena — início"><img src="<?= scl_url('resources/img/logo.svg') ?>" alt="Santa Casa de Lorena" width="170" height="74"></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" hidden><span class="menu-lines" aria-hidden="true"></span><span>Menu</span></button>
+<nav class="site-navigation" id="site-navigation" aria-label="Navegação principal">
+<a class="nav-home" href="<?= scl_url() ?>" <?= $isHome ? 'aria-current="page"' : '' ?>>Início</a>
+<?php
+$navigation = array(
+'A Santa Casa' => array('institucional/sobre-a-santa-casa' => 'Nossa história', 'institucional/humanizacao' => 'Humanização', 'institucional/acoes-sociais-ambientais' => 'Ações sociais e ambientais', 'institucional/programa-nacional-seguranca' => 'Segurança do paciente', 'institucional/portal-transparencia' => 'Portal da transparência'),
+'Atendimento' => array('instalacoes/pronto-atendimento' => 'Pronto atendimento SUS', 'instalacoes/clinica-emilia' => 'Clínica Emília', 'instalacoes/centro-diagnostico-por-imagem' => 'Diagnóstico por imagem', 'instalacoes/unidades-de-internacao' => 'Unidades de internação', 'instalacoes/hotelaria' => 'Hotelaria', 'instalacoes/particular_convenio' => 'Particular e convênios'),
+'Para você' => array('servicos/convenios' => 'Convênios atendidos', 'servicos/especialidades' => 'Especialidades', 'servicos/manual-do-paciente-e-visitantes' => 'Guia do paciente e visitante', 'servicos/capacidade-instalacao-producao' => 'Estrutura e produção', 'fale-conosco' => 'Contato e ouvidoria'),
+);
+foreach ($navigation as $label => $links): ?>
+<details class="nav-dropdown"><summary><?= $label ?><span aria-hidden="true">⌄</span></summary><div class="nav-dropdown-panel">
+<?php foreach ($links as $href => $text): ?><a href="<?= scl_url($href) ?>"><?= $text ?></a><?php endforeach; ?>
+</div></details>
+<?php endforeach; ?>
+<a href="<?= scl_url('noticias') ?>">Notícias</a>
+<a class="nav-donate" href="<?= scl_url('doacoes') ?>"><?= scl_icon('heart') ?> Doe</a>
+<a class="scl-button small" href="https://1741prd-vivace-portal.cloudmv.com.br:432/login" target="_blank" rel="noopener noreferrer">Resultados de exames <?= scl_icon('arrow') ?><span class="sr-only"> (abre em nova aba)</span></a>
+</nav>
+</div>
 </header>
