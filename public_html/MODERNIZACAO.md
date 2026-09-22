@@ -94,3 +94,19 @@ Tela modernizada com o padrão visual institucional, CSS próprio e JavaScript n
 Validação: `php tests/transparency.php` passou com 434 verificações do portal, além das 101 anteriores. Inventário comparado aos arquivos físicos, sem documentos ausentes ou duplicados; todos os 211 links responderam HTTP 200 na prévia local. Navegador: busca combinada, estado sem resultados, categoria, limpeza, expansão e recolhimento; larguras 390 e 1280 sem overflow horizontal; console sem erros. Conteúdo dos documentos e sua vigência não foram alterados nem auditados.
 
 Prévia: `http://127.0.0.1:8095/institucional/portal-transparencia`. Usa o acervo real local; banco e envios permanecem desconectados. Alterações aplicadas no projeto local, sem publicação em produção.
+
+## Pronto atendimento SUS
+
+Página modernizada com navegação por seções, destaque do conteúdo institucional, quatro cartões de classificação identificados por texto e cor, galeria com ampliação e navegação por teclado, links para guia e contato. Preservados os cinco campos do CMS, a consulta do registro mais recente, a ordem e os títulos das imagens, além das quatro categorias e tempos da página original. Dependências legadas removidas apenas desta rota; a página particular/convênios permanece independente.
+
+Prévia: `http://127.0.0.1:8095/instalacoes/pronto-atendimento` (também aceita underscore). Textos demonstrativos isolados em `tests/fixtures/urgent-care.php`, imagens do acervo local; banco real não conectado. Antes de publicar, homologar o conteúdo do CMS e a vigência das informações assistenciais com a instituição. Nenhuma mudança de protocolo clínico foi proposta.
+
+Validação: `php tests/urgent-care.php` passou com 19 verificações novas e 535 anteriores. Cobertura de conteúdo, consultas, classificação, URLs em subdiretório, galeria unitária, estado vazio e sanitização. Navegador em 1280 e 390 pixels sem rolagem horizontal; imagens sem falhas observadas, console sem erros, ampliação/próxima foto/Escape e restauração do foco conferidos. Aplicado localmente, sem publicação em produção.
+
+## Hotelaria
+
+Página modernizada com apresentação em duas colunas no desktop, navegação por seções, galeria ampliável com legendas do campo `titulo`, contador de imagens e atalhos para guia do paciente e contato. Preservadas as consultas a `pagina_hotelaria` e `hotelaria`, os dois campos de conteúdo e a ordem por `data_criacao`. Removido o carregamento de jQuery, Bootstrap e OwlCarousel nesta rota; galeria reutiliza o componente nativo institucional.
+
+Prévia: `http://127.0.0.1:8095/instalacoes/hotelaria`; conteúdo demonstrativo isolado em `tests/fixtures/hospitality.php`, com imagens do acervo local. Banco real e envios não conectados. Homologação com conteúdo real permanece necessária antes da publicação; nenhuma alteração em produção.
+
+Validação: `php tests/hospitality.php` passou com 14 verificações novas e 554 anteriores. Cobertura de consultas, textos, títulos das fotos, caminhos em subdiretório, conteúdo parcial, galeria unitária, ausência de dados e sanitização. Teste legado de `tests/about.php` agora usa a página ainda não convertida `particular_convenio`. Navegador em 1280 e 390 pixels sem overflow horizontal; galeria ampliada, próxima imagem, fechamento por Escape e restauração de foco conferidos; sem erros no console ou imagens quebradas observadas.

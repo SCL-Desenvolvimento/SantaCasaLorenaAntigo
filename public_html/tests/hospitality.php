@@ -1,0 +1,23 @@
+<?php
+require __DIR__.'/urgent-care.php';
+$before=$count;$fixture=require __DIR__.'/fixtures/hospitality.php';
+Read::$fixtures=$fixture;Read::$queries=array();$getPagina=new Read();
+$r_DIR=array('page'=>'hotelaria','info'=>array('titulo'=>'Hotelaria'));
+ob_start();require DIR.'includes/header.php';require DIR.'includes/topo_paginas.php';require DIR.'includes/paginas/hotelaria.php';require DIR.'includes/footer.php';$html=ob_get_clean();
+verify(!str_contains($html,'jQuery') && !str_contains($html,'bootstrap.min') && !str_contains($html,'owlCarousel'),'Hotelaria without legacy libraries');
+verify(str_contains($html,'hospitality.css') && str_contains($html,'about.js'),'Hotelaria assets');
+verify(substr_count($html,'<h1>')===1,'Single page heading');
+verify(str_contains($html,'Conheça a hotelaria da Santa Casa.') && str_contains($html,'exibida integralmente'),'Both CMS fields preserved');
+verify(str_contains(Read::$queries[0]['sql'],'pagina_hotelaria ORDER BY data DESC LIMIT 1') && str_contains(Read::$queries[1]['sql'],'hotelaria ORDER BY data_criacao ASC'),'Original CMS queries');
+verify(str_contains($html,'/hospital/arquivos/hotelaria/') && str_contains($html,'Acervo de hotelaria'),'Image titles and subdirectory URLs');
+verify(substr_count($html,'class="about-photo-link"')===count($fixture['hotelaria']),'All gallery records rendered');
+verify(str_contains($html,'/hospital/servicos/manual-do-paciente-e-visitantes') && str_contains($html,'/hospital/fale-conosco'),'Patient resource links');
+Read::$fixtures=array();ob_start();require DIR.'includes/paginas/hotelaria.php';$empty=ob_get_clean();
+verify(str_contains($empty,'As informações sobre a hotelaria'),'Empty content fallback');
+verify(!str_contains($empty,'href="#hotelaria-galeria"') && !str_contains($empty,'<dialog'),'Empty gallery omitted');
+Read::$fixtures=array('pagina_hotelaria'=>array(array('bloco1'=>'Título isolado')));ob_start();require DIR.'includes/paginas/hotelaria.php';$title=ob_get_clean();verify(str_contains($title,'Título isolado') && !str_contains($title,'As informações sobre a hotelaria'),'Title-only content');
+Read::$fixtures=array('pagina_hotelaria'=>array(array('bloco2'=>'<p onclick="bad()">Texto seguro</p><script>bad()</script>')), 'hotelaria'=>array(array('img'=>'javascript:bad()','titulo'=>'Unsafe')));ob_start();require DIR.'includes/paginas/hotelaria.php';$safe=ob_get_clean();
+verify(str_contains($safe,'Texto seguro') && !str_contains($safe,'onclick=') && !str_contains($safe,'<script>') && !str_contains($safe,'javascript:'),'CMS text and URLs sanitized');
+Read::$fixtures=$fixture;Read::$fixtures['hotelaria']=array_slice($fixture['hotelaria'],0,1);ob_start();require DIR.'includes/paginas/hotelaria.php';$single=ob_get_clean();verify(substr_count($single,'class="about-photo-link"')===1 && str_contains($single,'1 imagem'),'Single-photo gallery');
+Read::$fixtures=array('hotelaria'=>$fixture['hotelaria']);ob_start();require DIR.'includes/paginas/hotelaria.php';$photosOnly=ob_get_clean();verify(str_contains($photosOnly,'id="hotelaria-galeria"') && str_contains($photosOnly,'As informações sobre a hotelaria'),'Gallery without text');
+echo 'OK: '.($count-$before)." hospitality checks.\n";

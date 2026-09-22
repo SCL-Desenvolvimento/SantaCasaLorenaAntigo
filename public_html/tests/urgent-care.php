@@ -1,0 +1,24 @@
+<?php
+require __DIR__.'/transparency.php';
+$before=$count;
+$fixture=require __DIR__.'/fixtures/urgent-care.php';
+Read::$fixtures=$fixture; Read::$queries=array(); $getPagina=new Read();
+$r_DIR=array('page'=>'pronto-atendimento','info'=>array('titulo'=>'Pronto atendimento SUS'));
+ob_start();require DIR.'includes/header.php';require DIR.'includes/topo_paginas.php';require DIR.'includes/paginas/pronto_atendimento.php';require DIR.'includes/footer.php';$html=ob_get_clean();
+verify(!str_contains($html,'jQuery') && !str_contains($html,'bootstrap.min') && !str_contains($html,'owlCarousel'), 'Urgent care without legacy libraries');
+verify(str_contains($html,'urgent-care.css') && str_contains($html,'about.js'), 'Modern care assets');
+verify(substr_count($html,'<h1>')===1, 'Single care heading');
+foreach(array('Conheça o pronto atendimento SUS.','exibido integralmente','Destaque demonstrativo','introdução cadastrada','Observação demonstrativa') as $text) verify(str_contains($html,$text),'CMS block preserved');
+foreach(array('Atendimento imediato','Atendimento em até 60 minutos','Atendimento em até 2 horas','Atendimento em até 4 horas') as $text) verify(str_contains($html,$text),'Original classification time preserved');
+verify(substr_count($html,'<article class="care-priority ')===4, 'Four original categories');
+verify(str_contains($html,'/hospital/arquivos/pronto_atendimento/') && str_contains($html,'legenda demonstrativa'), 'Gallery keeps paths and titles');
+verify(str_contains(Read::$queries[0]['sql'],'pagina_pronto_atendimento ORDER BY data DESC LIMIT 1') && str_contains(Read::$queries[1]['sql'],'pronto_atendimento ORDER BY data_criacao ASC'), 'Preserve CMS queries and ordering');
+Read::$fixtures=array();ob_start();require DIR.'includes/paginas/pronto_atendimento.php';$empty=ob_get_clean();
+verify(str_contains($empty,'As informações sobre o pronto atendimento') && !str_contains($empty,'id="pa-galeria"'), 'Empty state without broken gallery');
+Read::$fixtures=array('pagina_pronto_atendimento'=>array(array('bloco2'=>'<p onclick="bad()">Texto seguro</p><script>bad()</script>')), 'pronto_atendimento'=>array(array('img'=>'javascript:bad()','titulo'=>'Unsafe')));
+ob_start();require DIR.'includes/paginas/pronto_atendimento.php';$safe=ob_get_clean();
+verify(str_contains($safe,'Texto seguro') && !str_contains($safe,'onclick=') && !str_contains($safe,'<script>') && !str_contains($safe,'javascript:'), 'Safe CMS text and gallery URLs');
+Read::$fixtures=$fixture;Read::$fixtures['pronto_atendimento']=array_slice($fixture['pronto_atendimento'],0,1);
+ob_start();require DIR.'includes/paginas/pronto_atendimento.php';$single=ob_get_clean();verify(substr_count($single,'class="about-photo-link"')===1,'Single image supported');
+$r_DIR['page']='pronto_atendimento';ob_start();require DIR.'includes/header.php';$alias=ob_get_clean();verify(str_contains($alias,'urgent-care.css') && !str_contains($alias,'jQuery'), 'Underscore route alias');
+echo 'OK: '.($count-$before)." urgent-care checks.\n";

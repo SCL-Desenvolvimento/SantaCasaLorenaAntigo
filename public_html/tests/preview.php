@@ -2,14 +2,16 @@
 // Local visual fixture: never connects to the production database.
 if (PHP_SAPI !== 'cli-server') { http_response_code(404); exit; }
 $root = dirname(__DIR__);
-$aboutFixtures = array_merge(require __DIR__ . '/fixtures/about.php', require __DIR__ . '/fixtures/humanization.php', require __DIR__ . '/fixtures/social-actions.php', require __DIR__ . '/fixtures/patient-safety.php');
+$aboutFixtures = array_merge(require __DIR__ . '/fixtures/about.php', require __DIR__ . '/fixtures/humanization.php', require __DIR__ . '/fixtures/social-actions.php', require __DIR__ . '/fixtures/patient-safety.php', require __DIR__ . '/fixtures/urgent-care.php', require __DIR__ . '/fixtures/hospitality.php');
 if (($_GET['fixture'] ?? '') === 'empty') $aboutFixtures = array_fill_keys(array_keys($aboutFixtures), array());
 if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_sobre'] = array_slice($aboutFixtures['galeria_sobre'], 0, 1);
 if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_humanizacao'] = array_slice($aboutFixtures['galeria_humanizacao'], 0, 1);
 if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_acao'] = array_slice($aboutFixtures['galeria_acao'], 0, 1);
 if (($_GET['fixture'] ?? '') === 'no-image' && !empty($aboutFixtures['pagina_programa_nacional_seguranca'][0])) $aboutFixtures['pagina_programa_nacional_seguranca'][0]['img1'] = '';
+if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['pronto_atendimento'] = array_slice($aboutFixtures['pronto_atendimento'], 0, 1);
+if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['hotelaria'] = array_slice($aboutFixtures['hotelaria'], 0, 1);
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-if (((str_starts_with($path, '/resources/') || str_starts_with($path, '/arquivos/galeria_sobre/') || str_starts_with($path, '/arquivos/galeria_humanizacao/') || str_starts_with($path, '/arquivos/galeria_acao/') || str_starts_with($path, '/arquivos/acoes_sociais_ambientais/') || str_starts_with($path, '/arquivos/programa_nacional_seguranca/')) && preg_match('~\\.(css|js|png|jpe?g|svg|gif|webp|woff2?|ttf|otf|ico)$~i', $path)) || $path === '/favicon.ico') return false;
+if (((str_starts_with($path, '/resources/') || str_starts_with($path, '/arquivos/hotelaria/') || str_starts_with($path, '/arquivos/pronto_atendimento/') || str_starts_with($path, '/arquivos/galeria_sobre/') || str_starts_with($path, '/arquivos/galeria_humanizacao/') || str_starts_with($path, '/arquivos/galeria_acao/') || str_starts_with($path, '/arquivos/acoes_sociais_ambientais/') || str_starts_with($path, '/arquivos/programa_nacional_seguranca/')) && preg_match('~\\.(css|js|png|jpe?g|svg|gif|webp|woff2?|ttf|otf|ico)$~i', $path)) || $path === '/favicon.ico') return false;
 if (str_starts_with($path, '/includes/paginas/transparencia/') && !str_contains(rawurldecode($path), '..') && preg_match('~\.(pdf|docx?|xlsx?|ods|csv|pptx?|odt|rtf|txt|zip)$~i', $path)) return false;
 chdir($root);
 session_start();
@@ -51,6 +53,12 @@ if (in_array(rtrim($path, '/'), array('/institucional/programa-nacional-seguranc
 if (in_array(rtrim($path, '/'), array('/institucional/portal-transparencia','/institucional/portal_transparencia'), true)) {
     $r_DIR = array('page'=>'portal-transparencia', 'info'=>array('titulo'=>'Portal da transparência', 'sessao'=>'Institucional', 'sub_titulo'=>'Acesso à informação. Compromisso com a comunidade.', 'descricao_pagina'=>''));
 }
+if (in_array(rtrim($path, '/'), array('/instalacoes/pronto-atendimento', '/instalacoes/pronto_atendimento'), true)) {
+    $r_DIR = array('page'=>'pronto-atendimento', 'info'=>array('titulo'=>'Pronto atendimento SUS', 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça o atendimento, a classificação e o espaço da Santa Casa.', 'descricao_pagina'=>''));
+}
+if (rtrim($path, '/') === '/instalacoes/hotelaria') {
+    $r_DIR = array('page'=>'hotelaria', 'info'=>array('titulo'=>'Hotelaria', 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça a hotelaria e os ambientes da Santa Casa.', 'descricao_pagina'=>''));
+}
 if (($r_DIR['page'] ?? '') === '404') http_response_code(404);
 require 'includes/header.php';
 echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · ' . (($r_DIR['page'] ?? '') === 'portal-transparencia' ? 'Acervo real de arquivos locais' : 'Conteúdo demonstrativo') . ' · Banco de dados e envios não conectados</aside>';
@@ -64,6 +72,8 @@ else {
     elseif ($r_DIR['page'] === 'acoes-sociais-ambientais') { $getPagina = new Read(); require 'includes/paginas/acoes_sociais_ambientais.php'; }
     elseif ($r_DIR['page'] === 'programa-nacional-seguranca') { $getPagina = new Read(); require 'includes/paginas/programa_nacional_seguranca.php'; }
     elseif ($r_DIR['page'] === 'portal-transparencia') require 'includes/paginas/portal_transparencia.php';
+    elseif ($r_DIR['page'] === 'pronto-atendimento') { $getPagina = new Read(); require 'includes/paginas/pronto_atendimento.php'; }
+    elseif ($r_DIR['page'] === 'hotelaria') { $getPagina = new Read(); require 'includes/paginas/hotelaria.php'; }
     else require 'includes/paginas/404.php';
 }
 echo '</main>';require 'includes/footer.php';

@@ -6,7 +6,9 @@ $isHumanization = ($r_DIR['page'] ?? '') === 'humanizacao';
 $isSocialActions = in_array($r_DIR['page'] ?? '', array('acoes-sociais-ambientais', 'acoes_sociais_ambientais'), true);
 $isPatientSafety = in_array($r_DIR['page'] ?? '', array('programa-nacional-seguranca', 'programa_nacional_seguranca'), true);
 $isTransparency = in_array($r_DIR['page'] ?? '', array('portal-transparencia', 'portal_transparencia'), true);
-$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency;
+$isUrgentCare = in_array($r_DIR['page'] ?? '', array('pronto-atendimento', 'pronto_atendimento'), true);
+$isHospitality = ($r_DIR['page'] ?? '') === 'hotelaria';
+$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency && !$isUrgentCare && !$isHospitality;
 $pageTitle = $r_DIR['info']['titulo'] ?? ($isHome ? 'Cuidado que acolhe. Saúde que transforma.' : 'Página não encontrada');
 $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pagina'] ?? 'Santa Casa de Lorena: conheça nossos serviços, encontre orientações para pacientes e acompanhe as notícias da instituição.');
 ?>
@@ -37,7 +39,7 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <?php endif; ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/modern.js') ?>?v=1" defer></script>
-<?php if ($isAbout || $isHumanization || $isSocialActions): ?>
+<?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/about.js') ?>?v=1" defer></script>
 <?php endif; ?>
@@ -54,6 +56,12 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <?php if ($isTransparency): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/transparency.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/transparency.js') ?>?v=1" defer></script>
+<?php endif; ?>
+<?php if ($isUrgentCare): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/urgent-care.css') ?>?v=1">
+<?php endif; ?>
+<?php if ($isHospitality): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/hospitality.css') ?>?v=1">
 <?php endif; ?>
 </head>
 <body class="scl-site <?= $isHome ? 'scl-home' : 'scl-inner' ?>">
