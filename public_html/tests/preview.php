@@ -10,6 +10,7 @@ if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_acao'] = arra
 if (($_GET['fixture'] ?? '') === 'no-image' && !empty($aboutFixtures['pagina_programa_nacional_seguranca'][0])) $aboutFixtures['pagina_programa_nacional_seguranca'][0]['img1'] = '';
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if (((str_starts_with($path, '/resources/') || str_starts_with($path, '/arquivos/galeria_sobre/') || str_starts_with($path, '/arquivos/galeria_humanizacao/') || str_starts_with($path, '/arquivos/galeria_acao/') || str_starts_with($path, '/arquivos/acoes_sociais_ambientais/') || str_starts_with($path, '/arquivos/programa_nacional_seguranca/')) && preg_match('~\\.(css|js|png|jpe?g|svg|gif|webp|woff2?|ttf|otf|ico)$~i', $path)) || $path === '/favicon.ico') return false;
+if (str_starts_with($path, '/includes/paginas/transparencia/') && !str_contains(rawurldecode($path), '..') && preg_match('~\.(pdf|docx?|xlsx?|ods|csv|pptx?|odt|rtf|txt|zip)$~i', $path)) return false;
 chdir($root);
 session_start();
 // The preview must never process submissions.
@@ -47,9 +48,12 @@ if (in_array(rtrim($path, '/'), array('/institucional/acoes-sociais-ambientais',
 if (in_array(rtrim($path, '/'), array('/institucional/programa-nacional-seguranca', '/institucional/programa_nacional_seguranca'), true)) {
     $r_DIR = array('page'=>'programa-nacional-seguranca', 'info'=>array('titulo'=>'Programa de segurança do paciente', 'sessao'=>'Institucional', 'sub_titulo'=>'Conheça o programa e o núcleo de segurança do paciente da Santa Casa.', 'descricao_pagina'=>''));
 }
+if (in_array(rtrim($path, '/'), array('/institucional/portal-transparencia','/institucional/portal_transparencia'), true)) {
+    $r_DIR = array('page'=>'portal-transparencia', 'info'=>array('titulo'=>'Portal da transparência', 'sessao'=>'Institucional', 'sub_titulo'=>'Acesso à informação. Compromisso com a comunidade.', 'descricao_pagina'=>''));
+}
 if (($r_DIR['page'] ?? '') === '404') http_response_code(404);
 require 'includes/header.php';
-echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · Conteúdo demonstrativo · Banco de dados e envios não conectados</aside>';
+echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · ' . (($r_DIR['page'] ?? '') === 'portal-transparencia' ? 'Acervo real de arquivos locais' : 'Conteúdo demonstrativo') . ' · Banco de dados e envios não conectados</aside>';
 require 'includes/navbar.php';
 echo '<main id="conteudo" tabindex="-1">';
 if (!$r_DIR) require 'includes/home.php';
@@ -59,6 +63,7 @@ else {
     elseif ($r_DIR['page'] === 'humanizacao') { $getPagina = new Read(); require 'includes/paginas/humanizacao.php'; }
     elseif ($r_DIR['page'] === 'acoes-sociais-ambientais') { $getPagina = new Read(); require 'includes/paginas/acoes_sociais_ambientais.php'; }
     elseif ($r_DIR['page'] === 'programa-nacional-seguranca') { $getPagina = new Read(); require 'includes/paginas/programa_nacional_seguranca.php'; }
+    elseif ($r_DIR['page'] === 'portal-transparencia') require 'includes/paginas/portal_transparencia.php';
     else require 'includes/paginas/404.php';
 }
 echo '</main>';require 'includes/footer.php';

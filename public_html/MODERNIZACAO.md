@@ -86,3 +86,11 @@ A interface usa atalhos de seção, leitura responsiva, imagem sem recorte com l
 Teste: php tests/patient-safety.php — 101 verificações, sendo 18 específicas desta página. Casos de dados ausentes, apenas programa, apenas núcleo, apenas imagem, HTML inseguro, imagens inválidas e alias com underscore tratados. Layout desktop e móvel, imagem original, ausência de imagem e estado vazio verificados no navegador.
 
 Prévia: /institucional/programa-nacional-seguranca. Estados alternativos: ?fixture=empty e ?fixture=no-image. Os textos demonstrativos estão isolados em tests/fixtures/patient-safety.php e não representam recomendações clínicas. A homologação com o banco real permanece pendente antes da publicação.
+
+## Portal da transparência
+
+Tela modernizada com o padrão visual institucional, CSS próprio e JavaScript nativo, sem carregar jQuery, Bootstrap ou OwlCarousel nesta rota. Preserva a classificação e os 211 documentos do acervo local. Busca combina palavras, ignora acentos e considera títulos dos grupos; filtro por categoria, contagens atualizadas, limpeza de filtros e controles de expansão. Grupos nativos continuam acessíveis sem JavaScript.
+
+Validação: `php tests/transparency.php` passou com 434 verificações do portal, além das 101 anteriores. Inventário comparado aos arquivos físicos, sem documentos ausentes ou duplicados; todos os 211 links responderam HTTP 200 na prévia local. Navegador: busca combinada, estado sem resultados, categoria, limpeza, expansão e recolhimento; larguras 390 e 1280 sem overflow horizontal; console sem erros. Conteúdo dos documentos e sua vigência não foram alterados nem auditados.
+
+Prévia: `http://127.0.0.1:8095/institucional/portal-transparencia`. Usa o acervo real local; banco e envios permanecem desconectados. Alterações aplicadas no projeto local, sem publicação em produção.

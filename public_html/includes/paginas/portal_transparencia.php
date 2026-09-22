@@ -281,12 +281,12 @@ if (!function_exists('tpRenderDocument')) {
         <a class="tp-document" href="<?php echo tpEscape($url); ?>" target="_blank" rel="noopener"
            data-search="<?php echo tpEscape($searchText); ?>"
            aria-label="<?php echo tpEscape($label); ?>, abrir arquivo em nova aba">
-            <span class="tp-document-icon" aria-hidden="true"><span class="fa <?php echo tpEscape(tpDocumentIcon($absolutePath)); ?>"></span></span>
+            <span class="tp-document-icon" aria-hidden="true"><?= scl_icon('file') ?></span>
             <span class="tp-document-text">
                 <span class="tp-document-title"><?php echo tpEscape($label); ?></span>
                 <span class="tp-document-meta"><?php echo tpEscape($documentType); ?> <span aria-hidden="true">&bull;</span> <?php echo tpEscape(tpHumanSize(filesize($absolutePath))); ?></span>
             </span>
-            <span class="fa fa-external-link tp-external" aria-hidden="true"></span>
+            <span class="tp-external" aria-hidden="true">↗</span>
         </a>
         <?php
     }
@@ -383,12 +383,12 @@ if (!function_exists('tpRenderStaticDocument')) {
         <a class="tp-document" href="<?php echo tpEscape($url); ?>" target="_blank" rel="noopener"
            data-search="<?php echo tpEscape($document['title']); ?>"
            aria-label="<?php echo tpEscape($document['title']); ?>, abrir arquivo em nova aba">
-            <span class="tp-document-icon" aria-hidden="true"><span class="fa <?php echo tpEscape(tpDocumentIcon($document['file'])); ?>"></span></span>
+            <span class="tp-document-icon" aria-hidden="true"><?= scl_icon('file') ?></span>
             <span class="tp-document-text">
                 <span class="tp-document-title"><?php echo tpEscape($document['title']); ?></span>
                 <span class="tp-document-meta"><?php echo tpEscape($documentType); ?> <span aria-hidden="true">&bull;</span> <?php echo tpEscape($size); ?></span>
             </span>
-            <span class="fa fa-external-link tp-external" aria-hidden="true"></span>
+            <span class="tp-external" aria-hidden="true">↗</span>
         </a>
         <?php
     }
@@ -587,301 +587,52 @@ $tpArchiveCount = tpCountDocuments($tpArchiveDirectory);
 $tpTotalCount = $tpStaticCount + $tpArchiveCount;
 ?>
 
-<style>
-    #portal-transparencia {
-        color: #23313b;
-        font-family: 'Montserrat', sans-serif;
-    }
 
-    #portal-transparencia * { box-sizing: border-box; }
-    #portal-transparencia .tp-shell { max-width: 1120px; margin: 0 auto; }
 
-    #portal-transparencia .tp-intro {
-        display: flex;
-        align-items: center;
-        gap: 22px;
-        margin-bottom: 26px;
-        padding: 24px 26px;
-        border: 1px solid #d9edf7;
-        border-left: 5px solid #29b6f6;
-        border-radius: 6px;
-        background: #f5fbfe;
-    }
-
-    #portal-transparencia .tp-intro-icon {
-        flex: 0 0 54px;
-        width: 54px;
-        height: 54px;
-        border-radius: 50%;
-        color: #fff;
-        background: #29b6f6;
-        text-align: center;
-        line-height: 54px;
-        font-size: 23px;
-    }
-
-    #portal-transparencia .tp-intro h2 {
-        margin: 0 0 5px !important;
-        padding: 0 !important;
-        color: #1b3443;
-        font-size: 21px;
-        font-weight: 600;
-    }
-
-    #portal-transparencia .tp-intro p {
-        margin: 0;
-        color: #52636e;
-        font-family: 'Domine', serif;
-        font-size: 15px;
-        line-height: 1.6;
-    }
-
-    #portal-transparencia .tp-tools {
-        display: flex;
-        align-items: flex-end;
-        gap: 18px;
-        margin-bottom: 38px;
-    }
-
-    #portal-transparencia .tp-search-wrap { position: relative; flex: 1 1 auto; }
-    #portal-transparencia .tp-search-label { display: block; margin-bottom: 7px; color: #1b3443; font-size: 13px; font-weight: 600; }
-    #portal-transparencia .tp-search-icon { position: absolute; left: 16px; bottom: 14px; color: #5c7280; font-size: 16px; }
-
-    #portal-transparencia .tp-search {
-        width: 100%;
-        height: 48px;
-        padding: 0 48px 0 44px;
-        border: 1px solid #cbd6dc;
-        border-radius: 5px;
-        background: #fff;
-        color: #23313b;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 14px;
-        outline: none;
-        transition: border-color .2s, box-shadow .2s;
-    }
-
-    #portal-transparencia .tp-search:focus { border-color: #29b6f6; box-shadow: 0 0 0 3px rgba(41, 182, 246, .15); }
-
-    #portal-transparencia .tp-search-clear {
-        position: absolute;
-        right: 8px;
-        bottom: 7px;
-        display: none;
-        width: 34px;
-        height: 34px;
-        padding: 0;
-        border: 0;
-        border-radius: 50%;
-        color: #5c7280;
-        background: transparent;
-        font-size: 20px;
-        line-height: 34px;
-        cursor: pointer;
-    }
-
-    #portal-transparencia .tp-search-clear:hover,
-    #portal-transparencia .tp-search-clear:focus { color: #e53935; background: #f7f7f7; outline: none; }
-
-    #portal-transparencia .tp-result-count {
-        flex: 0 0 auto;
-        min-width: 150px;
-        height: 48px;
-        padding: 0 18px;
-        border-radius: 5px;
-        color: #315166;
-        background: #eef5f8;
-        font-size: 13px;
-        font-weight: 600;
-        line-height: 48px;
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    #portal-transparencia .tp-section { margin-bottom: 42px; }
-    #portal-transparencia .tp-section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-
-    #portal-transparencia .tp-section-icon {
-        flex: 0 0 38px;
-        width: 38px;
-        height: 38px;
-        border-radius: 5px;
-        color: #168fc6;
-        background: #e7f6fc;
-        font-size: 17px;
-        line-height: 38px;
-        text-align: center;
-    }
-
-    #portal-transparencia .tp-section h2 { margin: 0 !important; padding: 0 !important; color: #0f3d53; font-size: 21px; font-weight: 600; }
-    #portal-transparencia .tp-section-description { margin: -3px 0 17px 50px; color: #647680; font-family: 'Domine', serif; font-size: 14px; line-height: 1.55; }
-
-    #portal-transparencia .tp-disclosure { margin: 0; border: 1px solid #d6dde1; border-bottom: 0; background: #fff; }
-    #portal-transparencia .tp-disclosure:first-of-type { border-radius: 5px 5px 0 0; }
-    #portal-transparencia .tp-disclosure:last-of-type { border-bottom: 1px solid #d6dde1; border-radius: 0 0 5px 5px; }
-    #portal-transparencia .tp-disclosure:only-of-type { border-radius: 5px; }
-
-    #portal-transparencia .tp-disclosure > summary {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        min-height: 54px;
-        padding: 14px 20px;
-        color: #123f55;
-        background: #fff;
-        font-size: 14px;
-        font-weight: 600;
-        list-style: none;
-        cursor: pointer;
-        transition: color .2s, background .2s;
-    }
-
-    #portal-transparencia .tp-disclosure > summary::-webkit-details-marker { display: none; }
-    #portal-transparencia .tp-disclosure > summary:hover,
-    #portal-transparencia .tp-disclosure > summary:focus { color: #087dac; background: #f7fbfd; outline: none; }
-    #portal-transparencia .tp-disclosure > summary:focus-visible { box-shadow: inset 0 0 0 2px #29b6f6; }
-    #portal-transparencia .tp-disclosure[open] > summary { color: #087dac; background: #f2f9fc; border-bottom: 1px solid #dce5e9; }
-    #portal-transparencia .tp-summary-side { display: flex; align-items: center; gap: 16px; }
-    #portal-transparencia .tp-count { color: #71818a; font-size: 11px; font-weight: 500; white-space: nowrap; }
-
-    #portal-transparencia .tp-chevron {
-        display: block;
-        width: 9px;
-        height: 9px;
-        margin: -4px 3px 0 0;
-        border-right: 2px solid #2b7899;
-        border-bottom: 2px solid #2b7899;
-        transform: rotate(45deg);
-        transition: transform .2s;
-    }
-
-    #portal-transparencia .tp-disclosure[open] > summary .tp-chevron { margin-top: 4px; transform: rotate(225deg); }
-    #portal-transparencia .tp-panel { padding: 16px 18px 18px; background: #fff; }
-
-    #portal-transparencia .tp-subgroup {
-        margin: 10px 0 0;
-        border: 1px solid #dce3e7;
-        border-radius: 4px !important;
-    }
-
-    #portal-transparencia .tp-subgroup > summary { min-height: 48px; padding: 11px 16px; background: #fafcfd; font-size: 13px; }
-    #portal-transparencia .tp-subgroup .tp-panel { padding: 14px; }
-    #portal-transparencia .tp-document-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-
-    #portal-transparencia .tp-document {
-        display: flex;
-        align-items: center;
-        min-width: 0;
-        min-height: 68px;
-        padding: 12px 14px;
-        border: 1px solid #e0e6e9;
-        border-radius: 4px;
-        color: #244858;
-        background: #fff;
-        transition: border-color .2s, box-shadow .2s, transform .2s;
-    }
-
-    #portal-transparencia .tp-document:hover,
-    #portal-transparencia .tp-document:focus {
-        color: #087dac;
-        border-color: #8ed2ef;
-        box-shadow: 0 3px 10px rgba(27, 74, 94, .09);
-        outline: none;
-        transform: translateY(-1px);
-    }
-
-    #portal-transparencia .tp-document-icon {
-        flex: 0 0 36px;
-        width: 36px;
-        height: 36px;
-        margin-right: 12px;
-        border-radius: 4px;
-        color: #e53935;
-        background: #fff1f0;
-        font-size: 17px;
-        line-height: 36px;
-        text-align: center;
-    }
-
-    #portal-transparencia .tp-document-text { display: block; flex: 1 1 auto; min-width: 0; }
-    #portal-transparencia .tp-document-title { display: block; overflow-wrap: anywhere; font-size: 12px; font-weight: 500; line-height: 1.45; }
-    #portal-transparencia .tp-document-meta { display: block; margin-top: 3px; color: #87949b; font-size: 10px; font-weight: 500; letter-spacing: .03em; text-transform: uppercase; }
-    #portal-transparencia .tp-external { flex: 0 0 auto; margin-left: 10px; color: #9babb2; font-size: 11px; }
-
-    #portal-transparencia .tp-no-results {
-        display: none;
-        margin: 12px 0 40px;
-        padding: 28px;
-        border: 1px dashed #bdcbd2;
-        border-radius: 5px;
-        color: #52636e;
-        background: #fafcfd;
-        font-family: 'Domine', serif;
-        font-size: 14px;
-        line-height: 1.6;
-        text-align: center;
-    }
-
-    #portal-transparencia .tp-archive-alert { margin-bottom: 30px; padding: 16px 18px; border: 1px solid #f1d59a; border-radius: 5px; color: #6a521d; background: #fffaf0; font-size: 13px; }
-
-    @media (max-width: 767px) {
-        #portal-transparencia .tp-shell { padding: 0 15px; }
-        #portal-transparencia .tp-intro { align-items: flex-start; padding: 19px; }
-        #portal-transparencia .tp-intro-icon { flex-basis: 44px; width: 44px; height: 44px; line-height: 44px; font-size: 19px; }
-        #portal-transparencia .tp-intro h2 { font-size: 18px; }
-        #portal-transparencia .tp-tools { display: block; margin-bottom: 32px; }
-        #portal-transparencia .tp-result-count { display: inline-block; height: 36px; min-width: 0; margin-top: 10px; padding: 0 13px; line-height: 36px; }
-        #portal-transparencia .tp-section { margin-bottom: 34px; }
-        #portal-transparencia .tp-section h2 { font-size: 18px; }
-        #portal-transparencia .tp-section-description { margin-left: 0; }
-        #portal-transparencia .tp-disclosure > summary { min-height: 52px; padding: 13px 14px; }
-        #portal-transparencia .tp-count { display: none; }
-        #portal-transparencia .tp-summary-side { gap: 8px; }
-        #portal-transparencia .tp-panel,
-        #portal-transparencia .tp-subgroup .tp-panel { padding: 12px; }
-        #portal-transparencia .tp-document-list { grid-template-columns: 1fr; }
-        #portal-transparencia .tp-document { min-height: 62px; padding: 10px 11px; }
-    }
-
-    @media print {
-        #portal-transparencia .tp-tools,
-        #portal-transparencia .tp-intro-icon,
-        #portal-transparencia .tp-external { display: none !important; }
-        #portal-transparencia .tp-disclosure > .tp-panel { display: block !important; }
-    }
-</style>
-
-<section class="bloco-conteudo" id="portal-transparencia">
-    <div class="bloco-conteudo-padding bloco-conteudo-conteudo">
+<section class="section-space" id="portal-transparencia">
+    <div class="site-container">
         <div class="tp-shell">
             <div class="tp-intro">
-                <div class="tp-intro-icon" aria-hidden="true"><span class="fa fa-university"></span></div>
+                <div class="tp-intro-icon" aria-hidden="true"><?= scl_icon('shield') ?></div>
                 <div>
                     <h2>Transparência que aproxima</h2>
                     <p>Consulte documentos institucionais, convênios, termos aditivos, planos de trabalho e relatórios de atividades da Santa Casa de Lorena.</p>
                 </div>
             </div>
 
-            <div class="tp-tools" role="search">
+            <div class="tp-tools" role="search" aria-label="Consultar documentos" hidden>
                 <div class="tp-search-wrap">
-                    <label class="tp-search-label" for="tp-search">Buscar no portal</label>
-                    <span class="fa fa-search tp-search-icon" aria-hidden="true"></span>
-                    <input class="tp-search" id="tp-search" type="search" placeholder="Digite um ano, convênio ou documento" autocomplete="off" aria-describedby="tp-result-count">
-                    <button class="tp-search-clear" id="tp-search-clear" type="button" aria-label="Limpar busca">&times;</button>
+                    <label for="tp-search">O que você procura?</label>
+                    <input id="tp-search" type="search" placeholder="Ex.: relatório 2024, estatuto, convênio…" autocomplete="off" aria-controls="tp-sections" aria-describedby="tp-result-count">
                 </div>
-                <div class="tp-result-count" id="tp-result-count" aria-live="polite"><?php echo $tpTotalCount; ?> documentos</div>
+                <div class="tp-category-wrap">
+                    <label for="tp-category">Categoria</label>
+                    <select id="tp-category" aria-controls="tp-sections">
+                        <option value="">Todas as categorias</option>
+                        <option value="institucionais">Documentos institucionais</option>
+                        <option value="estaduais">Convênios estaduais</option>
+                        <option value="municipais">Convênios municipais</option>
+                        <option value="fomento">Termos de fomento</option>
+                    </select>
+                </div>
+                <button class="tp-reset" id="tp-search-clear" type="button">Limpar filtros</button>
             </div>
+            <div class="tp-results-bar">
+                <p id="tp-result-count" role="status" aria-live="polite"><?php echo $tpTotalCount; ?> documentos disponíveis</p>
+                <div class="tp-expand-tools" hidden><button type="button" id="tp-expand">Expandir grupos</button><button type="button" id="tp-collapse">Recolher grupos</button></div>
+            </div>
+            <p class="tp-hint">Selecione um grupo para consultar os arquivos. Cada documento abre em uma nova aba, com seu formato e tamanho indicados abaixo do título.</p>
+            <noscript><p>A busca requer JavaScript. Você pode consultar todos os documentos pelos grupos abaixo.</p></noscript>
 
             <?php if (!is_dir($tpArchiveDirectory)): ?>
                 <div class="tp-archive-alert" role="alert">O acervo de convênios está temporariamente indisponível. Os documentos institucionais continuam acessíveis abaixo.</div>
             <?php endif; ?>
 
             <div id="tp-sections">
-                <section class="tp-section">
+                <section class="tp-section" data-category="institucionais" aria-labelledby="tp-heading-institucionais">
                     <div class="tp-section-heading">
-                        <span class="tp-section-icon fa fa-folder-open-o" aria-hidden="true"></span>
-                        <h2>Documentos institucionais</h2>
+                        <span class="tp-section-icon" aria-hidden="true"><?= scl_icon('file') ?></span>
+                        <h2 id="tp-heading-institucionais">Documentos institucionais</h2>
                     </div>
                     <p class="tp-section-description">Estatuto, atas, dirigentes, demonstrações financeiras, certificações e programas.</p>
                     <div class="tp-accordion">
@@ -891,10 +642,10 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                     </div>
                 </section>
 
-                <section class="tp-section">
+                <section class="tp-section" data-category="estaduais" aria-labelledby="tp-heading-estaduais">
                     <div class="tp-section-heading">
-                        <span class="tp-section-icon fa fa-map-o" aria-hidden="true"></span>
-                        <h2>Convênios estaduais</h2>
+                        <span class="tp-section-icon" aria-hidden="true"><?= scl_icon('file') ?></span>
+                        <h2 id="tp-heading-estaduais">Convênios estaduais</h2>
                     </div>
                     <p class="tp-section-description">Termos de convênio, planos de trabalho e relatórios organizados por ano e número do convênio.</p>
                     <div class="tp-accordion">
@@ -922,10 +673,10 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                     </div>
                 </section>
 
-                <section class="tp-section">
+                <section class="tp-section" data-category="municipais" aria-labelledby="tp-heading-municipais">
                     <div class="tp-section-heading">
-                        <span class="tp-section-icon fa fa-building-o" aria-hidden="true"></span>
-                        <h2>Convênios municipais</h2>
+                        <span class="tp-section-icon" aria-hidden="true"><?= scl_icon('file') ?></span>
+                        <h2 id="tp-heading-municipais">Convênios municipais</h2>
                     </div>
                     <p class="tp-section-description">Termos aditivos, planos de trabalho e relatórios do convênio municipal, separados por exercício.</p>
                     <div class="tp-accordion">
@@ -943,10 +694,10 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                     </div>
                 </section>
 
-                <section class="tp-section">
+                <section class="tp-section" data-category="fomento" aria-labelledby="tp-heading-fomento">
                     <div class="tp-section-heading">
-                        <span class="tp-section-icon fa fa-file-text-o" aria-hidden="true"></span>
-                        <h2>Termos de fomento</h2>
+                        <span class="tp-section-icon" aria-hidden="true"><?= scl_icon('file') ?></span>
+                        <h2 id="tp-heading-fomento">Termos de fomento</h2>
                     </div>
                     <p class="tp-section-description">Instrumentos, planos de trabalho, termos aditivos e relatórios de atividades.</p>
                     <div class="tp-accordion">
@@ -957,101 +708,10 @@ $tpTotalCount = $tpStaticCount + $tpArchiveCount;
                 </section>
             </div>
 
-            <div class="tp-no-results" id="tp-no-results" role="status">
-                <span class="fa fa-search" aria-hidden="true"></span><br>
+            <div class="tp-no-results" id="tp-no-results" hidden>
+                <?= scl_icon('search') ?><br>
                 Nenhum documento corresponde à sua busca. Tente usar apenas o número do convênio, o ano ou uma palavra do título.
             </div>
         </div>
     </div>
 </section>
-
-<script>
-    (function () {
-        'use strict';
-
-        var portal = document.getElementById('portal-transparencia');
-        if (!portal) return;
-
-        var search = portal.querySelector('#tp-search');
-        var clearButton = portal.querySelector('#tp-search-clear');
-        var resultCount = portal.querySelector('#tp-result-count');
-        var noResults = portal.querySelector('#tp-no-results');
-        var documents = Array.prototype.slice.call(portal.querySelectorAll('.tp-document'));
-        var disclosures = Array.prototype.slice.call(portal.querySelectorAll('.tp-disclosure'));
-        var sections = Array.prototype.slice.call(portal.querySelectorAll('.tp-section'));
-        var filtering = false;
-
-        function normalize(value) {
-            value = (value || '').toLocaleLowerCase();
-            return value.normalize ? value.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : value;
-        }
-
-        function restoreDisclosureState() {
-            disclosures.forEach(function (disclosure) {
-                disclosure.hidden = false;
-                if (disclosure.hasAttribute('data-tp-was-open')) {
-                    disclosure.open = disclosure.getAttribute('data-tp-was-open') === '1';
-                    disclosure.removeAttribute('data-tp-was-open');
-                }
-            });
-            sections.forEach(function (section) { section.hidden = false; });
-        }
-
-        function filterDocuments() {
-            var term = normalize(search.value.trim());
-            var visibleCount = 0;
-            clearButton.style.display = term ? 'block' : 'none';
-
-            if (term && !filtering) {
-                disclosures.forEach(function (disclosure) {
-                    disclosure.setAttribute('data-tp-was-open', disclosure.open ? '1' : '0');
-                });
-                filtering = true;
-            }
-
-            documents.forEach(function (documentLink) {
-                var matches = !term || normalize(documentLink.getAttribute('data-search')).indexOf(term) !== -1;
-                documentLink.hidden = !matches;
-                if (matches) visibleCount++;
-            });
-
-            if (!term) {
-                restoreDisclosureState();
-                filtering = false;
-            } else {
-                disclosures.slice().reverse().forEach(function (disclosure) {
-                    var hasVisibleDocument = Array.prototype.some.call(
-                        disclosure.querySelectorAll('.tp-document'),
-                        function (documentLink) { return !documentLink.hidden; }
-                    );
-                    disclosure.hidden = !hasVisibleDocument;
-                    disclosure.open = hasVisibleDocument;
-                });
-
-                sections.forEach(function (section) {
-                    section.hidden = !Array.prototype.some.call(
-                        section.querySelectorAll('.tp-document'),
-                        function (documentLink) { return !documentLink.hidden; }
-                    );
-                });
-            }
-
-            resultCount.textContent = visibleCount + (visibleCount === 1 ? ' documento' : ' documentos');
-            noResults.style.display = visibleCount ? 'none' : 'block';
-        }
-
-        search.addEventListener('input', filterDocuments);
-        search.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape' && search.value) {
-                search.value = '';
-                filterDocuments();
-            }
-        });
-
-        clearButton.addEventListener('click', function () {
-            search.value = '';
-            filterDocuments();
-            search.focus();
-        });
-    }());
-</script>

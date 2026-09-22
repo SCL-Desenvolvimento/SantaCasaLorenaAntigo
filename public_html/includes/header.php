@@ -5,7 +5,8 @@ $isAbout = in_array($r_DIR['page'] ?? '', array('sobre-a-santa-casa', 'sobre_a_s
 $isHumanization = ($r_DIR['page'] ?? '') === 'humanizacao';
 $isSocialActions = in_array($r_DIR['page'] ?? '', array('acoes-sociais-ambientais', 'acoes_sociais_ambientais'), true);
 $isPatientSafety = in_array($r_DIR['page'] ?? '', array('programa-nacional-seguranca', 'programa_nacional_seguranca'), true);
-$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety;
+$isTransparency = in_array($r_DIR['page'] ?? '', array('portal-transparencia', 'portal_transparencia'), true);
+$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency;
 $pageTitle = $r_DIR['info']['titulo'] ?? ($isHome ? 'Cuidado que acolhe. Saúde que transforma.' : 'Página não encontrada');
 $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pagina'] ?? 'Santa Casa de Lorena: conheça nossos serviços, encontre orientações para pacientes e acompanhe as notícias da instituição.');
 ?>
@@ -49,6 +50,10 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <?php if ($isPatientSafety): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
 <link rel="stylesheet" href="<?= scl_url('resources/css/patient-safety.css') ?>?v=1">
+<?php endif; ?>
+<?php if ($isTransparency): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/transparency.css') ?>?v=1">
+<script src="<?= scl_url('resources/js/transparency.js') ?>?v=1" defer></script>
 <?php endif; ?>
 </head>
 <body class="scl-site <?= $isHome ? 'scl-home' : 'scl-inner' ?>">
