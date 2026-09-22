@@ -14,6 +14,8 @@ $r_QueryString = explode('/', substr(QUERY_STRING, 3));
 
 $Url = new Url;
 $r_DIR = $Url->setUrlAmigavel(REDIRECT_URL);
+require_once __DIR__.'/includes/contact_routes.php';
+scl_redirect_contact($r_DIR['page'] ?? '');
 
 if (isset($r_DIR['page']) && $r_DIR['page'] === '404') {
     http_response_code(404);

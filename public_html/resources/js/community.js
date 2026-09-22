@@ -16,6 +16,12 @@
       return;
     }
   }
+  const focusLocation = () => {
+    if (location.hash === "#localizacao")
+      document.getElementById("localizacao")?.focus({ preventScroll: true });
+  };
+  window.addEventListener("hashchange", focusLocation);
+  focusLocation();
   const errors = document.querySelector("[data-form-errors]");
   if (errors) errors.focus();
   const facebook = document.querySelector("[data-share-article]");

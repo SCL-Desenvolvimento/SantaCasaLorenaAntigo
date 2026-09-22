@@ -27,6 +27,7 @@ $_POST['community_token']=$_SESSION['community_token'];
 $state=scl_process_form(array('contato'),'test',fn()=>false,$mailer);verify(isset($state['errors']['captcha']),'Rejected CAPTCHA prevents persistence');
 $state=scl_process_form(array('contato'),'test',$verify,$mailer);
 verify($state['success']&&isset(Create::$data['razao'])&&!isset(Create::$data['unexpected']),'Persist allowlisted contact and return success');
+verify(Create::$table===scl_ouvidoria_table(),'Public form uses the same table as list and report');
 verify(OfflineCommunityMailer::$last->getToAddresses()[0][0]==='secretaria@santacasalorena.org.br','Keep institutional recipient');
 verify(str_contains(OfflineCommunityMailer::$last->Body,'&lt;script&gt;')&&!str_contains(OfflineCommunityMailer::$last->Body,'<script>'),'Escape user content in notification email');
 verify(OfflineCommunityMailer::$last->CharSet==='UTF-8'&&strlen(OfflineCommunityMailer::$last->getSentMIMEMessage())>0,'Build UTF-8 MIME with modern PHPMailer without sending');
@@ -50,5 +51,7 @@ verify(!str_contains($html,'jQuery')&&!str_contains($html,'magnific')&&str_conta
 verify(Update::$data['acessos']===4,'Preserve news access counter');
 verify(!str_contains($html,'1970')&&!str_contains($html,'src=""'),'Missing article date and cover render safely');
 verify(substr_count($html,'<h1>')===1&&str_contains($html,'/hospital/noticias'),'Article routes support subdirectories');
+require __DIR__.'/contact-channels-checks.php';
 define('SCL_PREVIEW',true);$_SERVER['REQUEST_METHOD']='POST';$_POST=$valid+array('form'=>'contato');$state=scl_process_form(array('contato'),'test',$verify,$mailer);verify(!$state['success']&&str_contains($state['errors']['form'],'prévia'),'Preview cannot send even valid-looking submissions');
+$_POST=array();$r_DIR=array('page'=>'fale-conosco','info'=>array('titulo'=>'Contato'));ob_start();require DIR.'includes/header.php';require DIR.'includes/footer.php';$previewMarkup=ob_get_clean();verify(!str_contains($previewMarkup,'https://www.google.com/recaptcha/api.js'),'Preview still excludes external CAPTCHA');
 echo 'OK: '.($count-$before)." community and article checks; no real email sent.\n";

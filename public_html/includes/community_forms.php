@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/about_helpers.php';
+require_once __DIR__ . '/ouvidoria_queries.php';
 
 function scl_form_fields($mode) {
     if ($mode === 'pesquisa') {
@@ -67,7 +68,7 @@ function scl_process_form($allowed, $secret, $verifyCaptcha = null, $mailerFacto
             if (!move_uploaded_file($file['tmp_name'], $attachment)) throw new RuntimeException('Upload failed');
         }
         $create = new Create();
-        $create->ExeCreate(PREFIX.$tables[$mode], $data);
+        $create->ExeCreate($mode === 'contato' ? scl_ouvidoria_table() : PREFIX.$tables[$mode], $data);
         if (!$create->getResult()) {
             if ($attachment && is_file($attachment)) unlink($attachment);
             throw new RuntimeException('Insert failed');

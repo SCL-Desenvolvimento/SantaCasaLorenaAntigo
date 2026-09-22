@@ -1,9 +1,8 @@
 <?php
 require_once dirname(__DIR__).'/community_forms.php';
 $channels = array('contato'=>'Ouvidoria', 'trabalhe_conosco'=>'Trabalhe conosco', 'pesquisa'=>'Pesquisa de atendimento');
-$initial = isset($_SESSION['tb']) ? 'trabalhe_conosco' : (isset($_SESSION['pa']) ? 'pesquisa' : 'contato');
 unset($_SESSION['tb'], $_SESSION['pa']);
-$selected = $_GET['canal'] ?? $initial;
+$selected = $_GET['canal'] ?? 'contato';
 $mode = is_string($selected) && isset($channels[$selected]) ? $selected : 'contato';
 $state = scl_process_form(array_keys($channels), $secret ?? '');
 if ($state['mode']) $mode = $state['mode'];
@@ -19,11 +18,11 @@ $intros = array('contato'=>'Envie sua dúvida, sugestão, elogio ou manifestaç�
 ?>
 <section class="section-space community-page"><div class="site-container">
 <nav class="community-channels" aria-label="Canais de contato">
-<?php foreach ($channels as $key=>$label): ?><a href="<?= scl_url('fale-conosco') ?>?canal=<?= scl_escape($key) ?>#formulario"<?= $mode === $key ? ' aria-current="page"' : '' ?>><span><?= scl_icon($key === 'trabalhe_conosco' ? 'people' : ($key === 'pesquisa' ? 'heart' : 'file')) ?></span><strong><?= scl_escape($label) ?></strong><span aria-hidden="true">↗</span></a><?php endforeach; ?>
+<?php foreach ($channels as $key=>$label): ?><a href="<?= scl_escape(scl_contact_url($key)) ?>"<?= $mode === $key ? ' aria-current="page"' : '' ?>><span><?= scl_icon($key === 'trabalhe_conosco' ? 'people' : ($key === 'pesquisa' ? 'heart' : 'file')) ?></span><strong><?= scl_escape($label) ?></strong><span aria-hidden="true">↗</span></a><?php endforeach; ?>
 </nav><div class="community-layout"><div class="community-panel" id="formulario"><span class="eyebrow">Estamos aqui para ouvir</span><h2><?= scl_escape($channels[$mode]) ?></h2><p class="community-lead"><?= scl_escape($intros[$mode]) ?></p>
 <?php if ($description): ?><div class="about-prose"><?= scl_about_content($description) ?></div><?php endif; ?>
 <?php require dirname(__DIR__).'/community_form_view.php'; ?>
-</div><aside class="community-aside"><div class="community-info"><span class="eyebrow">Fale com a Santa Casa</span><h2>Encontre o seu caminho</h2><p>Você também pode entrar em contato pelos canais da instituição.</p>
+</div><aside class="community-aside"><div class="community-info" id="localizacao" tabindex="-1"><span class="eyebrow">Fale com a Santa Casa</span><h2>Encontre o seu caminho</h2><p>Você também pode entrar em contato pelos canais da instituição.</p>
 <?php if ($phone): ?><a class="contact-detail" href="tel:<?= scl_escape(preg_replace('/[^0-9+]/', '', $phone)) ?>"><?= scl_icon('phone') ?><span><small>Telefone</small><?= scl_escape($phone) ?></span></a><?php endif; ?>
 <?php if (preg_replace('/\D/', '', $phone) !== '1231593344'): ?><a class="contact-detail" href="tel:+551231593344"><?= scl_icon('phone') ?><span><small>Telefone</small>(12) 3159-3344</span></a><?php endif; ?>
 <?php if ($email): ?><a class="contact-detail" href="mailto:<?= scl_escape($email) ?>"><?= scl_icon('file') ?><span><small>E-mail</small><?= scl_escape($email) ?></span></a><?php endif; ?>

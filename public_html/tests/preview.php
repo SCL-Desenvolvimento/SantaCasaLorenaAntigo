@@ -21,6 +21,8 @@ session_start();
 $_POST = array();
 define('SCL_PREVIEW', true);
 define('ROOT', '/'); define('HOME', '/'); define('DIR', $root . '/'); define('PREFIX', 'scl_');
+require_once $root.'/includes/contact_routes.php';
+scl_redirect_contact(basename(rtrim($path, '/')));
 class Read {
     private $rows = array();
     public function fullRead($sql, $params = null) {

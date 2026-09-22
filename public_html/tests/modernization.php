@@ -39,7 +39,8 @@ class Read {
 }
 class Create {
     public static $data;
-    public function ExeCreate($table, $data) { self::$data = $data; }
+    public static $table;
+    public function ExeCreate($table, $data) { self::$data = $data; self::$table = $table; }
     public function getResult() {return 1;}
 }
 $count = 0;

@@ -9,7 +9,7 @@
 $navigation = array(
 'A Santa Casa' => array('institucional/sobre-a-santa-casa' => 'Nossa história', 'institucional/humanizacao' => 'Humanização', 'institucional/acoes-sociais-ambientais' => 'Ações sociais e ambientais', 'institucional/programa-nacional-seguranca' => 'Segurança do paciente', 'institucional/portal-transparencia' => 'Portal da transparência'),
 'Atendimento' => array('instalacoes/pronto-atendimento' => 'Pronto atendimento SUS', 'instalacoes/clinica-emilia' => 'Clínica Emília', 'instalacoes/centro-diagnostico-por-imagem' => 'Diagnóstico por imagem', 'instalacoes/unidades-de-internacao' => 'Unidades de internação', 'instalacoes/hotelaria' => 'Hotelaria', 'instalacoes/particular_convenio' => 'Particular e convênios'),
-'Para você' => array('servicos/convenios' => 'Convênios atendidos', 'servicos/especialidades' => 'Especialidades', 'servicos/manual-do-paciente-e-visitantes' => 'Guia do paciente e visitante', 'servicos/capacidade-instalacao-producao' => 'Estrutura e produção', 'fale-conosco' => 'Contato e ouvidoria'),
+'Para você' => array('servicos/convenios' => 'Convênios atendidos', 'servicos/especialidades' => 'Especialidades', 'servicos/manual-do-paciente-e-visitantes' => 'Guia do paciente e visitante', 'servicos/capacidade-instalacao-producao' => 'Estrutura e produção', 'fale-conosco?canal=contato#formulario' => 'Contato e ouvidoria', 'fale-conosco?canal=trabalhe_conosco#formulario' => 'Trabalhe conosco', 'fale-conosco?canal=pesquisa#formulario' => 'Pesquisa de atendimento', 'fale-conosco#localizacao' => 'Localização'),
 );
 foreach ($navigation as $label => $links): ?>
 <details class="nav-dropdown"><summary><?= $label ?><span aria-hidden="true">⌄</span></summary><div class="nav-dropdown-panel">

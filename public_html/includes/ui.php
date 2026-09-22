@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . "/contact_routes.php";
 /** Shared presentation helpers. No database or session side effects. */
 function scl_escape($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');

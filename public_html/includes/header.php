@@ -44,7 +44,7 @@ $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null)
 <script src="<?= scl_url('resources/plugins/owlcarousel/owl.carousel.min.js') ?>"></script>
 <?php endif; ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=1">
-<script src="<?= scl_url('resources/js/modern.js') ?>?v=1" defer></script>
+<script src="<?= scl_url('resources/js/modern.js') ?>?v=2" defer></script>
 <?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality || $isEmilia || $isFacility || $isService || $isArticle || $isContact): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/about.js') ?>?v=2" defer></script>
@@ -83,8 +83,8 @@ $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null)
 <link rel="stylesheet" href="<?= scl_url('resources/css/news-listing.css') ?>?v=1">
 <?php endif; ?>
 <?php if ($isArticle || $isContact): ?>
-<link rel="stylesheet" href="<?= scl_url('resources/css/community.css') ?>?v=1">
-<script src="<?= scl_url('resources/js/community.js') ?>?v=1" defer></script>
+<link rel="stylesheet" href="<?= scl_url('resources/css/community.css') ?>?v=2">
+<script src="<?= scl_url('resources/js/community.js') ?>?v=2" defer></script>
 <?php endif; ?>
 </head>
 <body class="scl-site <?= $isHome ? 'scl-home' : 'scl-inner' ?>">

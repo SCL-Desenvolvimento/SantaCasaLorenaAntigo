@@ -1,7 +1,3 @@
-<?php 
-	
-	session_start();
-	$_SESSION['pa'] = true;
-	Header("Location: ".ROOT."fale-conosco");
-
-?>
+<?php
+require_once dirname(__DIR__).'/contact_routes.php';
+scl_redirect_contact('pesquisa_atendimento');

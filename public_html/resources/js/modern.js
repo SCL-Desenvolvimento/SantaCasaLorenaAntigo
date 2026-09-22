@@ -42,19 +42,31 @@ if (navigation && menuToggle) {
   window
     .matchMedia("(min-width: 1101px)")
     .addEventListener("change", closeMenu);
-  const path = location.pathname.replace(/\/$/, "");
-  navigation.querySelectorAll("a").forEach((link) => {
-    if (
-      link.origin === location.origin &&
-      link.pathname.replace(/\/$/, "") === path
-    ) {
-      link.setAttribute("aria-current", "page");
-    }
+  const updateCurrentLink = () => {
+    const path = location.pathname
+      .replace(/\/$/, "")
+      .replace(/fale_conosco$/, "fale-conosco");
+    const current = new URL(location.href);
+    navigation.querySelectorAll("a").forEach((link) => {
+      let matches =
+        link.origin === location.origin &&
+        link.pathname.replace(/\/$/, "") === path;
+      if (matches && /fale-conosco$/.test(path)) {
+        const target = new URL(link.href);
+        matches =
+          current.hash === "#localizacao"
+            ? target.hash === "#localizacao"
+            : target.hash !== "#localizacao" &&
+              target.searchParams.get("canal") ===
+                (current.searchParams.get("canal") || "contato");
+      }
+      if (matches) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+  };
+  navigation.addEventListener("click", (event) => {
+    if (event.target.closest("a")) closeMenu();
   });
-}
-// Legacy contact tabs already provide their own click handlers.
-if (location.hash === "#trabalhe-conosco") {
-  window.addEventListener("load", () =>
-    document.getElementById("trabalhe-conosco")?.click(),
-  );
+  window.addEventListener("hashchange", updateCurrentLink);
+  updateCurrentLink();
 }

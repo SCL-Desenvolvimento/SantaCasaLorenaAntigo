@@ -608,3 +608,7 @@
     grid-row: 1;
   }
 }
+
+#localizacao {
+  scroll-margin-top: 120px;
+}

@@ -1,10 +1,28 @@
 # Relatório de modernização — inventário e pendências
 
-## Situação consolidada — 22/09/2026
+## Atualização de execução — etapa 1 aplicada em 22/09/2026
+
+As correções da etapa 1 foram autorizadas e aplicadas no código. O inventário posterior registra os achados anteriores; para esses itens, prevalece o estado desta atualização.
+
+| Item | Resultado aplicado | Validação restante |
+|---|---|---|
+| CAPTCHA | Script carregado fora de $needsLegacy, uma única vez no contato/doações; a prévia continua sem integrações externas. | Chaves/domínio e verificação real na hospedagem. |
+| Ouvidoria | Entrada antiga redireciona diretamente ao canal contato. | Testar no domínio definitivo. |
+| Trabalhe conosco / Pesquisa | Redirecionamentos HTTP diretos, aliases com hífen/underscore e exit; seleção não depende de flags da sessão. | Homologar os recebimentos reais. |
+| Localização | Entrada antiga aponta para #localizacao; seção recebe foco e respeita o cabeçalho fixo. | Validar endereço e mapa reais. |
+| Menu / rodapé | Atalhos diretos dos quatro destinos, indicação do canal ativo e fechamento do menu móvel ao navegar. | Revisão editorial de contatos. |
+| Ouvidoria — dados | Formulário, listagem e relatório usam a definição compartilhada de tabela ouvidoria; contatos históricos permanecem separados. | Confirmar esquema e dados no banco da hospedagem. |
+| Ouvidoria — relatório | Filtros usam data_cadastro com parâmetros vinculados, datas válidas, período ordenado e inclusão do dia inteiro. | Conferir exportação com o acervo real. |
+
+A listagem da Ouvidoria passa a inserir nome/e-mail como texto, trata lista vazia e falha de carregamento. O relatório escapa os campos de texto. O endpoint de contato e o relatório de Ouvidoria encerram a execução quando a autenticação falha. Não foram habilitadas novas ações de exclusão nem alterados registros do banco. A revisão abrangente de segurança do administrativo permanece na etapa 2.
+
+Validação: 733 verificações automatizadas aprovadas em PHP 8.4.25; inclui 42 verificações de canais, carga do CAPTCHA fora da prévia, links em subdiretório, independência da sessão e filtros de relatório. Seis entradas/aliases testados por HTTP retornaram 302 com os destinos corretos. No navegador, foram conferidos os quatro destinos, seleção do canal, foco na localização, menu móvel e ausência de rolagem horizontal a 390 px. Nenhum e-mail real enviado, nenhum CAPTCHA resolvido e nenhum deploy realizado. Os testes de conteúdo/query usam dados isolados; não substituem a homologação integrada com o banco.
+
+## Situação consolidada do inventário — antes da execução da etapa 1
 
 **O projeto ainda não está 100% modernizado.** A maior parte da interface pública foi renovada, mas há falhas funcionais confirmadas, acessos antigos incompletos, administrativo legado e homologação de infraestrutura pendente. Interface modernizada não significa fluxo aprovado em produção.
 
-Esta revisão altera somente o relatório. Nenhuma correção de código, atualização de infraestrutura, gravação no banco ou publicação está sendo executada. As correções propostas aguardam autorização. Este inventário prevalece sobre as afirmações de conclusão do histórico mantido ao final.
+O inventário foi inicialmente produzido sem alterar código. Posteriormente, o usuário autorizou a etapa 1, cujos resultados constam acima. As demais etapas continuam pendentes; não houve atualização da hospedagem ou publicação.
 
 Escopo: 24 templates diretamente em `includes/paginas`, a página inicial, componentes compartilhados, 17 templates de conteúdo administrativo em `admin/system`, login/recuperação, cinco relatórios administrativos e bibliotecas identificadas no código. As abas e operações desses templates estão discriminadas abaixo. Documentos de transparência são acervo, não telas adicionais. Sistemas externos não fazem parte da aplicação auditada.
 
@@ -116,7 +134,7 @@ Integrar os quatro canais ao Fale conosco é válido. Não é necessário criar 
 | Manual do paciente e visitante | Mesmo template de serviços | Orientações, documentos e download. |
 | Contatos — listagem histórica | `admin/system/paginas/fale-conosco.php` | Esclarecer finalidade e separar registros da Ouvidoria. |
 | Ouvidoria — conteúdo e recebimentos | Mesmo template de contato | Corrigir divergência entre `contato` e `ouvidoria`. |
-| Trabalhe conosco — conteúdo e currículos | Mesmo template de contato | Revisar acesso a PDFs e função `listTrabalheConosco` duplicada no JavaScript. |
+| Trabalhe conosco — conteúdo e currículos | Mesmo template de contato | Revisar acesso a PDFs e limpar o trecho duplicado comentado de `listTrabalheConosco`; não se trata de duas funções ativas. |
 | Doações — conteúdo e recebimentos | Mesmo template de contato | Preservar instruções oficiais e modalidades nos registros. |
 | Pesquisa — conteúdo e respostas | Mesmo template de contato | Conferir listagem/relatório das sete respostas e acesso pelo menu. |
 | Localização — edição | Mesmo template de contato | Endereço, telefone, e-mail e correspondência com o público. |
@@ -171,9 +189,9 @@ Outras pastas presentes, sem certificação de versão/uso ativo: `aguia-gallery
 
 ### Prioridade 1 — funcionamento e proteção antes da publicação
 
-- [ ] Corrigir CAPTCHA e testar sua renderização fora de `SCL_PREVIEW`.
-- [ ] Resolver Ouvidoria/Localização vazias e redirecionamentos por sessão, preservando aliases e links.
-- [ ] Alinhar gravação, listagem e relatório de Ouvidoria com o banco real.
+- [x] Corrigir CAPTCHA e testar sua renderização fora de `SCL_PREVIEW` (homologação externa ainda pendente).
+- [x] Resolver Ouvidoria/Localização vazias e redirecionamentos por sessão, preservando aliases e links.
+- [x] Alinhar gravação, listagem e relatório de Ouvidoria no código; validar o esquema e os registros reais na homologação.
 - [ ] Corrigir autorização nos endpoints: em `admin/webservices/paginas/fale-conosco/servico.php:7–15`, o código redireciona quando o login falha, mas não encerra a execução antes de processar `acao`. Revisar também os outros endpoints; um cabeçalho Location não interrompe PHP.
 - [ ] Revisar CSRF e autorização por ação/registro nos cadastros, alterações, exclusões e relatórios. O endpoint de contato inspecionado não apresenta validação CSRF; não houve auditoria exaustiva de todos os endpoints.
 - [ ] Migrar MD5 e recuperação de senha; revisar sessão, cookies, expiração e tentativas repetidas.

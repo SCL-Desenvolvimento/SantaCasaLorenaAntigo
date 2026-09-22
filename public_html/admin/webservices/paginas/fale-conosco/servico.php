@@ -1,12 +1,14 @@
 <?php
 	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	require('../../../../_app/Config.inc.php');
+    require_once __DIR__.'/../../../../includes/ouvidoria_queries.php';
 	
 	$login = new Login(3);
 
 	if(!$login->CheckLogin()):
 		unset($_SESSION['UsuarioLogin']);
 		header("Location: index.php?exe=Restrito");
+        exit;
 	else:
 		$usuarioLogin = $_SESSION['UsuarioLogin'];
 	endif;
@@ -39,19 +41,14 @@
 			break;
 
 			case 'listOuvidoria':
+                $read = new Read();
+                [$sql, $params] = scl_ouvidoria_query(array(), true);
+                $read->fullRead($sql, $params);
+                header('Content-Type: application/json; charset=UTF-8');
+                echo json_encode($read->getResult() ?: array());
+                break;
 
-				//Trás apenas conteudos que o usuáro tem acesso
-	        	$read = new Read;
-				$read->fullRead("SELECT *, date_format(`data_cadastro`,'%d/%m/%Y às %Hh%i') AS `data_formatada` FROM ".PREFIX."contato ORDER BY data_cadastro DESC");
-
-	        	if($read->getResult()):
-	        		echo json_encode($read->getResult());
-	        	else:
-	        		echo 0;
-	        	endif;
-			break;
-
-			case 'listTrabalheConosco':
+            case 'listTrabalheConosco':
 
 				//Trás apenas conteudos que o usuáro tem acesso
 	        	$read = new Read;

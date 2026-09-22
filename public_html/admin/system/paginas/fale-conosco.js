@@ -32,31 +32,26 @@
   }
 
   function listOuvidoria(){
-
-    var request = $.ajax({ url: 'webservices/paginas/fale-conosco/servico.php', type: 'POST', dataType: 'Json', data: {acao:'listOuvidoria'}});
+    var table = $('#lista-ouvidoria');
+    var request = $.ajax({ url: 'webservices/paginas/fale-conosco/servico.php', type: 'POST', dataType: 'json', data: {acao:'listOuvidoria'}});
     request.done(function(response){
-
-      //console.log(response);
-
-      for(i=0; i <= response.length - 1; i++) {
-        $('#lista-ouvidoria tbody').append(`<tr>
-          <td>${response[i]['nome']}</td>
-          <td>${response[i]['email']}</td>
-          <td style='font-size:1px !important; color:transparent;'>${response[i]['data_cadastro']}<span style='font-size:14px !important; color:#000;'>${response[i]['data_formatada']}</span></td>
-          <td></td>
-        </tr>`);
-      }
-      //"<a class='btn btn-block btn-flat btn-danger btn-xs' onCLick='excluiContato(this, "+response[i]['id_contato']+")'>Excluir</a>"+
-
-      $('#lista-ouvidoria').DataTable({
-        "columnDefs": [
-          {
-            "targets": [ 3 ],
-            "searchable": false,
-            "orderable": false,
-          },
-        ]
+      table.find('tbody').empty();
+      (Array.isArray(response) ? response : []).forEach(function(item){
+        var row = $('<tr>');
+        $('<td>').text(item.nome || '').appendTo(row);
+        $('<td>').text(item.email || '').appendTo(row);
+        $('<td>').attr('data-order', item.data_cadastro || '').text(item.data_formatada || '').appendTo(row);
+        $('<td>').appendTo(row);
+        table.find('tbody').append(row);
       });
+      table.DataTable({
+        order: [[2, 'desc']],
+        columnDefs: [{targets: [3], searchable: false, orderable: false}],
+        language: {emptyTable: 'Nenhuma manifestação recebida.'}
+      });
+    });
+    request.fail(function(){
+      table.find('tbody').empty().append($('<tr>').append($('<td>').attr('colspan', 4).attr('role', 'alert').text('Não foi possível carregar a Ouvidoria. Atualize a página para tentar novamente.')));
     });
   }
 
