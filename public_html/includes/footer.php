@@ -39,7 +39,7 @@ jQuery(function ($) {
     $('.carousel-convenios').owlCarousel({loop:false,margin:24,responsive:{0:{items:2},740:{items:4}}});
 });
 </script>
-<?php if (in_array($r_DIR['page'] ?? '', array('fale-conosco', 'fale_conosco', 'doacoes'), true)): ?><script src="https://www.google.com/recaptcha/api.js" async defer></script><?php endif; ?>
+<?php if (!defined('SCL_PREVIEW') && in_array($r_DIR['page'] ?? '', array('fale-conosco', 'fale_conosco', 'doacoes'), true)): ?><script src="https://www.google.com/recaptcha/api.js" async defer></script><?php endif; ?>
 <?php endif; ?>
 </body>
 </html>

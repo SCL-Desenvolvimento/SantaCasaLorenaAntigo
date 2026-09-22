@@ -1,183 +1,33 @@
-<?php 
-	
-	$dadosNoticia = array("acessos" => $r_DIR['noticia']['acessos'] + 1);
-	$updateAcessos = new Update();
-	$updateAcessos->ExeUpdate(PREFIX."noticia", $dadosNoticia, "WHERE id_noticia = :id_noticia", "id_noticia={$r_DIR['noticia']['id_noticia']}");
-
+<?php
+require_once dirname(__DIR__).'/article_helpers.php';
+$article = $r_DIR['noticia'] ?? array();
+$articleId = max(0, (int)($article['id_noticia'] ?? 0));
+if ($articleId && !defined('SCL_PREVIEW')) {
+    $updateAcessos = new Update();
+    $updateAcessos->ExeUpdate(PREFIX.'noticia', array('acessos'=>(int)($article['acessos'] ?? 0)+1), 'WHERE id_noticia = :id_noticia', 'id_noticia='.$articleId);
+}
+$getTags = new Read();
+$getTags->fullRead('SELECT T.* FROM '.PREFIX.'tag AS T INNER JOIN '.PREFIX.'tag_noticia AS TN ON TN.id_tag = T.id_tag WHERE TN.id_noticia = :article', 'article='.$articleId);
+$articleTags = array_values(array_filter($getTags->getResult() ?: array(), fn($tag)=>!empty($tag['url']) && !empty($tag['nome'])));
+$tagIds = array_values(array_filter(array_map(fn($tag)=>(int)($tag['id_tag'] ?? 0), $articleTags)));
+$related = array();
+if ($tagIds) {
+    $readRelated = new Read();
+    $readRelated->fullRead('SELECT DISTINCT N.* FROM '.PREFIX.'noticia AS N INNER JOIN '.PREFIX.'tag_noticia AS TN ON TN.id_noticia = N.id_noticia WHERE N.status = 1 AND N.id_noticia != :article AND TN.id_tag IN ('.implode(',', $tagIds).') ORDER BY N.data_criacao DESC LIMIT 3', 'article='.$articleId);
+    $related = $readRelated->getResult() ?: array();
+}
+$articleImage = scl_link($article['img'] ?? '');
+$articlePath = 'noticias/'.rawurlencode($article['link'] ?? '');
+$shareUrl = preg_match('~^https?://~i', HOME) ? rtrim(HOME, '/').'/'.$articlePath : scl_url($articlePath);
 ?>
-<section class='bloco-conteudo noticia-descricao'>
-
-	<div class="col-md-offset-1 col-md-10 col-sm-offset-0 col-sm-12">
-		<center>
-			<br><br>
-			<img src='<?php echo ROOT.$r_DIR['noticia']['img'] ; ?>' alt='<?php echo $r_DIR['noticia']['titulo'] ; ?>' class='img-responsive'>
-			<br><br>
-		</center>
-		<?php echo $r_DIR['noticia']['descricao'] ; ?>
-	</div>
-
-	<div class="btn-compartilhar">
-		<div class="fb-share-button" data-href="<?php echo HOME.substr(str_replace("SCL/", "", $_SERVER['REDIRECT_URL']), 1) ?>" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo HOME.substr(str_replace("SCL/", "", $_SERVER['REDIRECT_URL']), 1) ?>&amp;src=sdkpreparse">Compartilhar</a></div>
-		<div class="clear"></div>
-	</div>
-
-	<?php 
-
-		$getTags = new Read();
-		$getTags->fullRead("SELECT T.* 
-							FROM ".PREFIX."tag AS T
-							INNER JOIN ".PREFIX."tag_noticia AS TN ON (TN.id_tag = T.id_tag)
-							WHERE TN.id_noticia = {$r_DIR['noticia']['id_noticia']}");
-
-		if($getTags->getResult()){
-
-			$tagsRelacionadas = "(";
-
-			echo "<div class='tags'> Tags:";
-				foreach ($getTags->getResult() AS $key => $tag) {
-
-					$tagsRelacionadas .= "T.id_tag = {$tag['id_tag']}".(($getTags->getRowCount() - 1) == $key ? "" : " OR ");
-					echo "<a href='".ROOT."noticias/{$tag['url']}'>#{$tag['nome']}</a>".(($getTags->getRowCount() - 1) == $key ? "" : ( ($getTags->getRowCount() - 2) == $key ? "<span> e </span>" : "<span>, </span>" ));
-				}
-
-			$tagsRelacionadas .= ") AND N.id_noticia != {$r_DIR['noticia']['id_noticia']} AND ";
-
-			echo "</div>";
-		}
-
-	?>	
-</section>
-<div class="clear"></div>
-
-<?php 
-
-	if($getTags->getResult()){
-		include_once(DIR."includes/noticias.php");
-	}
-
-?>
-
-<!-- Magnific Popup CSS tema -->
-<link rel="stylesheet" href="<?php echo HOME; ?>resources/plugins/magnific-popup/magnific-popup.css"> 
-
-<!-- Magnific Popup core JS file -->
-<script src="<?php echo HOME; ?>resources/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
-
-<script type="text/javascript">
-	
-	$(document).ready(function(){
-
-		function getPopUp(){
-			$('.pop-up').magnificPopup({
-				delegate: 'a',
-				type: 'image',
-				tLoading: 'Carregando imagem #%curr%...',
-				mainClass: 'mfp-img-mobile',
-				gallery: {
-					enabled: true,
-					navigateByImgClick: true,
-					preload: [0,1] // Will preload 0 - before current, and 1 after the current image
-				},
-				image: {
-					tError: '<a href="%url%">A imagem #%curr%</a> não pode ser carregada.',
-					titleSrc: function(item) {
-						//return item.el.attr('title') + '<small>by Marsel Van Oosten</small>';
-						return item.el.attr('title') + '<small>'+item.el.attr('alt')+'</small>';
-					}
-				}
-			});
-		}
-
-		function getGallerias(){
-
-			gallerias = $(".ck-galleria");
-
-			if($("#galleria-aux").length){
-				$("#galleria-aux").html("");
-				$("#galleria-aux").fadeIn();
-			}
-
-			$.each(gallerias, function( key, cat ){
-				//dataType : "json",
-				//console.log($(cat).find('input').val());
-				var request = $.ajax({ url: '<?php echo ROOT; ?>includes/servicos/galeria.php', dataType : "json", type: 'POST', data: {acao:'getGalleria', galleria: $(cat).find('input').val()}, async: false });
-				request.done(function(g){
-
-					console.log(g);
-
-					newGallery = "<div class='galeria-fotos pop-up'>";
-					$.each(g, function(){
-						//"+this.galeria+"
-						newGallery = newGallery.concat("<a href='<?php echo ROOT; ?>"+this.url+"' title='<?php echo (isset($r_DIR['noticia']) ? $r_DIR['noticia']['titulo'] : ""); ?>' alt='"+this.descricao+"'><div class='item-slide' style='background: url(<?php echo ROOT; ?>"+this.url+") no-repeat; background-size: cover; background-position: top;'></div></a>");
-					});
-					newGallery = newGallery.concat("</div>");
-					//console.log(newGallery);
-
-					if($("#galleria-aux").length){
-						$("#galleria-aux").append(newGallery);
-					}else{
-						$(cat).replaceWith(newGallery);
-					}
-
-					
-				});
-
-			});
-
-			/*
-			items:2,
-			loop:true,
-			margin:20,
-			lazyLoad:true, //in this example only applied on video thumbnails
-			merge: true, 
-			video: true,
-			autoplay:true,
-			autoplayTimeout:3000,
-			autoplaySpeed:1000,
-			dots: false,
-			nav: false,
-			//navText: ["<img src='<?php echo ROOT; ?>resources/img/icones/left.png'>","<img src='<?php echo ROOT; ?>resources/img/icones/right.png'>"],
-			*/
-
-			$('.galeria-fotos').owlCarousel({
-				loop:true,
-    			margin:20,
-    			responsiveClass:true,
-				responsive:{  
-					0:{
-						dots: false,
-					   	items:1
-					},
-					480:{
-					 	dots: false,
-					   	items:2
-					},
-					678:{
-					 	dots: false,
-					   	items:3
-					},
-					960:{
-					 	dots: false,
-					   	items:4
-					}
-				}
-			});
-
-			getPopUp();
-
-		}
-
-
-		function setPopUp(){
-			images = $(".insert-popup");
-			$.each(images, function( key, img ){
-				//console.log($(img));
-				$(img).replaceWith("<div class='pop-up'><a href='"+$(img).attr('src')+"' title='"+$(img).attr('alt')+"' alt=''>"+img.outerHTML+"</a></div>");
-			});
-		}
-
-		setPopUp();
-		getGallerias();
-
-	});
-</script>
+<section class="section-space article-page"><div class="site-container">
+<div class="article-layout"><article class="article-main" aria-label="Conteúdo da notícia">
+<?php if (!empty($article['subtitulo'])): ?><p class="article-deck"><?= scl_escape(strip_tags($article['subtitulo'])) ?></p><?php endif; ?>
+<?php if ($articleImage): ?><figure class="article-cover"><a class="article-image-link" href="<?= scl_escape($articleImage) ?>"><img src="<?= scl_escape($articleImage) ?>" alt="<?= scl_escape(strip_tags($article['titulo'] ?? '')) ?>" width="1000" height="620" fetchpriority="high"></a></figure><?php endif; ?>
+<div class="article-prose"><?= scl_article_content($article['descricao'] ?? '') ?></div>
+<?php if ($articleTags): ?><nav class="article-tags" aria-label="Assuntos desta notícia"><span>Assuntos</span><?php foreach ($articleTags as $tag): ?><a href="<?= scl_url('noticias/'.rawurlencode($tag['url'])) ?>"><?= scl_escape($tag['nome']) ?></a><?php endforeach; ?></nav><?php endif; ?>
+<a class="text-link article-back" href="<?= scl_url('noticias') ?>">← Voltar para todas as notícias</a>
+</article><aside class="article-aside"><div class="community-info"><span class="eyebrow">Compartilhe o cuidado</span><h2>Leve esta notícia adiante</h2><p>Compartilhe com quem acompanha a Santa Casa.</p><div class="article-share"><button class="scl-button" type="button" data-copy-article="<?= scl_escape(scl_url($articlePath)) ?>" hidden>Copiar link <?= scl_icon('file') ?></button><a data-share-article="<?= scl_escape(scl_url($articlePath)) ?>" href="https://www.facebook.com/sharer/sharer.php?u=<?= rawurlencode($shareUrl) ?>" target="_blank" rel="noopener noreferrer">Compartilhar no Facebook ↗</a><span role="status" data-copy-status></span></div></div><div class="community-help"><h3>Mais histórias da Santa Casa</h3><p>Acompanhe as novidades e ações da instituição.</p><a class="text-link" href="<?= scl_url('noticias') ?>">Explorar notícias <?= scl_icon('arrow') ?></a></div></aside></div>
+<?php if ($related): ?><section class="article-related" aria-labelledby="related-title"><span class="eyebrow">Continue a leitura</span><h2 id="related-title">Notícias relacionadas</h2><div class="article-related-grid"><?php foreach ($related as $item): ?><article><a href="<?= scl_url('noticias/'.rawurlencode($item['link'])) ?>"><?php if (scl_link($item['img'] ?? '')): ?><img src="<?= scl_escape(scl_link($item['img'])) ?>" alt="" loading="lazy" width="480" height="300"><?php endif; ?><h3><?= scl_escape($item['titulo']) ?></h3><p><?= scl_escape(strip_tags($item['subtitulo'] ?? '')) ?></p><span class="text-link">Ler notícia →</span></a></article><?php endforeach; ?></div></section><?php endif; ?>
+</div></section>
+<dialog class="article-lightbox" aria-label="Imagem da notícia ampliada"><button type="button" data-article-close autofocus>Fechar ×</button><img alt=""></dialog>

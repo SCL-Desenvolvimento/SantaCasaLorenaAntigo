@@ -19,11 +19,16 @@ chdir($root);
 session_start();
 // The preview must never process submissions.
 $_POST = array();
+define('SCL_PREVIEW', true);
 define('ROOT', '/'); define('HOME', '/'); define('DIR', $root . '/'); define('PREFIX', 'scl_');
 class Read {
     private $rows = array();
     public function fullRead($sql, $params = null) {
         global $aboutFixtures, $previewNewsRows;
+        if (str_contains($sql, 'SELECT DISTINCT N.*')) { $items=require __DIR__.'/fixtures/news-listing.php'; parse_str($params ?? '', $values); $this->rows=array_slice(array_values(array_filter($items,fn($item)=>(int)$item['id_noticia'] !== (int)($values['article'] ?? 0))),0,3);return; }
+        if (str_contains($sql, 'SELECT T.*')) { $this->rows=array(array('id_tag'=>1,'nome'=>'Institucional','url'=>'institucional')); return; }
+        if (str_contains($sql, PREFIX.'galeria_anexo')) { $this->rows=array(array('url'=>'resources/img/santa-casa-home/pronto-atendimento.png','descricao'=>'Imagem demonstrativa da Santa Casa'),array('url'=>'resources/img/santa-casa-home/unidade-de-internacao.png','descricao'=>'Ambientes de cuidado'));return; }
+        if (str_contains($sql, PREFIX.'pagina_doacao')) { $this->rows=array(array('bloco1'=>'Cada gesto ajuda a cuidar de mais pessoas','bloco2'=>'Apoie a Santa Casa de Lorena e fortaleça o cuidado com a nossa comunidade.','bloco3'=>'Prévia demonstrativa. Consulte a instituição para obter os dados bancários oficiais.'));return; }
         if (str_contains($sql, 'AS listing_total')) { $this->rows=array(array('listing_total'=>count($previewNewsRows ?? array())));return; }
         if (str_contains($sql, 'SELECT DISTINCT T.nome')) { $this->rows=array(array('nome'=>'Institucional','url'=>'institucional'),array('nome'=>'Ações sociais','url'=>'acoes-sociais'));return; }
         if (str_contains($sql, PREFIX.'unidade_internacao_imagem ')) {
@@ -83,6 +88,17 @@ if (preg_match('~^/noticias(?:/(institucional|acoes-sociais))?(?:/([0-9]+))?/?$~
     $Url=new class($previewNewsTag) { private $tag; public function __construct($tag){$this->tag=$tag;} public function getNoticiaTag(){return $this->tag;} };
     $r_DIR=array('page'=>'noticias','info'=>array('titulo'=>'Notícias','sub_titulo'=>'Acompanhe as novidades da Santa Casa.','descricao_pagina'=>''),'noticias'=>array_slice($previewNewsRows,($previewNewsPage-1)*5,5),'limit'=>5,'paginacao'=>array('pag'=>$previewNewsPage),'termos'=>'SELECT * FROM '.PREFIX.'noticia LIMIT :limit OFFSET :offset','places'=>'limit=5&offset='.(($previewNewsPage-1)*5));
 }
+if (in_array(rtrim($path,'/'),array('/fale-conosco','/fale_conosco','/doacoes'),true)) {
+    $isDonation=str_contains($path,'doacoes');
+    $r_DIR=array('page'=>$isDonation?'doacoes':'fale-conosco','info'=>array('titulo'=>$isDonation?'Doações':'Fale conosco','sub_titulo'=>$isDonation?'Sua solidariedade fortalece o cuidado.':'Um espaço para ouvir, acolher e orientar.'));
+}
+if (preg_match('~^/noticias/noticia-demonstrativa-([0-9]+)/?$~',$path,$match)) {
+    $items=require __DIR__.'/fixtures/news-listing.php'; $item=$items[max(0,min(count($items)-1,(int)$match[1]-1))];
+    $item['id_noticia']=(int)$match[1];$item['criador']='Comunicação · Conteúdo demonstrativo';
+    $item['descricao']='<p>Esta é uma notícia demonstrativa para conferir a experiência de leitura da Santa Casa de Lorena.</p><h2>Cuidado que se constrói em comunidade</h2><p>Informação, acolhimento e participação aproximam a instituição das pessoas. Este espaço reúne os registros das ações e novidades da Santa Casa.</p><blockquote>Uma história feita de pessoas e de cuidado.</blockquote><p>Veja os registros desta publicação na galeria abaixo.</p><div class="ck-galleria"><input value="1"></div><h2>Acompanhe a Santa Casa</h2><p>Encontre outras publicações na <a href="noticias">listagem de notícias</a>.</p>';
+    if(($_GET['fixture']??'')==='empty'){$item['img']='';$item['data_criacao']='';$item['descricao']='';}
+    $r_DIR=array('page'=>'noticia','info'=>array('titulo'=>$item['titulo'],'sessao'=>'Notícias'),'noticia'=>$item);
+}
 if (($r_DIR['page'] ?? '') === '404') http_response_code(404);
 require 'includes/header.php';
 echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · ' . (($r_DIR['page'] ?? '') === 'portal-transparencia' ? 'Acervo real de arquivos locais' : 'Conteúdo demonstrativo') . ' · Banco de dados e envios não conectados</aside>';
@@ -101,6 +117,7 @@ else {
     elseif ($r_DIR['page'] === 'clinica-emilia') { $getPagina = new Read(); require 'includes/paginas/clinica_emilia.php'; }
     elseif (in_array($r_DIR['page'], array('centro-diagnostico-por-imagem','unidades-de-internacao','particular-convenio'), true)) { $getPagina = new Read(); require 'includes/paginas/'.str_replace('-', '_', $r_DIR['page']).'.php'; }
     elseif(in_array($r_DIR['page'],array('convenios','especialidades','capacidade-instalacao-producao','manual-do-paciente-e-visitantes'),true)){$getPagina=new Read();require 'includes/paginas/'.str_replace('-','_',$r_DIR['page']).'.php';}
+    elseif(in_array($r_DIR['page'],array('noticia','fale-conosco','doacoes'),true))require 'includes/paginas/'.str_replace('-','_',$r_DIR['page']).'.php';
     elseif($r_DIR['page']==='noticias')require 'includes/paginas/noticias.php';
     else require 'includes/paginas/404.php';
 }

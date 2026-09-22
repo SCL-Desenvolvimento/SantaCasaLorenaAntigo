@@ -12,9 +12,11 @@ $isEmilia = in_array($r_DIR['page'] ?? '', array('clinica-emilia', 'clinica_emil
 $isFacility = in_array($r_DIR['page'] ?? '', array('centro-diagnostico-por-imagem', 'centro_diagnostico_por_imagem', 'unidades-de-internacao', 'unidades_de_internacao', 'particular-convenio', 'particular_convenio'), true);
 $isService = in_array($r_DIR['page'] ?? '', array('convenios', 'especialidades', 'capacidade-instalacao-producao', 'capacidade_instalacao_producao', 'manual-do-paciente-e-visitantes', 'manual_do_paciente_e_visitantes'), true);
 $isNewsListing = ($r_DIR['page'] ?? '') === 'noticias';
-$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency && !$isUrgentCare && !$isHospitality && !$isEmilia && !$isFacility && !$isService && !$isNewsListing;
+$isArticle = ($r_DIR['page'] ?? '') === 'noticia';
+$isContact = in_array($r_DIR['page'] ?? '', array('fale-conosco', 'fale_conosco', 'doacoes'), true);
+$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency && !$isUrgentCare && !$isHospitality && !$isEmilia && !$isFacility && !$isService && !$isNewsListing && !$isArticle && !$isContact;
 $pageTitle = $r_DIR['info']['titulo'] ?? ($isHome ? 'Cuidado que acolhe. Saúde que transforma.' : 'Página não encontrada');
-$description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pagina'] ?? 'Santa Casa de Lorena: conheça nossos serviços, encontre orientações para pacientes e acompanhe as notícias da instituição.');
+$description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null) : null) ?? $r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pagina'] ?? 'Santa Casa de Lorena: conheça nossos serviços, encontre orientações para pacientes e acompanhe as notícias da instituição.');
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -24,7 +26,7 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <meta name="theme-color" content="#145c50">
 <title><?= scl_escape(strip_tags($pageTitle)) ?> | Santa Casa de Lorena</title>
 <meta name="description" content="<?= scl_escape($description) ?>">
-<meta property="og:type" content="website">
+<meta property="og:type" content="<?= $isArticle ? 'article' : 'website' ?>">
 <meta property="og:title" content="<?= scl_escape(strip_tags($pageTitle)) ?> | Santa Casa de Lorena">
 <meta property="og:description" content="<?= scl_escape($description) ?>">
 <?php if (!empty($r_DIR['info']['imagem'])): ?>
@@ -43,7 +45,7 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <?php endif; ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/modern.js') ?>?v=1" defer></script>
-<?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality || $isEmilia || $isFacility || $isService): ?>
+<?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality || $isEmilia || $isFacility || $isService || $isArticle || $isContact): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/about.js') ?>?v=2" defer></script>
 <?php endif; ?>
@@ -77,8 +79,12 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <link rel="stylesheet" href="<?= scl_url('resources/css/services.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/services.js') ?>?v=1" defer></script>
 <?php endif; ?>
-<?php if ($isNewsListing): ?>
+<?php if ($isNewsListing || $isArticle): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/news-listing.css') ?>?v=1">
+<?php endif; ?>
+<?php if ($isArticle || $isContact): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/community.css') ?>?v=1">
+<script src="<?= scl_url('resources/js/community.js') ?>?v=1" defer></script>
 <?php endif; ?>
 </head>
 <body class="scl-site <?= $isHome ? 'scl-home' : 'scl-inner' ?>">

@@ -1,4 +1,211 @@
-# Modernização do site público
+# Relatório de modernização — inventário e pendências
+
+## Situação consolidada — 22/09/2026
+
+**O projeto ainda não está 100% modernizado.** A maior parte da interface pública foi renovada, mas há falhas funcionais confirmadas, acessos antigos incompletos, administrativo legado e homologação de infraestrutura pendente. Interface modernizada não significa fluxo aprovado em produção.
+
+Esta revisão altera somente o relatório. Nenhuma correção de código, atualização de infraestrutura, gravação no banco ou publicação está sendo executada. As correções propostas aguardam autorização. Este inventário prevalece sobre as afirmações de conclusão do histórico mantido ao final.
+
+Escopo: 24 templates diretamente em `includes/paginas`, a página inicial, componentes compartilhados, 17 templates de conteúdo administrativo em `admin/system`, login/recuperação, cinco relatórios administrativos e bibliotecas identificadas no código. As abas e operações desses templates estão discriminadas abaixo. Documentos de transparência são acervo, não telas adicionais. Sistemas externos não fazem parte da aplicação auditada.
+
+Método: inspeção estática de código, manifestos e versões declaradas; consulta a fontes oficiais para suporte e referências atuais. Não houve acesso ao banco, login no painel, inspeção de produção ou teste ofensivo. Os 689 testes e três cenários de upload da etapa anterior não foram repetidos nesta revisão documental e não cobrem todos os problemas agora encontrados.
+
+### Pendências confirmadas nos canais de contato
+
+| Item | Situação comprovada | Ajuste proposto, não aplicado |
+|---|---|---|
+| Ouvidoria | `includes/paginas/ouvidoria.php` está vazio. O formulário modernizado está no contato, como canal `contato`. | Encaminhar o acesso antigo diretamente a `/fale-conosco?canal=contato#formulario`, preservando aliases. |
+| Trabalhe conosco | `trabalhe_conosco.php` inicia sessão, define `tb` e redireciona; a configuração geral já inicia sessão. | Usar redirecionamento direto ao canal `trabalhe_conosco`, com encerramento da execução, e padronizar links. |
+| Pesquisa de atendimento | `pesquisa_atendimento.php` repete o mecanismo por sessão com `pa`. | Abrir diretamente o canal `pesquisa`, sem depender de sessão ou de JavaScript para selecionar o formulário. |
+| Localização | `localizacao.php` está vazio; endereço e mapa estão no contato, sem destino específico da seção para os links antigos. | Criar identificador para a seção e direcionar os acessos antigos e links de localização até ela. |
+| CAPTCHA — bloqueador | Em `includes/footer.php:34–43`, o script do reCAPTCHA fica dentro de `if ($needsLegacy)`. Contato e doações definem essa variável como falsa. | Desvincular o CAPTCHA das bibliotecas antigas; testar sua renderização no modo normal e homologar o widget real. |
+| Ouvidoria no administrativo | `includes/community_forms.php` grava em `ouvidoria`; `listOuvidoria` em `admin/webservices/paginas/fale-conosco/servico.php` consulta `contato`; `admin/relatorio-ouvidoria.php` consulta `ouvidoria`. | Alinhar gravação, listagem, detalhes, exclusão e relatório após verificar o esquema real. A divergência de código é confirmada; o impacto nos registros depende de homologação. |
+
+Integrar os quatro canais ao Fale conosco é válido. Não é necessário criar quatro layouts independentes para concluir a modernização, mas cada acesso precisa abrir a opção correta e funcionar de ponta a ponta. A afirmação anterior de que as telas estavam prontas deve ser entendida como renovação visual local, não como conclusão destas correções.
+
+## Todas as telas e entradas públicas
+
+**Modernizada:** nova interface implementada. **Correção:** falha/acesso incompleto confirmado. **Parcial:** ainda mantém parte da estrutura antiga. Todas precisam também da homologação transversal indicada neste relatório. Os arquivos são as referências canônicas; prefixos de seção e aliases devem ser validados no roteamento real.
+
+| # | Tela / referência | Estado | Falta para concluir |
+|---|---|---|---|
+| 1 | Inicial — `includes/home.php` | Modernizada | Homologar banners, campanhas, notícias, convênios, imagens e destinos reais. |
+| 2 | Sobre a Santa Casa — `sobre_a_santa_casa.php` | Modernizada | Conferir história, valores, provedores e galeria do CMS. |
+| 3 | Humanização — `humanizacao.php` | Modernizada | Homologar os quatro blocos, atualidade editorial e galeria. |
+| 4 | Ações sociais e ambientais — `acoes_sociais_ambientais.php` | Modernizada | Conferir conteúdo, voluntariado, galeria e SQL de notícias relacionadas. |
+| 5 | Programa de segurança do paciente — `programa_nacional_seguranca.php` | Modernizada | Validar textos, imagem e links com a área responsável. |
+| 6 | Portal da transparência — `portal_transparencia.php` | Modernizada | Homologar atualização do acervo, classificação, títulos, downloads e acessibilidade dos documentos. |
+| 7 | Pronto atendimento SUS — `pronto_atendimento.php` | Modernizada | Conferir informações assistenciais, registros e fotos reais. |
+| 8 | Hotelaria — `hotelaria.php` | Modernizada | Validar todos os ambientes, descrições e imagens. |
+| 9 | Clínica Emília — `clinica_emilia.php` | Modernizada | Homologar conteúdo, ambientes, galeria e contatos. |
+| 10 | Diagnóstico por imagem — `centro_diagnostico_por_imagem.php` | Modernizada | Conferir serviços descritos, imagens e registros cadastrados. |
+| 11 | Unidades de internação — `unidades_de_internacao.php` | Modernizada | Validar unidades e associação de fotos com o banco real. |
+| 12 | Particular / Convênio — `particular_convenio.php` | Modernizada, acervo pendente | Recuperar/substituir com aprovação institucional as 18 imagens externas que retornaram 404 na etapa anterior; validar planos e conteúdo. Referência: `tests/particular-legacy-images.json`. |
+| 13 | Convênios — `convenios.php` | Modernizada | Homologar nomes/logos, busca e convênio adicional preservado; conferir cobertura com a instituição. |
+| 14 | Especialidades — `especialidades.php` | Modernizada | Validar especialidades disponíveis, conteúdo e busca. |
+| 15 | Capacidade de instalação e produção — `capacidade_instalacao_producao.php` | Modernizada | Conferir números, períodos e associação de fotos sem inventar indicadores. |
+| 16 | Manual do paciente e visitante — `manual_do_paciente_e_visitantes.php` | Modernizada | Homologar orientações, documentos atuais, pesquisa e download por identificador. |
+| 17 | Listagem de notícias — `noticias.php` | Modernizada | Validar totais, categorias, paginação, mais lidas e estados vazios com publicações reais. |
+| 18 | Notícia individual — `noticia.php` | Modernizada | Homologar HTML histórico, mídias, tabelas, galerias, relacionados, compartilhamento e contador. |
+| 19 | Fale conosco — `fale_conosco.php` | Modernizada com correções | Corrigir CAPTCHA e homologar gravação, notificação, erros e os três formulários. |
+| 20 | Doações — `doacoes.php` | Modernizada com correções | Corrigir CAPTCHA; conferir dados bancários oficiais, modalidades e notificações. Não há geração automática de boleto nem processamento de pagamento implementados. |
+| 21 | Ouvidoria — `ouvidoria.php` | Correção | Resolver entrada vazia, abrir o canal correto e alinhar formulário/listagem/relatório. |
+| 22 | Trabalhe conosco — `trabalhe_conosco.php` | Correção | Trocar redirecionamento por sessão; homologar PDF, armazenamento, acesso administrativo e notificação ao RH. |
+| 23 | Pesquisa de atendimento — `pesquisa_atendimento.php` | Correção | Corrigir acesso direto; homologar sete respostas, observação opcional, gravação, listagem e relatório. |
+| 24 | Localização — `localizacao.php` | Correção | Resolver entrada vazia e acesso à seção; validar endereço, telefones e mapa. |
+| 25 | Página não encontrada — `404.php` | Parcial | Conteúdo já tem o visual novo, mas a rota ainda carrega bibliotecas antigas por `$needsLegacy`; isolar assets e testar HTTP 404. |
+
+### Componentes e estados compartilhados
+
+| Componente / fluxo | Pendência |
+|---|---|
+| Cabeçalho e menus | Teclado, foco, menu móvel, estado ativo, prefixos e todos os links diretos/antigos. |
+| Rodapé | Corrigir condição do CAPTCHA; padronizar canais e conferir possível duplicação do telefone cadastrado com o fixo. |
+| Newsletter | Homologar persistência e erros/duplicidade; inscrição no banco não comprova integração com plataforma de disparos. |
+| Galerias e imagens | Acervo real, textos alternativos, legendas, fallback, orientação, tamanho e controles por teclado. |
+| Metadados e indexação | Validar domínio público, títulos, descrições e imagem social; definir canonical, sitemap e indexação. |
+| Erros | Cobrir falha de banco/e-mail/CAPTCHA, upload acima do limite, sessão expirada, conteúdo ausente e links inválidos. |
+| Downloads | Validar caminhos, tipos, cabeçalhos e autorização quando aplicável, incluindo o controlador legado de `index.php`. |
+| Arquivos antigos na raiz | Revisar `index.htm`, `readme.html`, logs e cópias antigas no pacote de produção. Nada foi removido nesta revisão. |
+| Exames e Emendômetro | São sistemas externos. Validar destinos/disponibilidade; sua tecnologia não foi modernizada nem auditada aqui. |
+
+## Todas as telas do painel administrativo
+
+**O administrativo continua legado.** Usa AdminLTE 2, Bootstrap 3, jQuery 2 e plugins antigos. Cada item abaixo precisa de interface responsiva, acessibilidade, validação no servidor, permissões, tratamento de erros e compatibilidade com o PHP escolhido. Exclusão, publicação e ordenação são fluxos das telas correspondentes, não páginas separadas.
+
+### Acesso e gestão
+
+| Tela / fluxo | Localização | Trabalho pendente |
+|---|---|---|
+| Login | `admin/index.php`, `admin/includes/login.php` | Renovar formulário/estados, sessão, proteção contra tentativas repetidas e armazenamento de senhas. |
+| Recuperação de senha | `admin/index.php` | Migrar para recuperação por token temporário, revisar mensagens e substituir mailer antigo. |
+| Estrutura do painel e saída | `admin/painel.php`, `admin/includes/` | Menu/cabeçalho/perfil, zoom e redirecionamentos com encerramento adequado. |
+| Inicial do painel | `admin/system/home.php` | Arquivo vazio: definir e implementar conteúdo útil baseado em dados disponíveis. |
+| Usuários — listagem | `admin/system/usuario/index.php` | Renovar tabela, filtros, paginação e permissões. |
+| Usuários — cadastro | `admin/system/usuario/create.php` | Renovar formulário, senha e validação. |
+| Usuários — edição / meu perfil | `admin/system/usuario/update.php` | Validar alteração de senha, foto e autorização por usuário. |
+| Banners — listagem | `admin/system/banner/index.php` | Renovar tabela, publicação, ordem e ações. |
+| Banners — cadastro | `admin/system/banner/create.php` | Renovar campos, destino do link e upload. |
+| Banners — edição | `admin/system/banner/update.php` | Substituição de imagem, prévia, publicação e tratamento de erros. |
+| Notícias — listagem | `admin/system/noticias/index.php` | Filtros, status, paginação e ações. |
+| Notícias — cadastro | `admin/system/noticias/create.php` | Migrar editor, mídia, categorias, uploads e galerias. |
+| Notícias — edição | `admin/system/noticias/update.php` | Preservar HTML existente, slug, metadados e publicação. |
+| Galerias — listagem | `admin/system/galeria/index.php` | Pesquisa, organização e ações. |
+| Galerias — cadastro | `admin/system/galeria/create.php` | Upload, associação, legendas e ordenação. |
+| Galerias — edição | `admin/system/galeria/update.php` | Associação com notícias e exclusão/substituição segura de arquivos. |
+| Seletor de arquivos/imagens | `resources/plugins/ckeditor/kcfinder/` | Migrar gerenciador, autenticação, permissões, tipos e diretórios. |
+| Editor / inserção de galeria | `resources/plugins/ckeditor/config.js`, plugin `rpcgaleria` | Migrar integração personalizada e compatibilidade do HTML; não basta substituir o JavaScript do editor. |
+
+### Edição de páginas — cada aba precisa ser modernizada
+
+| Tela / aba | Template administrativo | Pendência específica além da renovação comum |
+|---|---|---|
+| Sobre a Santa Casa | `admin/system/paginas/institucional.php` | Blocos institucionais, provedores e galeria. |
+| Humanização | Mesmo template institucional | Quatro blocos e galeria. |
+| Ações sociais e ambientais | Mesmo template institucional | Blocos e imagens. |
+| Programa de segurança do paciente | Mesmo template institucional | Textos e imagem. |
+| Portal da transparência | Mesmo template institucional | Cadastro/classificação de documentos e correspondência com o acervo público. |
+| Pronto atendimento | `admin/system/paginas/instalacoes.php` | Registros e fotos. |
+| Hotelaria | Mesmo template de instalações | Registros e galeria. |
+| Clínica Emília | Mesmo template de instalações | Registros e galeria. |
+| Diagnóstico por imagem | Mesmo template de instalações | Blocos e imagens. |
+| Unidades de internação | Mesmo template de instalações | Unidades e associação/ordenação de fotos. |
+| Convênios | `admin/system/paginas/servicos.php` | Nomes, logos e consistência com a busca pública. |
+| Especialidades | Mesmo template de serviços | Conteúdo e ordenação. |
+| Capacidade de instalação e produção | Mesmo template de serviços | Indicadores, períodos e fotos. |
+| Manual do paciente e visitante | Mesmo template de serviços | Orientações, documentos e download. |
+| Contatos — listagem histórica | `admin/system/paginas/fale-conosco.php` | Esclarecer finalidade e separar registros da Ouvidoria. |
+| Ouvidoria — conteúdo e recebimentos | Mesmo template de contato | Corrigir divergência entre `contato` e `ouvidoria`. |
+| Trabalhe conosco — conteúdo e currículos | Mesmo template de contato | Revisar acesso a PDFs e função `listTrabalheConosco` duplicada no JavaScript. |
+| Doações — conteúdo e recebimentos | Mesmo template de contato | Preservar instruções oficiais e modalidades nos registros. |
+| Pesquisa — conteúdo e respostas | Mesmo template de contato | Conferir listagem/relatório das sete respostas e acesso pelo menu. |
+| Localização — edição | Mesmo template de contato | Endereço, telefone, e-mail e correspondência com o público. |
+
+Não foi encontrada aba específica de Particular / Convênio nos templates e menus inspecionados: a página pública contém texto no código e consulta convênios. Decidir se é necessário editor próprio. Também não foi identificada uma tela administrativa própria de newsletter; esclarecer a operação esperada antes de adicionar funcionalidades. Estes recursos ausentes não são apresentados como telas existentes.
+
+### Relatórios administrativos
+
+| Relatório | Arquivo | Pendência |
+|---|---|---|
+| Contatos | `admin/relatorio-contatos.php` | Renovar filtros/exportação, permissões, campos e codificação. |
+| Ouvidoria | `admin/relatorio-ouvidoria.php` | Mesmo trabalho e alinhamento com a listagem e o formulário. |
+| Trabalhe conosco | `admin/relatorio-trabalhe_conosco.php` | Conferir campos e acesso restrito aos dados de candidatos. |
+| Doações | `admin/relatorio-doacoes.php` | Validar modalidades, datas e recebimentos. |
+| Pesquisa de atendimento | `admin/relatorio-pesquisa_atendimento.php` | Perguntas, valores, datas e exportação com acentuação correta. |
+
+## Tecnologias defasadas e situação real do PHP
+
+**O PHP da hospedagem não foi atualizado nesta modernização.** A evidência disponível é a execução local anterior em PHP 8.4.25. A versão real de produção, suas extensões e o banco ainda precisam ser levantados.
+
+PHP 8.4 tem suporte ativo até 31/12/2026 e de segurança até 31/12/2028. PHP 8.5 é uma linha mais recente, com suporte ativo até 31/12/2027. Portanto, 8.4 não está sem suporte, mas também não é a linha mais recente. Homologar a aplicação inteira antes de trocar o runtime. [Ciclo de suporte oficial](https://www.php.net/supported-versions.php).
+
+| Tecnologia / prática | Evidência / uso | Situação e trabalho proposto |
+|---|---|---|
+| PHP | Testes anteriores em 8.4.25; produção desconhecida | Avaliar PHP 8.5 com patch estável atual, depois de homologar painel, uploads, e-mail e banco. Não afirmar que a hospedagem já foi atualizada. |
+| Bootstrap 3.3.5 | `resources/bootstrap`, painel e fallback público | Defasado; Bootstrap 3 encerrou suporte em 24/07/2019. Remover do público convertido e migrar/reconstruir o painel. [Fonte oficial](https://getbootstrap.com/docs/3.4/getting-started/). |
+| jQuery 2.1.4 | Login, painel e fallback | Defasado; jQuery 4.0.0 foi lançado em 2026. Preferir JavaScript nativo onde viável; migrar plugins antes de trocar a versão. [Lançamento oficial](https://blog.jquery.com/2026/01/17/jquery-4-0-0/). |
+| jQuery UI 1.11.4 | CDN do painel/login | Versão antiga; substituir componentes usados ou migrar em conjunto com os plugins dependentes. |
+| AdminLTE 2.3.2 | `resources/dist/css/AdminLTE.css` | Tema antigo acoplado ao Bootstrap 3. Renovar o painel com base mantida ou componentes próprios; conferir a [distribuição oficial](https://adminlte.io/) ao executar. |
+| CKEditor 4.5.1 | `resources/plugins/ckeditor/ckeditor.js` | Editor antigo. CKEditor 4 aberto encerrou suporte em junho de 2023. Migrar para editor mantido com licença adequada, preservando plugins e conteúdo. [Fonte oficial](https://ckeditor.com/blog/ckeditor-4-end-of-life/). |
+| KCFinder 3.20-test2 | Constante do uploader e configuração do CKEditor | Gerenciador legado com versão identificada como teste. Migrar/substituir com revisão de uploads e autorização. O cabeçalho menciona 3.12; o inventário usa a constante de versão. |
+| PHPMailer 5.2.10 | `_app/PHPMailer-master`, recuperação administrativa | Ainda usado no legado. Migrar e testar recuperação/notificações. O projeto oficial informa que a linha 5.2 não recebe suporte. [Fonte oficial](https://github.com/PHPMailer/PHPMailer). |
+| PHPMailer 7.1.1 | `_app/vendor/phpmailer`, contato e doações | Já incorporado nessas telas, não em todo o sistema. Homologar transporte e consolidar dependências. |
+| Slim 2.* | `_app/composer.json` | Dependência antiga declarada; as buscas no PHP da aplicação não encontraram bootstrap ativo do Slim. Confirmar uso: remover se abandonado ou migrar se necessário. A linha oficial consultada é Slim 4, com release 4.15.3. [Fonte oficial](https://www.slimframework.com/). |
+| DataTables 1.10.7 | Listagens administrativas | Renovar tabelas, filtros/paginação e integração visual, preservando permissões e exportações. |
+| Select2 4.0.0 | Campos administrativos | Versão antiga; revisar necessidade e atualizar/substituir junto ao painel. |
+| Bootbox 4.4.0 / iCheck 1.0.1 | Diálogos e campos do painel | Substituir por componentes acessíveis atuais ou controles nativos. |
+| Moment.js 2.10.2 | CDN referenciada no painel | Versão antiga; rever datas, locale/fuso e avaliar APIs nativas nos usos simples. |
+| Owl Carousel 2.0.0 / Magnific Popup | Acervo de plugins e código legado | Substituídos nas galerias públicas novas; mapear usos restantes antes de remover. A versão do Magnific Popup não foi confirmada. |
+| Font Awesome 4.4.0 / Ionicons 2.0.1 | Login/painel e fallback | Consolidar ícones em solução atual; reutilizar SVGs do público onde adequado. |
+| TimThumb 1.28 | `admin/includes/tim.php`, fotos de perfil/menu | Redimensionador legado: substituir por processamento controlado e validado. Não foi realizado teste de exploração. |
+| Classe ReCaptcha antiga | `_app/Helpers/ReCaptcha.class.php` | Construtor com nome da classe não funciona como construtor no PHP 8. Os formulários novos usam outra verificação; eliminar usos restantes após inventário e corrigir carregamento do widget. |
+| `utf8_encode` / `utf8_decode` | `Check.class.php`, recuperação e legado | Depreciadas desde PHP 8.2. Adotar UTF-8 consistente e conversão explícita somente onde necessária. [Manual oficial](https://www.php.net/manual/en/function.utf8-decode.php). |
+| MD5 para senhas | `_app/Models/Login.class.php:72`, `admin/index.php:83` | Migrar para `password_hash`/`password_verify`, com estratégia para contas existentes e recuperação segura. [API oficial](https://www.php.net/manual/en/function.password-hash.php). |
+| Bibliotecas copiadas manualmente | `resources/plugins`, dois mailers e manifesto antigo | Consolidar inventário, versões fixadas, licenças e atualização/auditoria reproduzível. Presença de arquivo não comprova uso ativo. |
+| MySQL/MariaDB | Camada PDO e SQL existentes | Versão desconhecida: não há evidência de atualização nem base para declarar obsolescência. Levantar versão, charset, modos SQL, índices, backup e restauração. |
+| Apache / sistema operacional / TLS | Configuração local e URLs; hospedagem não inspecionada | Versões desconhecidas. Validar manutenção, HTTPS, certificados e configuração de publicação. |
+
+Outras pastas presentes, sem certificação de versão/uso ativo: `aguia-gallery`, `bootstrap-slider`, `bootstrap-wysihtml5`, `chartjs`, `client`, `code-house-back-to-top`, `colorpicker`, `datepicker`, `daterangepicker`, `drag-menu`, `fastclick`, `flot`, `fullcalendar`, `imagesloaded`, `input-mask`, `ionslider`, `jquery-filer`, `jquery-sortable`, `jvectormap`, `knob`, `mapa`, `morris`, `nice-select`, `pace`, `PagSeguroLibrary`, `slimScroll`, `sparkline`, `swiper`, `timepicker`, `weather`, `youtube-thumbnail`. Confirmar chamadas, versões e compatibilidade antes de atualizar ou retirar. A pasta PagSeguro não comprova pagamento integrado às doações. Alguns scripts do painel aparecem em trechos comentados ou com caminhos relativos antigos: separar uso efetivo de exemplos antes da limpeza.
+
+## Prioridades e critérios para concluir a modernização
+
+### Prioridade 1 — funcionamento e proteção antes da publicação
+
+- [ ] Corrigir CAPTCHA e testar sua renderização fora de `SCL_PREVIEW`.
+- [ ] Resolver Ouvidoria/Localização vazias e redirecionamentos por sessão, preservando aliases e links.
+- [ ] Alinhar gravação, listagem e relatório de Ouvidoria com o banco real.
+- [ ] Corrigir autorização nos endpoints: em `admin/webservices/paginas/fale-conosco/servico.php:7–15`, o código redireciona quando o login falha, mas não encerra a execução antes de processar `acao`. Revisar também os outros endpoints; um cabeçalho Location não interrompe PHP.
+- [ ] Revisar CSRF e autorização por ação/registro nos cadastros, alterações, exclusões e relatórios. O endpoint de contato inspecionado não apresenta validação CSRF; não houve auditoria exaustiva de todos os endpoints.
+- [ ] Migrar MD5 e recuperação de senha; revisar sessão, cookies, expiração e tentativas repetidas.
+- [ ] Migrar mailer administrativo e retirar credenciais embutidas/configurações de desenvolvimento do pacote publicado, sem expor segredos no relatório ou logs.
+- [ ] Homologar gravação, consulta e notificação ponta a ponta; mensagem de sucesso não comprova entrega de e-mail.
+- [ ] Revisar autorização de leitura dos currículos, uploads históricos e gerenciador do editor. Nome aleatório e MIME validado não substituem controle de acesso aos documentos.
+
+### Prioridade 2 — concluir as telas e o conteúdo
+
+- [ ] Modernizar todas as telas/abas administrativas inventariadas, incluindo editor, gerenciador e relatórios.
+- [ ] Remover dependências antigas da página 404 e carregar apenas os recursos necessários por rota.
+- [ ] Recuperar o acervo de Particular / Convênio e homologar conteúdo/documentos das demais páginas.
+- [ ] Conferir conteúdo rico histórico: o editor permite mais tipos de mídia que os templates novos. Mapear casos reais e definir preservação/conversão segura, sem liberar HTML irrestrito.
+- [ ] Consolidar componentes, estados vazios, feedback, erros e acessibilidade.
+- [ ] Inventariar endpoints de `includes/servicos` e `admin/webservices`, padronizando validação, autorização, resposta e tratamento de falha.
+
+### Prioridade 3 — operação e critério de “100%”
+
+- [ ] Documentar e homologar versões reais de PHP, banco, servidor e extensões. Atualizar código não atualiza a hospedagem.
+- [ ] Preparar configuração por ambiente, domínio/HTTPS, credenciais fora do conteúdo público, logs adequados e dependências reproduzíveis.
+- [ ] Publicar pacote controlado, sem testes/harnesses, logs e material de desenvolvimento indevidamente acessíveis.
+- [ ] Automatizar regressão de rotas, formulários, permissões, uploads, CRUD e exportações administrativas com dados isolados.
+- [ ] Validar responsividade e acessibilidade com conteúdo real: foco, teclado, contraste, zoom, leitura de erros, controles e documentos.
+- [ ] Medir desempenho com imagens e volume reais; otimizar mídia, consultas, cache e carregamento com base nos resultados.
+- [ ] Validar metadados, sitemap, indexação, links e HTTP 404 no domínio definitivo.
+- [ ] Documentar backup/restauração testada, implantação, reversão e monitoramento; realizar homologação institucional final.
+
+**Critério de conclusão:** todos os itens aplicáveis aprovados, nenhuma falha bloqueadora conhecida, fluxos públicos e administrativos homologados com dados reais e implantação validada no ambiente definitivo. Isso define a entrega desta modernização, não o fim da manutenção futura. Não foi atribuído percentual numérico: telas, segurança e infraestrutura têm pesos diferentes, e parte da produção ainda é desconhecida.
+
+## Histórico das etapas anteriores
+
+Os registros seguintes descrevem o trabalho de cada etapa; suas conclusões são complementadas pelas pendências confirmadas no inventário acima.
 
 A interface foi reorganizada com uma página inicial nova, navegação responsiva, atalhos para pacientes, apresentação de serviços, campanhas, notícias, convênios e doações. Cabeçalho, rodapé e introdução das páginas internas compartilham o mesmo sistema visual.
 
@@ -150,3 +357,23 @@ Listagem modernizada com cartões responsivos, imagens com alternativa visual qu
 Prévia em `http://127.0.0.1:8095/noticias`, com categorias `institucional` e `acoes-sociais` e páginas numéricas. Notícias e links de artigos demonstrativos não representam publicações reais; o detalhe de artigo não é simulado nesta prévia. Banco real não conectado e nenhuma publicação em produção. Validar consultas e conteúdo real em homologação.
 
 Validação: `php tests/news-listing.php` passou com 10 verificações novas e 646 anteriores. Inclui paginação, categoria, última página, ausência de notícias/imagem, datas inválidas e escape de metadados. Navegador: categoria Ações sociais, página 2 (um registro de seis), retorno a Todas as notícias; desktop 1280 e mobile 390 sem overflow horizontal; console sem erros. Servidor local reiniciado na porta 8095.
+
+## Notícia individual, Fale conosco e Doações
+
+As três telas usam o padrão visual institucional responsivo, sem jQuery, Bootstrap, OwlCarousel ou Magnific Popup. Os estilos e comportamentos ficam em `resources/css/community.css` e `resources/js/community.js`.
+
+A notícia preserva título, resumo, imagem, autoria, data válida, contador de acessos, assuntos e notícias relacionadas publicadas. Conteúdo do editor passa por sanitização que preserva títulos, listas, tabelas, imagens e vídeos incorporados de YouTube/Vimeo. Galerias `ck-galleria` são consultadas no servidor com identificadores validados e parâmetros vinculados, usando os diálogos acessíveis existentes. Imagem principal e imagens do texto também podem ser ampliadas. Compartilhamento por link/Facebook, retorno à listagem e relacionados funcionais. O link compartilhado no navegador acompanha o domínio em que a página é acessada; configurar HOME corretamente continua necessário para o fallback sem JavaScript.
+
+Fale conosco conserva Ouvidoria, Trabalhe conosco e Pesquisa de atendimento. Cada opção tem um formulário próprio selecionável por URL, inclusive sem JavaScript; links antigos por fragmento e sessões `tb`/`pa` continuam atendidos. Endereço, e-mail e telefone vêm do cadastro, com o telefone adicional já existente preservado. O mapa foi substituído por um link de localização, eliminando a API antiga de geocodificação. Pesquisa mantém as sete perguntas e valores existentes; o enunciado da nota foi corrigido para 1–5, que são as opções históricas, e observações são opcionais.
+
+Doações conserva `bloco1`, `bloco2`, `bloco3` e as modalidades `deposito`/`boleto`. Os dados bancários do CMS não são substituídos por dados inventados. No celular, as orientações aparecem antes do formulário. O texto esclarece que a mensagem solicita orientação e não gera boleto automaticamente.
+
+Processamento compartilhado com lista permitida de campos, limites de tamanho, validação de e-mail e opções, CSRF, proteção contra reenvio imediato e retenção dos valores nos erros. Currículo exige upload real, extensão PDF, MIME application/pdf e limite de 5 MB, recebe nome aleatório e é removido quando o registro falha. O cadastro usa as tabelas e colunas existentes. Notificações de Ouvidoria/doações seguem para a Secretaria e currículos para o RH; a pesquisa, que tinha destinatário indefinido no código antigo, passa a notificar a Secretaria. Sucesso significa registro no banco; falha posterior na notificação é registrada no log e não induz um novo cadastro duplicado.
+
+PHPMailer 7.1.1 incorporado de https://github.com/PHPMailer/PHPMailer/tree/v7.1.1, com licença e procedência em `_app/vendor/phpmailer/`. As telas públicas novas usam essa versão namespaced e UTF-8, sem as credenciais de desenvolvimento embutidas nos antigos templates. O mailer legado do administrativo não foi migrado nesta etapa. A validação reCAPTCHA usa HTTPS diretamente, substituindo a classe com construtor antigo.
+
+Prévia: `/noticias/noticia-demonstrativa-1`, `/fale-conosco` e `/doacoes` em `http://127.0.0.1:8095`. Os artigos demonstrativos da listagem agora abrem seu detalhe e relacionados. Conteúdo fictício está identificado; não há banco real conectado nem envio real na prévia.
+
+Validação em PHP 8.4.25: `php tests/community.php` passou com 33 verificações novas e 656 anteriores (689 no total). Verificados também sintaxe dos 14 arquivos PHP envolvidos, JavaScript e `git diff --check`. O harness `tests/community-upload.php`, servido isoladamente em loopback com fileinfo habilitado, passou em três cenários HTTP: PDF válido com armazenamento aleatório e anexo MIME sem envio; texto disfarçado de PDF rejeitado; remoção do arquivo após falha de cadastro. Os arquivos sintéticos foram removidos e o servidor do harness encerrado. Navegador em 1280 e 390 pixels: sem overflow horizontal; opções de contato e boleto, galeria, ampliação da capa, Escape/restauração de foco, feedback de copiar link e navegação para notícia relacionada conferidos. Sem erros de console na sessão revisada.
+
+Antes de publicar: homologar os textos e galerias reais, consultas e gravações no banco, chaves/domínio do reCAPTCHA e transporte de e-mail no servidor. O ambiente precisa de DOM, fileinfo, HTTPS/OpenSSL com certificados e acesso de saída ao reCAPTCHA, além do driver de banco e serviço de e-mail; uploads requerem permissão no diretório de currículos e limites PHP coerentes com 5 MB. A prévia mínima não habilita essas integrações. Nenhuma alteração de versão do PHP da hospedagem, envio externo ou deploy foi realizado nesta etapa.
