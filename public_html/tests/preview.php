@@ -23,7 +23,9 @@ define('ROOT', '/'); define('HOME', '/'); define('DIR', $root . '/'); define('PR
 class Read {
     private $rows = array();
     public function fullRead($sql, $params = null) {
-        global $aboutFixtures;
+        global $aboutFixtures, $previewNewsRows;
+        if (str_contains($sql, 'AS listing_total')) { $this->rows=array(array('listing_total'=>count($previewNewsRows ?? array())));return; }
+        if (str_contains($sql, 'SELECT DISTINCT T.nome')) { $this->rows=array(array('nome'=>'Institucional','url'=>'institucional'),array('nome'=>'Ações sociais','url'=>'acoes-sociais'));return; }
         if (str_contains($sql, PREFIX.'unidade_internacao_imagem ')) {
             parse_str($params ?? '', $queryParams);
             $this->rows = array_values(array_filter($aboutFixtures['unidade_internacao_imagem'] ?? array(), fn($row)=>(string)$row['id_unidade_internacao'] === (string)($queryParams['unit'] ?? ''))); return;
@@ -73,6 +75,14 @@ foreach (array('centro-diagnostico-por-imagem'=>'Diagnóstico por imagem', 'unid
     if (in_array(rtrim($path, '/'), array('/instalacoes/'.$slug, '/instalacoes/'.str_replace('-', '_', $slug)), true)) $r_DIR = array('page'=>$slug, 'info'=>array('titulo'=>$title, 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça os serviços e encontre informações para seu atendimento.', 'descricao_pagina'=>''));
 }
 foreach(array('convenios'=>'Convênios','especialidades'=>'Especialidades','capacidade-instalacao-producao'=>'Capacidade de instalação e produção','manual-do-paciente-e-visitantes'=>'Manual do paciente e visitante') as $slug=>$title){if(in_array(rtrim($path,'/'),array('/servicos/'.$slug,'/servicos/'.str_replace('-','_',$slug)),true))$r_DIR=array('page'=>$slug,'info'=>array('titulo'=>$title,'sessao'=>'Para você','sub_titulo'=>'Encontre informações da Santa Casa para seu atendimento.','descricao_pagina'=>''));}
+if (preg_match('~^/noticias(?:/(institucional|acoes-sociais))?(?:/([0-9]+))?/?$~', $path, $newsMatch)) {
+    $previewNewsTag=$newsMatch[1] ?? '';$previewNewsPage=max(1,(int)($newsMatch[2] ?? 1));
+    $previewNewsRows=require __DIR__.'/fixtures/news-listing.php';
+    if($previewNewsTag!=='')$previewNewsRows=array_values(array_filter($previewNewsRows,fn($row)=>$row['url_tag']===$previewNewsTag));
+    if(($_GET['fixture'] ?? '')==='empty')$previewNewsRows=array();
+    $Url=new class($previewNewsTag) { private $tag; public function __construct($tag){$this->tag=$tag;} public function getNoticiaTag(){return $this->tag;} };
+    $r_DIR=array('page'=>'noticias','info'=>array('titulo'=>'Notícias','sub_titulo'=>'Acompanhe as novidades da Santa Casa.','descricao_pagina'=>''),'noticias'=>array_slice($previewNewsRows,($previewNewsPage-1)*5,5),'limit'=>5,'paginacao'=>array('pag'=>$previewNewsPage),'termos'=>'SELECT * FROM '.PREFIX.'noticia LIMIT :limit OFFSET :offset','places'=>'limit=5&offset='.(($previewNewsPage-1)*5));
+}
 if (($r_DIR['page'] ?? '') === '404') http_response_code(404);
 require 'includes/header.php';
 echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · ' . (($r_DIR['page'] ?? '') === 'portal-transparencia' ? 'Acervo real de arquivos locais' : 'Conteúdo demonstrativo') . ' · Banco de dados e envios não conectados</aside>';
@@ -91,6 +101,7 @@ else {
     elseif ($r_DIR['page'] === 'clinica-emilia') { $getPagina = new Read(); require 'includes/paginas/clinica_emilia.php'; }
     elseif (in_array($r_DIR['page'], array('centro-diagnostico-por-imagem','unidades-de-internacao','particular-convenio'), true)) { $getPagina = new Read(); require 'includes/paginas/'.str_replace('-', '_', $r_DIR['page']).'.php'; }
     elseif(in_array($r_DIR['page'],array('convenios','especialidades','capacidade-instalacao-producao','manual-do-paciente-e-visitantes'),true)){$getPagina=new Read();require 'includes/paginas/'.str_replace('-','_',$r_DIR['page']).'.php';}
+    elseif($r_DIR['page']==='noticias')require 'includes/paginas/noticias.php';
     else require 'includes/paginas/404.php';
 }
 echo '</main>';require 'includes/footer.php';
