@@ -1,120 +1,22 @@
-<?php 
-	$getPagina->fullRead("SELECT * FROM ".PREFIX."pagina_manual_paciente_visitante ORDER BY data DESC LIMIT 1");
-	$info = $getPagina->getResult()[0];
+<?php
+require_once __DIR__.'/../about_helpers.php';
+$getPagina->fullRead('SELECT * FROM '.PREFIX.'pagina_manual_paciente_visitante ORDER BY data DESC LIMIT 1');$manualContent=($getPagina->getResult() ?: array())[0] ?? array();
+$query=new Read();$query->fullRead('SELECT * FROM '.PREFIX.'manual_paciente ORDER BY data_criacao ASC');$topics=$query->getResult() ?: array();
+$downloadQuery=new Read();$downloadQuery->fullRead('SELECT * FROM '.PREFIX.'download_manual_paciente ORDER BY data_criacao DESC');$downloads=$downloadQuery->getResult() ?: array();
 ?>
-<section class='bloco-conteudo'>
-	<div class='bloco-conteudo-padding bloco-conteudo-conteudo'>
-		<div class='titulos'>
-			<div class='col-md-1'></div>
-			<div class='col-md-10'>
-				<h2><?php echo nl2br($info['bloco1']); ?></h2>
-			</div>
-			<div class='clearBoth'></div>
-		</div>
-	</div>
-	<div class='clearBoth'></div>
+<div class="facility-page">
+<nav class="about-section-nav site-container" aria-label="Nesta página"><span>Nesta página</span><a href="#manual-orientacoes">Orientações</a><?php if($downloads): ?><a href="#manual-downloads">Documentos</a><?php endif; ?><a href="<?= scl_url('fale-conosco') ?>">Fale conosco</a></nav>
+<section id="manual-orientacoes" class="site-container service-section" aria-labelledby="manual-title" data-service-directory>
+<div class="section-heading"><div><span class="eyebrow">PACIENTES E VISITANTES</span><h2 id="manual-title"><?= !empty($manualContent['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n",$manualContent['bloco1']))) : 'Orientações para sua visita.' ?></h2><p>Selecione um assunto para ler as orientações disponibilizadas pela Santa Casa.</p></div></div>
+<?php if($topics): ?>
+<?php $searchId='manual-search';$searchLabel='Buscar nas orientações';require __DIR__.'/../service_search.php'; ?>
+<div class="service-topic-tools" data-service-expand-tools hidden><button type="button" data-service-expand>Expandir assuntos</button><button type="button" data-service-collapse>Recolher assuntos</button></div>
+<?php foreach($topics as $topic): ?><details class="service-topic" data-service-item><summary><?= scl_escape($topic['titulo'] ?? 'Orientações') ?><span aria-hidden="true">+</span></summary><div class="about-prose"><?= scl_about_content($topic['descricao'] ?? '') ?></div></details><?php endforeach; ?>
+<?php else: ?><p class="about-empty">As orientações serão disponibilizadas nesta página. Para informações, <a href="<?= scl_url('fale-conosco') ?>">fale com a nossa equipe</a>.</p><?php endif; ?>
 </section>
-<div class='clearBoth'></div>
-
-
-<section class='bloco-conteudo'>
-	<div class='bloco-conteudo-padding bloco-conteudo-conteudo bg-gray bloco-paciente'>
-		<div class='titulos'>
-			<div class='col-md-1'></div>
-			<div id='accordion' class='col-md-10'>
-
-				<?php 
-
-					$getManual = new Read(); 
-					$getManual->fullRead("SELECT * FROM ".PREFIX."manual_paciente ORDER BY data_criacao ASC"); 
-					if($getManual->getResult()){
-
-						foreach ($getManual->getResult() AS $x => $manual) {
-							echo "<div class='item-manual'>
-								<header>
-									<img src='".ROOT."resources/img/icon-logo.png' alt='Santa Casa de Lorena'>
-									<strong>{$manual['titulo']}</strong>
-									<button class='btn bg-blue'>LEIA MAIS</button>
-								</header>
-								<article class='fonte2'>
-									{$manual['descricao']}
-								</article>
-							</div>";
-						}
-					}
-
-				?>
-
-				<?php 
-
-					$getManualDownload = new Read(); 
-					$getManualDownload->fullRead("SELECT * FROM ".PREFIX."download_manual_paciente ORDER BY data_criacao DESC"); 
-					if($getManualDownload->getResult()){
-
-						echo "<div class='item-manual'>
-								<header>
-									<img src='".ROOT."resources/img/icon-logo.png' alt='Santa Casa de Lorena'>
-									<strong>Downloads</strong>
-									<button class='btn bg-blue'>LEIA MAIS</button>
-								</header>
-								<article>
-									<ul>";
-
-						foreach ($getManualDownload->getResult() AS $x => $item) {
-							echo "<li><a href='".ROOT."servicos/manual-paciente-visitante/file-{$item['id_download_manual_paciente']}"."' target='_blank'>{$item['titulo']}</a></li>";
-						}
-
-						echo "</ul></article></div>";
-					}
-
-				?>
-					
-			</div>
-			<div class='clearBoth'></div>
-		</div>
-	</div>
-	<div class='clearBoth'></div>
-</section>
-<div class='clearBoth'></div>
-
-
-<script type="text/javascript">
-	$(function(){
-
-
-		/*Accordion - jf*/
-		let over = false;
-
-		$(".item-manual button").mouseover(function(){
-			over = true;
-		});
-		$(".item-manual button").mouseout(function(){
-			over = false;
-		});
-
-		$(".item-manual").click(function(){
-			if(over){
-				const status1 = $(this).attr('class');
-				const status2 = $(".open article").css("display");
-				if(status1 == "item-manual"){
-
-					if(status2 == "block"){$(".open article").slideUp();}
-
-					$(".item-manual").removeClass("open");
-					$(this).addClass("open");
-				}
-				else if(status1 == "item-manual open"){
-					const status4 = $(".open article").css("display");
-					if(status4 == "block"){$(".open article").slideUp();}
-					$(this).removeClass("open");
-				}
-				const status3 = $(".open article").css("display");
-				if(status3 == "none"){$(".open article").slideDown();}
-			}
-		});
-		/*/Accordion - jf*/
-
-
-		
-	});
-</script>
+<?php if($downloads): ?><section id="manual-downloads" class="facility-environments" aria-labelledby="manual-downloads-title"><div class="site-container"><div class="section-heading"><div><span class="eyebrow">PARA CONSULTAR</span><h2 id="manual-downloads-title">Documentos e downloads.</h2><p>Os documentos abrem em uma nova aba.</p></div></div><ul class="service-downloads">
+<?php foreach($downloads as $download): $fileUrl=scl_link($download['pdf'] ?? '');$downloadId=filter_var($download['id_download_manual_paciente'] ?? null,FILTER_VALIDATE_INT);if(!$fileUrl && $downloadId>1) $fileUrl=scl_url('servicos/manual-paciente-visitante/file-'.$downloadId); ?>
+<li><?php if($fileUrl): ?><a href="<?= scl_escape($fileUrl) ?>" target="_blank" rel="noopener"><span aria-hidden="true"><?= scl_icon('file') ?></span><span><?= scl_escape($download['titulo'] ?? 'Documento') ?></span><span aria-hidden="true">↗</span></a><?php else: ?><span><?= scl_escape($download['titulo'] ?? 'Documento') ?> — arquivo indisponível</span><?php endif; ?></li>
+<?php endforeach; ?></ul></div></section><?php endif; ?>
+<section class="site-container service-contact"><h2>Precisa de mais informações?</h2><a class="scl-button" href="<?= scl_url('fale-conosco') ?>">Fale com a nossa equipe <?= scl_icon('arrow') ?></a></section>
+</div>

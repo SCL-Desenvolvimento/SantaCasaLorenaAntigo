@@ -2,7 +2,7 @@
 // Local visual fixture: never connects to the production database.
 if (PHP_SAPI !== 'cli-server') { http_response_code(404); exit; }
 $root = dirname(__DIR__);
-$aboutFixtures = array_merge(require __DIR__ . '/fixtures/about.php', require __DIR__ . '/fixtures/humanization.php', require __DIR__ . '/fixtures/social-actions.php', require __DIR__ . '/fixtures/patient-safety.php', require __DIR__ . '/fixtures/urgent-care.php', require __DIR__ . '/fixtures/hospitality.php');
+$aboutFixtures = array_merge(require __DIR__ . '/fixtures/about.php', require __DIR__ . '/fixtures/humanization.php', require __DIR__ . '/fixtures/social-actions.php', require __DIR__ . '/fixtures/patient-safety.php', require __DIR__ . '/fixtures/urgent-care.php', require __DIR__ . '/fixtures/hospitality.php', require __DIR__ . '/fixtures/emilia.php', require __DIR__ . '/fixtures/facilities.php', require __DIR__ . '/fixtures/services.php');
 if (($_GET['fixture'] ?? '') === 'empty') $aboutFixtures = array_fill_keys(array_keys($aboutFixtures), array());
 if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_sobre'] = array_slice($aboutFixtures['galeria_sobre'], 0, 1);
 if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_humanizacao'] = array_slice($aboutFixtures['galeria_humanizacao'], 0, 1);
@@ -10,9 +10,11 @@ if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['galeria_acao'] = arra
 if (($_GET['fixture'] ?? '') === 'no-image' && !empty($aboutFixtures['pagina_programa_nacional_seguranca'][0])) $aboutFixtures['pagina_programa_nacional_seguranca'][0]['img1'] = '';
 if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['pronto_atendimento'] = array_slice($aboutFixtures['pronto_atendimento'], 0, 1);
 if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['hotelaria'] = array_slice($aboutFixtures['hotelaria'], 0, 1);
+if (($_GET['fixture'] ?? '') === 'single') $aboutFixtures['clinica_emilia'] = array_slice($aboutFixtures['clinica_emilia'], 0, 1);
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-if (((str_starts_with($path, '/resources/') || str_starts_with($path, '/arquivos/hotelaria/') || str_starts_with($path, '/arquivos/pronto_atendimento/') || str_starts_with($path, '/arquivos/galeria_sobre/') || str_starts_with($path, '/arquivos/galeria_humanizacao/') || str_starts_with($path, '/arquivos/galeria_acao/') || str_starts_with($path, '/arquivos/acoes_sociais_ambientais/') || str_starts_with($path, '/arquivos/programa_nacional_seguranca/')) && preg_match('~\\.(css|js|png|jpe?g|svg|gif|webp|woff2?|ttf|otf|ico)$~i', $path)) || $path === '/favicon.ico') return false;
+if (((str_starts_with($path, '/resources/') || str_starts_with($path, '/arquivos/capacidade_imagem/') || str_starts_with($path, '/arquivos/centro_diagnostico_por_imagem/') || str_starts_with($path, '/arquivos/unidade_internacao_imagem/') || str_starts_with($path, '/arquivos/convenio/') || str_starts_with($path, '/arquivos/clinica_emilia/') || str_starts_with($path, '/arquivos/hotelaria/') || str_starts_with($path, '/arquivos/pronto_atendimento/') || str_starts_with($path, '/arquivos/galeria_sobre/') || str_starts_with($path, '/arquivos/galeria_humanizacao/') || str_starts_with($path, '/arquivos/galeria_acao/') || str_starts_with($path, '/arquivos/acoes_sociais_ambientais/') || str_starts_with($path, '/arquivos/programa_nacional_seguranca/')) && preg_match('~\\.(css|js|png|jpe?g|svg|gif|webp|woff2?|ttf|otf|ico)$~i', $path)) || $path === '/favicon.ico') return false;
 if (str_starts_with($path, '/includes/paginas/transparencia/') && !str_contains(rawurldecode($path), '..') && preg_match('~\.(pdf|docx?|xlsx?|ods|csv|pptx?|odt|rtf|txt|zip)$~i', $path)) return false;
+if (str_starts_with($path, '/arquivos/download_manual_paciente/') && !str_contains(rawurldecode($path), '..') && preg_match('~\.pdf$~i', $path)) return false;
 chdir($root);
 session_start();
 // The preview must never process submissions.
@@ -22,6 +24,11 @@ class Read {
     private $rows = array();
     public function fullRead($sql, $params = null) {
         global $aboutFixtures;
+        if (str_contains($sql, PREFIX.'unidade_internacao_imagem ')) {
+            parse_str($params ?? '', $queryParams);
+            $this->rows = array_values(array_filter($aboutFixtures['unidade_internacao_imagem'] ?? array(), fn($row)=>(string)$row['id_unidade_internacao'] === (string)($queryParams['unit'] ?? ''))); return;
+        }
+        if (str_contains($sql, PREFIX.'capacidade_imagem ')) { parse_str($params ?? '', $queryParams); $this->rows=array_values(array_filter($aboutFixtures['capacidade_imagem'] ?? array(),fn($row)=>(string)$row['id_capacidade']===(string)($queryParams['unit'] ?? '')));return; }
         foreach ($aboutFixtures as $table=>$rows) {
             if ($table === 'noticia' && !str_contains($sql, 'T.url = :tag')) continue;
             if (str_contains($sql, PREFIX . $table)) { $this->rows=$rows; return; }
@@ -59,6 +66,13 @@ if (in_array(rtrim($path, '/'), array('/instalacoes/pronto-atendimento', '/insta
 if (rtrim($path, '/') === '/instalacoes/hotelaria') {
     $r_DIR = array('page'=>'hotelaria', 'info'=>array('titulo'=>'Hotelaria', 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça a hotelaria e os ambientes da Santa Casa.', 'descricao_pagina'=>''));
 }
+if (in_array(rtrim($path, '/'), array('/instalacoes/clinica-emilia','/instalacoes/clinica_emilia'), true)) {
+    $r_DIR = array('page'=>'clinica-emilia', 'info'=>array('titulo'=>'Clínica Emília', 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça a Clínica Emília e seus ambientes.', 'descricao_pagina'=>''));
+}
+foreach (array('centro-diagnostico-por-imagem'=>'Diagnóstico por imagem', 'unidades-de-internacao'=>'Unidades de internação', 'particular-convenio'=>'Particular / Convênio') as $slug=>$title) {
+    if (in_array(rtrim($path, '/'), array('/instalacoes/'.$slug, '/instalacoes/'.str_replace('-', '_', $slug)), true)) $r_DIR = array('page'=>$slug, 'info'=>array('titulo'=>$title, 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça os serviços e encontre informações para seu atendimento.', 'descricao_pagina'=>''));
+}
+foreach(array('convenios'=>'Convênios','especialidades'=>'Especialidades','capacidade-instalacao-producao'=>'Capacidade de instalação e produção','manual-do-paciente-e-visitantes'=>'Manual do paciente e visitante') as $slug=>$title){if(in_array(rtrim($path,'/'),array('/servicos/'.$slug,'/servicos/'.str_replace('-','_',$slug)),true))$r_DIR=array('page'=>$slug,'info'=>array('titulo'=>$title,'sessao'=>'Para você','sub_titulo'=>'Encontre informações da Santa Casa para seu atendimento.','descricao_pagina'=>''));}
 if (($r_DIR['page'] ?? '') === '404') http_response_code(404);
 require 'includes/header.php';
 echo '<aside style="background:#fff3cd;color:#55451a;padding:8px 20px;text-align:center;font:12px sans-serif">Prévia visual local · ' . (($r_DIR['page'] ?? '') === 'portal-transparencia' ? 'Acervo real de arquivos locais' : 'Conteúdo demonstrativo') . ' · Banco de dados e envios não conectados</aside>';
@@ -74,6 +88,9 @@ else {
     elseif ($r_DIR['page'] === 'portal-transparencia') require 'includes/paginas/portal_transparencia.php';
     elseif ($r_DIR['page'] === 'pronto-atendimento') { $getPagina = new Read(); require 'includes/paginas/pronto_atendimento.php'; }
     elseif ($r_DIR['page'] === 'hotelaria') { $getPagina = new Read(); require 'includes/paginas/hotelaria.php'; }
+    elseif ($r_DIR['page'] === 'clinica-emilia') { $getPagina = new Read(); require 'includes/paginas/clinica_emilia.php'; }
+    elseif (in_array($r_DIR['page'], array('centro-diagnostico-por-imagem','unidades-de-internacao','particular-convenio'), true)) { $getPagina = new Read(); require 'includes/paginas/'.str_replace('-', '_', $r_DIR['page']).'.php'; }
+    elseif(in_array($r_DIR['page'],array('convenios','especialidades','capacidade-instalacao-producao','manual-do-paciente-e-visitantes'),true)){$getPagina=new Read();require 'includes/paginas/'.str_replace('-','_',$r_DIR['page']).'.php';}
     else require 'includes/paginas/404.php';
 }
 echo '</main>';require 'includes/footer.php';

@@ -20,6 +20,10 @@ class Read {
         self::$queries[] = array('sql'=>$sql, 'params'=>$params);
         parse_str($params ?? '', $values);
         $this->result = array();
+        if (str_contains($sql, PREFIX.'unidade_internacao_imagem ')) {
+            $this->result = array_values(array_filter(self::$fixtures['unidade_internacao_imagem'] ?? array(), fn($row)=>(string)$row['id_unidade_internacao'] === (string)($values['unit'] ?? ''))); return;
+        }
+        if (str_contains($sql, PREFIX.'capacidade_imagem ')) {$this->result=array_values(array_filter(self::$fixtures['capacidade_imagem'] ?? array(),fn($row)=>(string)$row['id_capacidade']===(string)($values['unit'] ?? '')));return;}
         foreach (self::$fixtures as $table => $rows) {
             if (str_contains($sql, PREFIX . $table)) { $this->result = $rows; return; }
         }

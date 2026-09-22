@@ -29,7 +29,7 @@ Read::$fixtures['provedor'] = array(array('nome'=>'<img src=x onerror=alert(1)>'
 ob_start(); require DIR.'includes/paginas/sobre_a_santa_casa.php'; $html=ob_get_clean();
 verify(str_contains($html,'&lt;img') && !str_contains($html,'<img src=x'), 'Escape provider metadata');
 verify(!str_contains($html,'1900 —'), 'No dangling date separator');
-$r_DIR = array('page'=>'particular_convenio', 'info'=>array('titulo'=>'Particular e convênios'));
+$r_DIR = array('page'=>'noticias', 'info'=>array('titulo'=>'Notícias'));
 ob_start(); require DIR.'includes/header.php'; $html=ob_get_clean();
 verify(str_contains($html,'jQuery-2.1.4') && !str_contains($html,'about.js'), 'Preserve dependencies on unconverted pages');
 echo 'OK: ' . ($count-$before) . " about-page checks.\n";

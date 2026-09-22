@@ -110,3 +110,35 @@ Página modernizada com apresentação em duas colunas no desktop, navegação p
 Prévia: `http://127.0.0.1:8095/instalacoes/hotelaria`; conteúdo demonstrativo isolado em `tests/fixtures/hospitality.php`, com imagens do acervo local. Banco real e envios não conectados. Homologação com conteúdo real permanece necessária antes da publicação; nenhuma alteração em produção.
 
 Validação: `php tests/hospitality.php` passou com 14 verificações novas e 554 anteriores. Cobertura de consultas, textos, títulos das fotos, caminhos em subdiretório, conteúdo parcial, galeria unitária, ausência de dados e sanitização. Teste legado de `tests/about.php` agora usa a página ainda não convertida `particular_convenio`. Navegador em 1280 e 390 pixels sem overflow horizontal; galeria ampliada, próxima imagem, fechamento por Escape e restauração de foco conferidos; sem erros no console ou imagens quebradas observadas.
+
+## Clínica Emília
+
+Tela modernizada com apresentação responsiva, navegação por seções, galeria ampliável com legendas e contador, guia do paciente e contato. Mantidos os campos `bloco1`/`bloco2`, as tabelas `pagina_clinica_emilia` e `clinica_emilia`, a seleção do registro mais recente e a ordem das fotos. As rotas com hífen e underscore carregam os recursos modernos sem jQuery, Bootstrap ou OwlCarousel.
+
+Prévia: `http://127.0.0.1:8095/instalacoes/clinica-emilia`. Textos demonstrativos isolados em `tests/fixtures/emilia.php`, imagens do acervo local; banco real e envios desconectados. Homologar conteúdo real antes da publicação. Alterações locais, sem deploy.
+
+Validação: `php tests/emilia.php` passou com 14 verificações da clínica e 568 anteriores, incluindo campos, consultas, caminhos, galeria unitária, conteúdo parcial/ausente e sanitização. Navegador em 1280 e 390 pixels sem overflow horizontal, sem erros no console ou imagens quebradas observadas; ampliação, próxima imagem, Escape e restauração de foco conferidos.
+
+## Diagnóstico por imagem, Unidades de internação e Particular / Convênio
+
+Três páginas convertidas para o padrão responsivo institucional, com navegação por seções, conteúdo sanitizado, atalhos de orientação e contato, e sem jQuery, Bootstrap ou OwlCarousel nessas rotas. CSS compartilhado em `resources/css/facilities.css`.
+
+Diagnóstico mantém os dois campos e as consultas originais de página/galeria. Internação mantém os três campos de apresentação, todas as unidades, títulos, descrições e fotos na ordem original. Consulta de imagens usa identificador validado e parâmetro vinculado por unidade. Galeria nativa agora inicializa todas as instâncias e associa cada uma ao próprio diálogo; cálculo de navegação considera a posição real dos slides, inclusive layouts que exibem parte da próxima foto.
+
+Particular / Convênio conserva o parágrafo original e passa a consultar a tabela existente `convenio`, sem usar a consulta antiga e não utilizada à página do pronto atendimento. As 18 imagens externas em `agenciamd.com/fotos-santa-casa/02/` retornaram HTTP 404 em 22/09/2026. Os endereços foram preservados em `tests/particular-legacy-images.json` para futura recuperação. Não são mais carregados na página. Recuperar os arquivos originais continua pendente; nenhuma foto de outro serviço foi apresentada como substituta. Cobertura de planos e conteúdo assistencial precisam de homologação institucional.
+
+Prévia local nas rotas `/instalacoes/centro-diagnostico-por-imagem`, `/instalacoes/unidades-de-internacao` e `/instalacoes/particular_convenio`; aliases com hífen/underscore aceitos na prévia e nos assets. Fixtures em `tests/fixtures/facilities.php` usam textos, nomes de unidades, associações de fotos e convênios demonstrativos. Não representam cadastro real nem confirmação de cobertura. Banco e envios desconectados; sem publicação em produção.
+
+Validação: `php tests/facilities.php` passou com 33 verificações novas e 582 anteriores. Inclui isolamento das imagens por unidade, parâmetros SQL, conteúdo parcial/ausente, sanitização, aliases e convênios. Navegador: três telas em 1280 e 390 pixels sem overflow horizontal; galerias A/B abrem seus próprios diálogos; próxima imagem e Escape conferidos; sem erros de console ou imagens quebradas observadas. O teste de dependências legadas usa agora a rota ainda não convertida `convenios`.
+
+## Convênios, Especialidades, Capacidade de instalação e produção e Manual
+
+Quatro telas convertidas para o padrão moderno sem jQuery, Bootstrap ou OwlCarousel. Convênios e Especialidades têm busca textual sem distinção de acentos, contagem e estado sem resultados. O convênio adicional SINEEVALI publicado no template antigo foi preservado, evitando duplicação quando presente no cadastro. `includes/convenios.php` permanece intacto para usos legados; a nova página tem renderização própria.
+
+Capacidade conserva os campos de apresentação, títulos, descrições, valores e ordem de registros/imagens. Galerias por registro com identificador validado e consulta parametrizada. Nenhum indicador foi inventado ou recalculado.
+
+Manual tem assuntos em `details` nativos, busca no título e conteúdo, expansão/recolhimento e documentos em seção própria. Os links usam o campo `pdf` já cadastrado, em nova aba com `noopener`; registros sem caminho mantêm a rota legada por ID válido maior que 1 (limite do controlador existente). Sem endereço válido, o título permanece visível com indicação de indisponibilidade. A rota direta evita depender do controlador antigo para os documentos com arquivo cadastrado; não altera arquivos nem banco.
+
+Prévia nas rotas `/servicos/convenios`, `/servicos/especialidades`, `/servicos/capacidade-instalacao-producao` e `/servicos/manual-do-paciente-e-visitantes`. Fixtures em `tests/fixtures/services.php`; nomes, orientações, associações e números são demonstrativos, sem substituir o CMS real. Banco e envios desconectados. Homologar informações e documentos atuais com a instituição antes da publicação. Alterações locais, sem deploy.
+
+Validação: `php tests/services.php` passou com 31 verificações novas e 615 anteriores. Inclui sanitização, arquivos locais, links legados, aliases, conteúdo vazio, preservação de números e convênio adicional. Quatro páginas inspecionadas em 1280 e 390 pixels sem overflow horizontal. Busca de planos, busca sem acento, resultado vazio/limpeza, ampliação de capacidade, busca no corpo do manual, expansão/recolhimento e Enter nos assuntos conferidos. Console sem erros na sessão de validação. Dois PDFs demonstrativos retornaram HTTP 200 com Content-Type application/pdf. Servidor local reiniciado em 127.0.0.1:8095.

@@ -1,6 +1,5 @@
 "use strict";
-const aboutGallery = document.querySelector("[data-about-gallery]");
-if (aboutGallery) {
+document.querySelectorAll("[data-about-gallery]").forEach((aboutGallery) => {
   const track = aboutGallery.querySelector(".about-gallery-track");
   const slides = [...track.querySelectorAll(".about-slide")];
   const links = slides.map((slide) => slide.querySelector("a"));
@@ -10,21 +9,25 @@ if (aboutGallery) {
   const count = controls.querySelector("[data-gallery-count]");
   let index = 0;
   const update = () => {
-    index = Math.max(
-      0,
-      Math.min(
-        slides.length - 1,
-        Math.round(track.scrollLeft / track.clientWidth),
-      ),
-    );
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    index =
+      maxScroll > 1 && track.scrollLeft >= maxScroll - 2
+        ? slides.length - 1
+        : slides.reduce(
+            (best, slide, i) =>
+              Math.abs(slide.offsetLeft - track.scrollLeft) <
+              Math.abs(slides[best].offsetLeft - track.scrollLeft)
+                ? i
+                : best,
+            0,
+          );
     prev.disabled = index === 0;
     next.disabled = index === slides.length - 1;
     count.textContent = `${index + 1} de ${slides.length}`;
   };
   const move = (target) =>
     track.scrollTo({
-      left:
-        Math.max(0, Math.min(slides.length - 1, target)) * track.clientWidth,
+      left: slides[Math.max(0, Math.min(slides.length - 1, target))].offsetLeft,
       behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "instant"
         : "smooth",
@@ -49,7 +52,9 @@ if (aboutGallery) {
   );
   new ResizeObserver(update).observe(track);
   update();
-  const dialog = document.querySelector(".about-lightbox");
+  const dialog = aboutGallery.nextElementSibling?.matches(".about-lightbox")
+    ? aboutGallery.nextElementSibling
+    : null;
   if (dialog && typeof dialog.showModal === "function") {
     const image = dialog.querySelector("[data-dialog-image]");
     const caption = dialog.querySelector("[data-dialog-caption]");
@@ -106,4 +111,4 @@ if (aboutGallery) {
       }
     });
   }
-}
+});

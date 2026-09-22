@@ -1,0 +1,23 @@
+<?php
+require __DIR__.'/hospitality.php';
+$before=$count;$fixture=require __DIR__.'/fixtures/emilia.php';
+Read::$fixtures=$fixture;Read::$queries=array();$getPagina=new Read();
+$r_DIR=array('page'=>'clinica_emilia','info'=>array('titulo'=>'Clínica Emília'));
+ob_start();require DIR.'includes/header.php';require DIR.'includes/topo_paginas.php';require DIR.'includes/paginas/clinica_emilia.php';require DIR.'includes/footer.php';$html=ob_get_clean();
+verify(!str_contains($html,'jQuery') && !str_contains($html,'bootstrap.min') && !str_contains($html,'owlCarousel'),'Clínica Emília without legacy libraries');
+verify(str_contains($html,'emilia.css') && str_contains($html,'about.js'),'Clínica Emília assets');
+verify(substr_count($html,'<h1>')===1,'Single page heading');
+verify(str_contains($html,'Conheça a Clínica Emília.') && str_contains($html,'exibida integralmente'),'Both CMS fields preserved');
+verify(str_contains(Read::$queries[0]['sql'],'pagina_clinica_emilia ORDER BY data DESC LIMIT 1') && str_contains(Read::$queries[1]['sql'],'clinica_emilia ORDER BY data_criacao ASC'),'Original CMS queries');
+verify(str_contains($html,'/hospital/arquivos/clinica_emilia/') && str_contains($html,'Acervo da Clínica Emília'),'Image titles and subdirectory URLs');
+verify(substr_count($html,'class="about-photo-link"')===count($fixture['clinica_emilia']),'All gallery records rendered');
+verify(str_contains($html,'/hospital/servicos/manual-do-paciente-e-visitantes') && str_contains($html,'/hospital/fale-conosco'),'Patient resource links');
+Read::$fixtures=array();ob_start();require DIR.'includes/paginas/clinica_emilia.php';$empty=ob_get_clean();
+verify(str_contains($empty,'As informações sobre a Clínica Emília'),'Empty content fallback');
+verify(!str_contains($empty,'href="#clinica-emilia-galeria"') && !str_contains($empty,'<dialog'),'Empty gallery omitted');
+Read::$fixtures=array('pagina_clinica_emilia'=>array(array('bloco1'=>'Título isolado')));ob_start();require DIR.'includes/paginas/clinica_emilia.php';$title=ob_get_clean();verify(str_contains($title,'Título isolado') && !str_contains($title,'As informações sobre a Clínica Emília'),'Title-only content');
+Read::$fixtures=array('pagina_clinica_emilia'=>array(array('bloco2'=>'<p onclick="bad()">Texto seguro</p><script>bad()</script>')), 'clinica_emilia'=>array(array('img'=>'javascript:bad()','titulo'=>'Unsafe')));ob_start();require DIR.'includes/paginas/clinica_emilia.php';$safe=ob_get_clean();
+verify(str_contains($safe,'Texto seguro') && !str_contains($safe,'onclick=') && !str_contains($safe,'<script>') && !str_contains($safe,'javascript:'),'CMS text and URLs sanitized');
+Read::$fixtures=$fixture;Read::$fixtures['clinica_emilia']=array_slice($fixture['clinica_emilia'],0,1);ob_start();require DIR.'includes/paginas/clinica_emilia.php';$single=ob_get_clean();verify(substr_count($single,'class="about-photo-link"')===1 && str_contains($single,'1 imagem'),'Single-photo gallery');
+Read::$fixtures=array('clinica_emilia'=>$fixture['clinica_emilia']);ob_start();require DIR.'includes/paginas/clinica_emilia.php';$photosOnly=ob_get_clean();verify(str_contains($photosOnly,'id="clinica-emilia-galeria"') && str_contains($photosOnly,'As informações sobre a Clínica Emília'),'Gallery without text');
+echo 'OK: '.($count-$before)." emilia checks.\n";

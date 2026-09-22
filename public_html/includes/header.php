@@ -8,7 +8,10 @@ $isPatientSafety = in_array($r_DIR['page'] ?? '', array('programa-nacional-segur
 $isTransparency = in_array($r_DIR['page'] ?? '', array('portal-transparencia', 'portal_transparencia'), true);
 $isUrgentCare = in_array($r_DIR['page'] ?? '', array('pronto-atendimento', 'pronto_atendimento'), true);
 $isHospitality = ($r_DIR['page'] ?? '') === 'hotelaria';
-$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency && !$isUrgentCare && !$isHospitality;
+$isEmilia = in_array($r_DIR['page'] ?? '', array('clinica-emilia', 'clinica_emilia'), true);
+$isFacility = in_array($r_DIR['page'] ?? '', array('centro-diagnostico-por-imagem', 'centro_diagnostico_por_imagem', 'unidades-de-internacao', 'unidades_de_internacao', 'particular-convenio', 'particular_convenio'), true);
+$isService = in_array($r_DIR['page'] ?? '', array('convenios', 'especialidades', 'capacidade-instalacao-producao', 'capacidade_instalacao_producao', 'manual-do-paciente-e-visitantes', 'manual_do_paciente_e_visitantes'), true);
+$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency && !$isUrgentCare && !$isHospitality && !$isEmilia && !$isFacility && !$isService;
 $pageTitle = $r_DIR['info']['titulo'] ?? ($isHome ? 'Cuidado que acolhe. Saúde que transforma.' : 'Página não encontrada');
 $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pagina'] ?? 'Santa Casa de Lorena: conheça nossos serviços, encontre orientações para pacientes e acompanhe as notícias da instituição.');
 ?>
@@ -39,9 +42,9 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <?php endif; ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/modern.js') ?>?v=1" defer></script>
-<?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality): ?>
+<?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality || $isEmilia || $isFacility || $isService): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
-<script src="<?= scl_url('resources/js/about.js') ?>?v=1" defer></script>
+<script src="<?= scl_url('resources/js/about.js') ?>?v=2" defer></script>
 <?php endif; ?>
 <?php if ($isHumanization): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/humanization.css') ?>?v=1">
@@ -62,6 +65,16 @@ $description = strip_tags($r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pag
 <?php endif; ?>
 <?php if ($isHospitality): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/hospitality.css') ?>?v=1">
+<?php endif; ?>
+<?php if ($isEmilia): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/emilia.css') ?>?v=1">
+<?php endif; ?>
+<?php if ($isFacility || $isService): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/facilities.css') ?>?v=1">
+<?php endif; ?>
+<?php if ($isService): ?>
+<link rel="stylesheet" href="<?= scl_url('resources/css/services.css') ?>?v=1">
+<script src="<?= scl_url('resources/js/services.js') ?>?v=1" defer></script>
 <?php endif; ?>
 </head>
 <body class="scl-site <?= $isHome ? 'scl-home' : 'scl-inner' ?>">

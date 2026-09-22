@@ -1,127 +1,20 @@
-<?php 
-	$getPagina->fullRead("SELECT * FROM ".PREFIX."pagina_pronto_atendimento ORDER BY data DESC LIMIT 1");
-	$info = $getPagina->getResult()[0];
+<?php
+require_once __DIR__.'/../about_helpers.php';
+$planQuery = new Read();
+$planQuery->fullRead('SELECT * FROM '.PREFIX.'convenio ORDER BY data_criacao ASC');
+$plans = $planQuery->getResult() ?: array();
 ?>
-<style>
-.bg-topo-paginas{
-    display:none;
-}
-</style>
-
-<section class='bloco-conteudo'>
-	<div class='bloco-conteudo-padding bloco-conteudo-conteudo'>
-		<div class="titulos">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<h2>Particular / Convênio</h2>
-				<hr>
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-		<div class="clearBoth"></div>
-		<div class="textos">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<p class="fonte2">O Pronto Atendimento da Santa Casa de Lorena possui acomodações amplas e modernas e,  ainda, conta com brinquedoteca e cantinho do café.</p>
-			    
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/01.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/02.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/04.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/05.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/06.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/07.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/08.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/09.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/10.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/11.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/12.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/13.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/14.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/15.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/16.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/17.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/18.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-<p style="text-align:center"><strong><img alt="" src="http://agenciamd.com/fotos-santa-casa/02/19.jpeg" style="width:100%" /></strong></p>
-
-<p>&nbsp;</p>
-
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-		<div class="clearBoth"></div>
-	</div>
-	<div class="clearBoth"></div>
+<div class="facility-page">
+<nav class="about-section-nav site-container" aria-label="Nesta página"><span>Nesta página</span><a href="#particular-apresentacao">Sobre o atendimento</a><a href="#particular-convenios">Convênios</a><a href="#facility-contato">Informações e contato</a></nav>
+<section id="particular-apresentacao" class="site-container facility-intro" aria-labelledby="private-title">
+<div class="facility-heading"><span class="facility-symbol" aria-hidden="true"><?= scl_icon('people') ?></span><span class="eyebrow">PARTICULAR / CONVÊNIO</span><h2 id="private-title">Conheça o atendimento.</h2></div>
+<div class="facility-copy about-prose"><p>O Pronto Atendimento da Santa Casa de Lorena possui acomodações amplas e modernas e, ainda, conta com brinquedoteca e cantinho do café.</p><a class="scl-button" href="<?= scl_url('fale-conosco') ?>">Informações sobre atendimento <?= scl_icon('arrow') ?></a></div>
 </section>
-<div class="clearBoth"></div>
-
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('.galeria-pronto_atendimento').owlCarousel({
-		    loop:true,
-		    margin:30,
-		    responsive:{
-		        0:{
-		            items:1
-		        },
-		        740:{
-		            items:2
-		        },
-		        900:{
-		            items:3
-		        }
-		    }
-		});
-	});
-</script>
+<section id="particular-convenios" class="facility-environments" aria-labelledby="plans-title"><div class="site-container"><div class="section-heading"><div><span class="eyebrow">CONSULTE AS INFORMAÇÕES</span><h2 id="plans-title">Convênios cadastrados.</h2><p>Para informações sobre seu plano e o atendimento desejado, entre em contato com a instituição.</p></div></div>
+<?php if ($plans): ?><div class="facility-plans">
+<?php foreach ($plans as $plan): $planName=trim(strip_tags($plan['nome'] ?? '')) ?: 'Convênio'; $planImage=scl_link($plan['img'] ?? ''); ?>
+<figure class="facility-plan"><?php if ($planImage): ?><img src="<?= scl_escape($planImage) ?>" alt="<?= scl_escape($planName) ?>" loading="lazy" decoding="async" width="180" height="78"><?php endif; ?><figcaption><?= scl_escape($planName) ?></figcaption></figure>
+<?php endforeach; ?></div><?php else: ?><p class="about-empty">Consulte os convênios e as informações de atendimento com a nossa equipe.</p><?php endif; ?>
+</div></section>
+<?php require __DIR__.'/../facility_resources.php'; ?>
+</div>
