@@ -52,7 +52,7 @@ class Delete extends Conn {
         	$this->Result = true;
         } catch (PDOException $e) {
             $this->Result = null;
-            SystemErro("<b>Erro ao Ler:</b> {$e->getMessage()}", $e->getCode());
+            error_log('SCL: database operation failed.');
         }
     }
 

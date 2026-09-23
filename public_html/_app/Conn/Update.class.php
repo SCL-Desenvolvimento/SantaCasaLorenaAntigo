@@ -15,6 +15,7 @@ class Update extends Conn {
     public function ExeUpdate($Tabela, array $Dados, $Termos, $ParseString) {
         $this->Tabela = (string) $Tabela;
         $this->Dados = $Dados;
+        foreach (array_keys($Dados) as $column) { if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/D', $column)) throw new InvalidArgumentException('Invalid column.'); }
         $this->Termos = (string) $Termos;
 
         parse_str($ParseString, $this->Places);
@@ -63,7 +64,7 @@ class Update extends Conn {
             $this->Result = true;
         } catch (PDOException $e) {
             $this->Result = null;
-            SystemErro("", "<b>Erro ao Ler:</b> {$e->getMessage()}", $e->getCode());
+            error_log('SCL: database operation failed.');
         }
     }
 

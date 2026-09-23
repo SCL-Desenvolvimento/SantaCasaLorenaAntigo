@@ -11,9 +11,9 @@
 
       for(i=0; i <= response.length - 1; i++) {
         $('#lista-contatos tbody').append(`<tr>
-          <td>${response[i]['nome']}</td>
-          <td>${response[i]['email']}</td>
-          <td style='font-size:1px !important; color:transparent;'>${response[i]['data_cadastro']}<span style='font-size:14px !important; color:#000;'>${response[i]['data_formatada']}</span></td>
+          <td>${sclAdminEscape(response[i]['nome'])}</td>
+          <td>${sclAdminEscape(response[i]['email'])}</td>
+          <td style='font-size:1px !important; color:transparent;'>${sclAdminEscape(response[i]['data_cadastro'])}<span style='font-size:14px !important; color:#000;'>${sclAdminEscape(response[i]['data_formatada'])}</span></td>
           <td></td>
         </tr>`);
       }
@@ -64,10 +64,10 @@
 
       for(i=0; i <= response.length - 1; i++) {
         $('#lista-trabalhe_conosco tbody').append(`<tr>
-          <td>${response[i]['nome']}</td>
-          <td>${response[i]['email']}</td>
-          <td><a class='btn btn-block btn-flat btn-info btn-xs' href='../${response[i]['curriculum']}' target='_blank'>ver curriculum</a></td>
-          <td style='font-size:1px !important; color:transparent;'>${response[i]['data_cadastro']}<span style='font-size:14px !important; color:#000;'>${response[i]['data_formatada']}</span></td>
+          <td>${sclAdminEscape(response[i]['nome'])}</td>
+          <td>${sclAdminEscape(response[i]['email'])}</td>
+          <td><a class='btn btn-block btn-flat btn-info btn-xs' href='curriculo.php?id=${Number(response[i]['id_trabalhe_conosco'])}' target='_blank'>ver curriculum</a></td>
+          <td style='font-size:1px !important; color:transparent;'>${sclAdminEscape(response[i]['data_cadastro'])}<span style='font-size:14px !important; color:#000;'>${sclAdminEscape(response[i]['data_formatada'])}</span></td>
           <td></td>
         </tr>`);
       }
@@ -95,10 +95,10 @@
 
       for(i=0; i <= response.length - 1; i++) {
         $('#lista-trabalhe_conosco tbody').append(`<tr>
-          <td>${response[i]['nome']}</td>
-          <td>${response[i]['email']}</td>
-          <td><a class='btn btn-block btn-flat btn-info btn-xs' href='../${response[i]['curriculum']}' target='_blank'>ver curriculum</a></td>
-          <td style='font-size:1px !important; color:transparent;'>${response[i]['data_cadastro']}<span style='font-size:14px !important; color:#000;'>${response[i]['data_formatada']}</span></td>
+          <td>${sclAdminEscape(response[i]['nome'])}</td>
+          <td>${sclAdminEscape(response[i]['email'])}</td>
+          <td><a class='btn btn-block btn-flat btn-info btn-xs' href='curriculo.php?id=${Number(response[i]['id_trabalhe_conosco'])}' target='_blank'>ver curriculum</a></td>
+          <td style='font-size:1px !important; color:transparent;'>${sclAdminEscape(response[i]['data_cadastro'])}<span style='font-size:14px !important; color:#000;'>${sclAdminEscape(response[i]['data_formatada'])}</span></td>
           <td></td>
         </tr>`);
       }
@@ -163,10 +163,10 @@
 
       for(i=0; i <= response.length - 1; i++) {
         $('#lista-doacoes tbody').append(`<tr>
-          <td>${response[i]['nome']}</td>
-          <td>${response[i]['email']}</td>
-          <td>${response[i]['cidade']}</td>
-          <td style='font-size:1px !important; color:transparent;'>${response[i]['data_cadastro']}<span style='font-size:14px !important; color:#000;'>${response[i]['data_formatada']}</span></td>
+          <td>${sclAdminEscape(response[i]['nome'])}</td>
+          <td>${sclAdminEscape(response[i]['email'])}</td>
+          <td>${sclAdminEscape(response[i]['cidade'])}</td>
+          <td style='font-size:1px !important; color:transparent;'>${sclAdminEscape(response[i]['data_cadastro'])}<span style='font-size:14px !important; color:#000;'>${sclAdminEscape(response[i]['data_formatada'])}</span></td>
           <td></td>
         </tr>`);
       }

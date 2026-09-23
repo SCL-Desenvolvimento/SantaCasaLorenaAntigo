@@ -1,28 +1,30 @@
 <?php
-require('../../../_app/Config.inc.php');
+require(__DIR__ . '/../../../_app/Config.inc.php');
+scl_admin_require();
 
 $login = new Login(3);
 
 if(!$login->CheckLogin()):
 	unset($_SESSION['UsuarioLogin']);
 	header("Location: index.php?exe=Restrito");
+	exit;
 else:
 	$usuarioLogin = $_SESSION['UsuarioLogin'];
 endif;
 
 //Pego dados noticia
-$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+$dados = scl_admin_input();
 
 //========================================================================= Carrega Tags Digitadas ==================================================================
 if(isset($_GET['q'])){
-	$search = strip_tags(trim($_GET['q'])); 
+	$search = strip_tags(trim($_GET['q']));
 
 	$readTags = new Read;
-	$readTags->ExeRead(PREFIX."tag WHERE nome LIKE '$search%'"); 
-	if($readTags->getRowCount()){ 
+	$readTags->ExeRead(PREFIX."tag", "WHERE nome LIKE :term", http_build_query(["term" => $search . "%"]));
+	if($readTags->getRowCount()){
 		foreach ($readTags->getResult() as $key => $value) {
 			$data[] = array('id' => $value['id_tag'], 'text' => $value['nome']);
-		} 
+		}
 	} else {
 		$data[] = array('id' => $search, 'text' => $search);
 	}
@@ -37,8 +39,8 @@ if(isset($dados['acao'])):
 
 			$readTags = new Read;
 
-			$readTags->fullRead("SELECT DISTINCT 
-				".PREFIX."tag.id_tag, ".PREFIX."tag_noticia.id_tag_noticia 
+			$readTags->fullRead("SELECT DISTINCT
+				".PREFIX."tag.id_tag, ".PREFIX."tag_noticia.id_tag_noticia
 				FROM ".PREFIX."tag_noticia
 				INNER JOIN ".PREFIX."tag ON (".PREFIX."tag_noticia.id_noticia = :id_noticia AND ".PREFIX."tag_noticia.id_tag = ".PREFIX."tag.id_tag)", "id_noticia={$dados['id_noticia']}");
 
@@ -83,7 +85,7 @@ if(isset($dados['acao'])):
 		case 'getListNoticia':
 
 			$Read = new Read();
-			$Read->fullRead("SELECT * FROM ".PREFIX."noticia"); 
+			$Read->fullRead("SELECT * FROM ".PREFIX."noticia");
 			echo json_encode($Read->getResult());
 		break;
 
@@ -118,6 +120,7 @@ if(isset($dados['acao'])):
 			if(isset($file)):
 				$Upload = new Upload("arquivos");
 				$Upload->Image($file, Check::urlAmigavel($dados['titulo']), 1920, "/noticia");
+                    if (!$Upload->getResult()) scl_deny(422);
 				$img = $Upload->getResult();
 				$dados['img'] = $img;
 
@@ -140,7 +143,7 @@ if(isset($dados['acao'])):
 					foreach($tag as $value){
 						if(is_numeric($value)){
 							$tag_noticia['id_noticia'] = $id_noticia_return;
-							$tag_noticia['id_tag'] = $value; 
+							$tag_noticia['id_tag'] = $value;
 							$Create->ExeCreate(PREFIX."tag_noticia", $tag_noticia);
 						}else {
 							$new_tag['nome'] = $value;
@@ -194,9 +197,10 @@ if(isset($dados['acao'])):
 
 			if(isset($file)):
 				if (!empty($file['name'])){
-					if (!empty($dados['img'])) { if (file_exists(DIR.$dados['img'])) unlink(DIR.$dados['img']); }	
+					if (!empty($dados['img'])) { /* Previous media retained for an audited cleanup. */ }
 					$Upload = new Upload("arquivos");
 					$Upload->Image($file, Check::urlAmigavel($dados['titulo']), 1920, "/noticia");
+                    if (!$Upload->getResult()) scl_deny(422);
 					$img = $Upload->getResult();
 					$dados['img'] = $img;
 				}
@@ -230,7 +234,7 @@ if(isset($dados['acao'])):
 						foreach($tag as $value){
 							if(is_numeric($value)){
 								$tag_noticia['id_noticia'] = $idNoticia;
-								$tag_noticia['id_tag'] = $value; 
+								$tag_noticia['id_tag'] = $value;
 								$Create->ExeCreate(PREFIX."tag_noticia", $tag_noticia);
 							}else {
 								$new_tag['nome'] = $value;
@@ -242,15 +246,15 @@ if(isset($dados['acao'])):
 								$new_tag_noticia['id_tag'] = $Create->getResult();
 								$Create->ExeCreate(PREFIX."tag_noticia", $new_tag_noticia);
 							}
-							
-						}		
+
+						}
 					}else {
 									//echo "Tag nao existe";
-					}							
+					}
 
 				}
 
-				echo $Update->getResult();	
+				echo $Update->getResult();
 
 			endif;
 
@@ -274,7 +278,7 @@ if(isset($dados['acao'])):
 
 			if($Delete->getResult()):
 
-				
+
 				echo 'ok';
 
 			else:

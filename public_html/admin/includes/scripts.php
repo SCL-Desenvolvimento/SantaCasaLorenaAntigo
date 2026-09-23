@@ -1,6 +1,8 @@
+<?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <!-- jQuery 2.1.4 -->
 <script src="../resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 
+<script src="../resources/js/admin-security.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 

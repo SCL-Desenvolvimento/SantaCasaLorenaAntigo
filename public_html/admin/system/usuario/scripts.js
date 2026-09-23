@@ -49,18 +49,18 @@
 
       //console.log(response);
 
-      for(i=0; i <= response.length - 1; i++) {
-        //console.log(response[i]);
-        $('#data-list tbody').append('<tr>'+
-          '<td>'+response[i]['nome']+'</td>'+
-          '<td>'+response[i]['email']+'</td>'+
-          "<td>"+(response[i]['status'] == '1' ? "<span class='label label-success' onCLick='alteraStatus(this, "+response[i]['id_usuario']+")' style='cursor:pointer;'>Habilitado</span>" : "<span class='label label-danger' onCLick='alteraStatus(this, "+response[i]['id_usuario']+")' style='cursor:pointer;'>Desabilitado</span>")+"</td>"+
-          '<td>'+
-            "<a href='painel.php?exe=usuario/update&id_usuario="+response[i]['id_usuario']+"' class='btn btn-block btn-flat btn-primary btn-xs'>Editar</a>"+
-            "<a class='btn btn-block btn-flat btn-danger btn-xs' onCLick='excluiAdministrador(this, "+response[i]['id_usuario']+", \""+response[i]['nome']+"\")'>Excluir</a>"+
-          '</td>'+
-        '</tr>');
-      }
+      (Array.isArray(response) ? response : []).forEach(function (item) {
+        var id = Number(item.id_usuario), row = $('<tr>');
+        $('<td>').text(item.nome || '').appendTo(row);
+        $('<td>').text(item.email || '').appendTo(row);
+        var status = $('<span>').addClass('label ' + (item.status == 1 ? 'label-success' : 'label-danger')).text(item.status == 1 ? 'Habilitado' : 'Desabilitado').css('cursor', 'pointer');
+        status.on('click', function () { alteraStatus(this, id); });
+        $('<td>').append(status).appendTo(row);
+        var actions = $('<td>').appendTo(row);
+        $('<a>').addClass('btn btn-block btn-flat btn-primary btn-xs').attr('href', 'painel.php?exe=usuario/update&id_usuario=' + id).text('Editar').appendTo(actions);
+        $('<button>').addClass('btn btn-block btn-flat btn-danger btn-xs').text('Excluir').on('click', function () { excluiAdministrador(this, id, sclAdminEscape(item.nome)); }).appendTo(actions);
+        $('#data-list tbody').append(row);
+      });
 
       $('#data-list').DataTable( {
         "columnDefs": [
@@ -191,9 +191,9 @@
                       
 
                       //Valida o nome
-                      if(f.senha.value == "" || f.senha.value.length != 8){
+                      if(f.senha.value == "" || (f.senha.value.length < 12 || f.senha.value.length > 72)){
                         $(f.senha).closest('.form-group').addClass('has-warning');
-                        $(f.senha).next().html('Insira uma senha válida de oito(8) caracteres');
+                        $(f.senha).next().html('Insira uma senha válida de 12 a 72 caracteres');
                         f.senha.focus();
                       }else{
 
@@ -341,9 +341,9 @@
                     }else{
                       
                       //Valida o nome
-                      if(f.senha.value != "" && f.senha.value.length != 8){
+                      if(f.senha.value != "" && (f.senha.value.length < 12 || f.senha.value.length > 72)){
                         $(f.senha).closest('.form-group').addClass('has-warning');
-                        $(f.senha).next().html('Insira uma senha válida de oito(8) caracteres');
+                        $(f.senha).next().html('Insira uma senha válida de 12 a 72 caracteres');
                         f.senha.focus();
                       }else{
 
@@ -490,15 +490,13 @@
   }
 
   function verificaSenha(input){
-    if($(input).val().length > 0 && $(input).val().length == 8){
-      $(input).closest('.form-group').removeClass('has-warning').addClass('has-success').find('.msg-erro').html('Limite de caracteres excedido');
-    }else{
-      $(input).closest('.form-group').removeClass('has-warning').addClass('has-success').find('.msg-erro').html('Faltam '+(8 - $(input).val().length)+' caracteres');
-    }
+    var length = new TextEncoder().encode(input.value).length;
+    var valid = length >= 12 && length <= 72;
+    $(input).closest('.form-group').toggleClass('has-warning', !valid).toggleClass('has-success', valid).find('.msg-erro').text(valid ? '' : 'Use uma senha de 12 a 72 bytes (acentos ocupam mais de um byte).');
   }
 
   function limpaMSGSenha(input){
-    if($(input).val().length == 8){
+    if($(input).val().length >= 12){
       $(input).closest('.form-group').find('.msg-erro').html('');
     }
   }

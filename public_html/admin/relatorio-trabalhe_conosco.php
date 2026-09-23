@@ -1,16 +1,18 @@
 <?php
-	require('../_app/Config.inc.php');
+	require(__DIR__ . '/../_app/Config.inc.php');
+scl_admin_require();
 	
 	$login = new Login(3);
 
 	if(!$login->CheckLogin()):
 		unset($_SESSION['UsuarioLogin']);
 		header("Location: index.php?exe=Restrito");
+	exit;
 	else:
 		$usuarioLogin = $_SESSION['UsuarioLogin'];
 	endif;
 
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = scl_admin_input();
 
     if((isset($_GET['data_inicio']) && $_GET['data_inicio'] != "") && (isset($_GET['data_fim']) && $_GET['data_fim'] != "")):
 
@@ -77,11 +79,11 @@
 			$i++;
 	?>
     <tr bgcolor="<?php echo $bg; ?>">
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $trabalhe_conosco['nome']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($trabalhe_conosco['nome']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $trabalhe_conosco['email']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($trabalhe_conosco['email']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $trabalhe_conosco['cidade']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($trabalhe_conosco['cidade']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo date("d/m/Y - H:i:s", strtotime($trabalhe_conosco['data_cadastro'])); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>

@@ -1,16 +1,18 @@
 <?php
-	require('../_app/Config.inc.php');
+	require(__DIR__ . '/../_app/Config.inc.php');
+scl_admin_require();
 	
 	$login = new Login(3);
 
 	if(!$login->CheckLogin()):
 		unset($_SESSION['UsuarioLogin']);
 		header("Location: index.php?exe=Restrito");
+	exit;
 	else:
 		$usuarioLogin = $_SESSION['UsuarioLogin'];
 	endif;
 
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = scl_admin_input();
 
     if((isset($_GET['data_inicio']) && $_GET['data_inicio'] != "") && (isset($_GET['data_fim']) && $_GET['data_fim'] != "")):
 
@@ -95,28 +97,28 @@
 			$i++;
 	?>
     <tr bgcolor="<?php echo $bg; ?>">
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['tempo_espera']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['tempo_espera']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
 
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['nota_atendimento']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['nota_atendimento']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
         
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['resolucao_problema']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['resolucao_problema']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
         
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['preparo_atendimento']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['preparo_atendimento']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
         
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['informacoes_passadas']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['informacoes_passadas']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
 
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['perguntas_respondidas']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['perguntas_respondidas']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
 
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['experiencia']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['experiencia']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
 
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $pesquisa_atendimento['mensagem']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($pesquisa_atendimento['mensagem']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
 
         <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo date("d/m/Y - H:i:s", strtotime($pesquisa_atendimento['data_cadastro'])); ?></b></td>

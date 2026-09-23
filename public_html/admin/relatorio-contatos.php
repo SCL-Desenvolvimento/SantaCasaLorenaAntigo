@@ -1,16 +1,18 @@
 <?php
-	require('../_app/Config.inc.php');
+	require(__DIR__ . '/../_app/Config.inc.php');
+scl_admin_require();
 	
 	$login = new Login(3);
 
 	if(!$login->CheckLogin()):
 		unset($_SESSION['UsuarioLogin']);
 		header("Location: index.php?exe=Restrito");
+	exit;
 	else:
 		$usuarioLogin = $_SESSION['UsuarioLogin'];
 	endif;
 
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = scl_admin_input();
 
     if((isset($_GET['data_inicio']) && $_GET['data_inicio'] != "") && (isset($_GET['data_fim']) && $_GET['data_fim'] != "")):
 
@@ -83,19 +85,19 @@
 			$i++;
 	?>
     <tr bgcolor="<?php echo $bg; ?>">
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $contato['nome']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($contato['nome']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $contato['email']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($contato['email']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $contato['cidade']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($contato['cidade']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $contato['assunto']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($contato['assunto']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $contato['razao']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($contato['razao']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo date("d/m/Y - H:i:s", strtotime($contato['data_cadastro'])); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo $contato['mensagem']; ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($contato['mensagem']); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
     </tr>
 	<?php

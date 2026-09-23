@@ -1,3 +1,4 @@
+<?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <?php
 
 $login = new Login(1);
@@ -74,7 +75,7 @@ endif;
 
                 <div class="form-group">
                   <label for="">Senha</label>
-                  <input type="password" class="form-control" placeholder="Entre com a senha" id="senha" name="senha" value="" onKeyUp='verificaSenha(this)' onBlur="limpaMSGSenha(this)" maxlength="8">
+                  <input type="password" class="form-control" placeholder="Entre com a senha" id="senha" name="senha" value="" onKeyUp='verificaSenha(this)' onBlur="limpaMSGSenha(this)" maxlength="72">
                   <label class='msg-erro'></label>
                 </div>
 

@@ -1,13 +1,14 @@
+<?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <!-- Notificações -->
 <li class="dropdown messages-menu">
   <!--<a href="#" class="dropdown-toggle"> <!-- data-toggle="dropdown" --
     <i class="fa fa-envelope-o"></i>
     <span class="label label-success">4</span>
   </a>
-  
+
   <ul class="dropdown-menu">
     <li class="header">Você tem 4 mensagens</li>
-    
+
     <li>
       <!-- inner menu: contains the actual data --
       <ul class="menu">
@@ -17,7 +18,7 @@
           <a href="#">
             <div class="pull-left">
               <img src="../dist/img/user1-128x128.jpg" class="img-circle" alt="User Image">
-            </div>          
+            </div>
             <h4>
               João
               <small><i class="fa fa-clock-o"></i> 5 min</small>
@@ -32,7 +33,7 @@
           <a href="#">
             <div class="pull-left">
               <img src="../dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-            </div>          
+            </div>
             <h4>
               João
               <small><i class="fa fa-clock-o"></i> 5 min</small>
@@ -47,7 +48,7 @@
           <a href="#">
             <div class="pull-left">
               <img src="../dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-            </div>          
+            </div>
             <h4>
               João
               <small><i class="fa fa-clock-o"></i> 5 min</small>
@@ -62,7 +63,7 @@
           <a href="#">
             <div class="pull-left">
               <img src="../dist/img/user5-128x128.jpg" class="img-circle" alt="User Image">
-            </div>          
+            </div>
             <h4>
               João
               <small><i class="fa fa-clock-o"></i> 5 min</small>
@@ -77,7 +78,7 @@
           <a href="#">
             <div class="pull-left">
               <img src="../dist/img/user6-128x128.jpg" class="img-circle" alt="User Image">
-            </div>          
+            </div>
             <h4>
               João
               <small><i class="fa fa-clock-o"></i> 5 min</small>
@@ -86,7 +87,7 @@
           </a>
         </li>-->
         <!-- end message --
-      
+
       </ul>
     </li>
     <li class="footer"><a href="#">Ver todas as mensagens</a></li>
@@ -100,7 +101,7 @@
     <i class="fa fa-bell-o"></i>
     <span class="label label-warning">10</span>
   </a>
-            
+
   <ul class="dropdown-menu">
     <li class="header">Você tem 10 noficações</li>
     <li>
@@ -142,26 +143,26 @@
 <!-- User Account: style can be found in dropdown.less -->
 <li class="dropdown user user-menu">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-    <img src="<?php echo ($_SESSION['UsuarioLogin']['img'] != "" ? "includes/tim.php?src={$_SESSION['UsuarioLogin']['img']}&h=25&w=25" : "includes/tim.php?src=/img/user.png&h=25&w=25")?>" class="user-image" alt="User Image">
+    <img src="<?= htmlspecialchars(scl_avatar_url(), ENT_QUOTES, 'UTF-8') ?>" class="user-image" alt="User Image">
     <span class="hidden-xs">
-      <?php 
-  			echo $_SESSION['UsuarioLogin']['nome'];
-  		?>
+      <?php
+			echo htmlspecialchars($_SESSION['UsuarioLogin']['nome'], ENT_QUOTES, 'UTF-8');
+		?>
     </span>
   </a>
-  
+
   <ul class="dropdown-menu">
   <!-- User image -->
     <li class="user-header">
-      <img src="<?php echo ($_SESSION['UsuarioLogin']['img'] != "" ? "includes/tim.php?src={$_SESSION['UsuarioLogin']['img']}&h=90&w=90" : "includes/tim.php?src=/img/user.png&h=90&w=90")?>" class="img-circle" alt="User Image">
+      <img src="<?= htmlspecialchars(scl_avatar_url(), ENT_QUOTES, 'UTF-8') ?>" class="img-circle" alt="User Image">
       <p>
-      <?php 
-			 echo $_SESSION['UsuarioLogin']['nome']." - ".$_SESSION['UsuarioLogin']['usuario'];
-			?> 
+      <?php
+			 echo htmlspecialchars($_SESSION['UsuarioLogin']['nome'].' - '.$_SESSION['UsuarioLogin']['usuario'], ENT_QUOTES, 'UTF-8');
+			?>
         <small>Membro desde <?php echo date("d/m/Y", strtotime($_SESSION['UsuarioLogin']['cadastro']))?></small>
       </p>
     </li>
-              
+
     <!-- Menu Body -->
     <!--<li class="user-body">
       <div class="row">
@@ -172,14 +173,14 @@
     <!-- /.row -->
     <!--</li>-->
 
-              
+
   <!-- Menu Footer-->
     <li class="user-footer">
       <div class="pull-left">
         <a href="painel.php?exe=usuario/update&id_usuario=<?php echo $_SESSION['UsuarioLogin']['id_usuario']; ?>" class="btn btn-default btn-flat">Perfil</a>
       </div>
       <div class="pull-right">
-        <a href="?LogOff=true" class="btn btn-default btn-flat">Sair</a>
+        <form method="post" action="painel.php"><input type="hidden" name="_csrf" value="<?= htmlspecialchars(scl_csrf_token(), ENT_QUOTES, 'UTF-8') ?>"><button name="LogOff" value="1" class="btn btn-default btn-flat">Sair</button></form>
       </div>
     </li>
   </ul>

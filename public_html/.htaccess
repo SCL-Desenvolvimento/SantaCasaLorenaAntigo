@@ -1,8 +1,19 @@
 DirectoryIndex index.php index.html
+Options -Indexes
+
+<FilesMatch "(?i)(^\.|\.(sql|log|ini|env|bak|old|md|toml|ya?ml)$|^error_log$)">
+    Require all denied
+</FilesMatch>
 
 RewriteEngine On
 
 RewriteBase /
+
+# Internal code, personal files, backups and development utilities are not public.
+RewriteRule ^(?:_app|tests|scripts|deploy|admin/system|hclorena\.org\.br|HOSPITALDASCLINICASLORENA\.ORG\.BR|santacasalorena\.org\.br|zITK0ffeMM)(?:/|$) - [F,L,NC]
+RewriteRule ^arquivos/curriculuns(?:/|$) - [F,L,NC]
+RewriteRule ^resources/.*\.(?:php[0-9]?|phtml|phar)(?:/|$) - [F,L,NC]
+RewriteRule ^includes/(?!servicos/galeria\.php$).*\.php(?:/|$) - [F,L,NC]
 
 # Se não for arquivo nem pasta, encaminha para index.php
 RewriteCond %{REQUEST_FILENAME} !-f

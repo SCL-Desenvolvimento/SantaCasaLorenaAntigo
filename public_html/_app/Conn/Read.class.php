@@ -9,6 +9,7 @@ class Read extends Conn{
 	private $Conn;
 	
 	public function ExeRead($Tabela, $Termos = null, $ParseString = null){
+		$this->Places = null;
 		if(!empty($ParseString)):
 			parse_str($ParseString, $this->Places);	
 		endif;
@@ -25,6 +26,7 @@ class Read extends Conn{
 	}
 	
 	public function fullRead($Query, $ParseString = null){
+		$this->Places = null;
 		$this->Select = (string) $Query;
 		
 		if(!empty($ParseString)):
@@ -68,8 +70,7 @@ class Read extends Conn{
 			$this->Result = $this->Read->fetchAll();
 		}catch (PDOException $e){
 			$this->Result = null;
-			echo $this->Select;
-			SystemErro("","<b> Erro ao realizar a leitura:</b> {$e->getMessage()}", $e->getCode());
+			error_log('SCL: database operation failed.');
 		}
 		
 	}

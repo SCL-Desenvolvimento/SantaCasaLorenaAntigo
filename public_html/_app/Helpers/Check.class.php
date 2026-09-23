@@ -39,14 +39,16 @@ class Check{
 	public static function insertImg($Img, $Pasta){
 
 		$Upload = new Upload("arquivos");
-		$Upload->Image($Img, md5($Pasta.date("d-m-Y H:i:s")), null, "/{$Pasta}");
+		$Upload->Image($Img, null, null, "/{$Pasta}");
+		if (!$Upload->getResult()) scl_deny(422);
 		return $Upload->getResult();
 	}
 
 	public static function insertFile($File, $Pasta){
 
 		$Upload = new Upload("arquivos");
-		$Upload->File($File, md5($Pasta.date("d-m-Y H:i:s")), "/{$Pasta}", null);
+		$Upload->File($File, null, "/{$Pasta}", null);
+		if (!$Upload->getResult()) scl_deny(422);
 		return $Upload->getResult();
 	}
 	
@@ -63,7 +65,7 @@ class Check{
 		if ($simbolos) $caracteres .= $simb;
 		$len = strlen($caracteres);
 		for ($n = 1; $n <= $tamanho; $n++) {
-			$rand = mt_rand(1, $len);
+			$rand = random_int(1, $len);
 			$retorno .= $caracteres[$rand-1];
 		}
 		return $retorno;
@@ -731,17 +733,9 @@ class Check{
 	
 
 	public static function urlAmigavel($Name){
-		self::$Format = Array();
-		self::$Format['a'] = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜüÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿRr&:,;()#"\'?!@*/%$¨+º.';
-		self::$Format['b'] = 'aaaaaaaceeeeiiiidnoooooouuuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRre------------------- ';
-		self::$Data = strtr(utf8_decode($Name), utf8_decode(self::$Format['a']), utf8_decode(self::$Format['b']));
-		self::$Data = strip_tags(trim(self::$Data));
-		self::$Data = str_replace(' ', '-', self::$Data);
-		self::$Data = str_replace(array('-----', '----', '---', '--'), '-', self::$Data);
-		
-		return strtolower(utf8_encode(self::$Data));
-		
-	}
+        $text = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', strip_tags((string) $Name));
+        return strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $text ?: ''), '-'));
+    }
 
 	public static function getUrlAmigavel($Url, $Site = null){
 		return HOME.(isset($Site) ? "".$Site['nome']."/".$Url : "".$Url);

@@ -1,5 +1,28 @@
 # Relatório de modernização — inventário e pendências
 
+## Atualização de execução — etapa 2 aplicada ao código em 23/09/2026
+
+Foram aplicadas as correções de autenticação, acesso administrativo e proteção dos dados. **A ativação na hospedagem depende da migração do banco e da configuração do servidor; não foi realizado deploy.** Para os itens desta etapa, esta atualização prevalece sobre os achados históricos abaixo.
+
+| Item | Resultado no código |
+|---|---|
+| Autenticação | Bloqueio com encerramento em todos os nove webservices, cinco relatórios, painel e downloads administrativos. Templates não podem ser chamados diretamente. |
+| Permissões | Administrador ativo de nível 3 pode consultar, cadastrar, editar, excluir e exportar. Níveis legados 1/2, inativos, sessões antigas e expiradas não acessam o administrativo. Não há elevação automática de nível; a própria conta não pode ser excluída/desativada pelo operador. |
+| CSRF | Token por sessão para POST administrativo, integração com AJAX/formulários e logout somente por POST. |
+| Senhas | Novas senhas usam password_hash/password_verify. MD5 permanece apenas como leitura de compatibilidade e é migrado após login válido. Nenhum hash é retornado na API de usuários. |
+| Recuperação | Token aleatório, resumo no banco, validade de 30 minutos, consumo transacional e uso único. Não altera a senha ao solicitar e não envia senhas por e-mail. |
+| Sessões e tentativas | Regeneração do identificador, cookie protegido, 30 minutos de inatividade/8 horas de duração máxima, consulta de status/versão a cada acesso e limites persistentes por conta/IP. |
+| Currículos | Novos arquivos fora da pasta pública; antigos acessíveis por download autenticado, preservando subpastas ano/mês. Script de cópia verificada para armazenamento privado, sem apagar originais. |
+| Uploads | Validação de tamanho, extensão e MIME real, nomes aleatórios, reprocessamento de imagens e bloqueio de arquivos ativos. Seletor protegido substitui KCFinder; leitura local de imagens substitui TimThumb. |
+| Configuração e pacote | Credenciais de execução removidas dos arquivos; variáveis de ambiente; erros internos não expostos. Gerador de pacote exclui currículos, logs, testes, backups e ferramentas legadas. |
+| Proteção complementar | Lista de rotas permitidas no painel, validação de identificadores/datas, escape dos dados públicos exibidos no administrativo e proteção de células exportadas contra fórmulas. |
+
+Validação local: **733 verificações da suíte pública, 58 de segurança e 86 por HTTP** aprovadas; 146 arquivos PHP e quatro arquivos JavaScript passaram pela verificação sintática. A seleção de publicação contém 2.232 arquivos e nenhum currículo. Login e abertura da recuperação foram conferidos no navegador. Os testes de segurança usam banco SQLite e dados sintéticos; não substituem homologação com MySQL/MariaDB, SMTP e regras do servidor real. Nenhum e-mail real foi enviado e nenhum usuário real foi modificado.
+
+Auditoria do acervo local: 5.601 PDFs, dos quais 5.565 currículos; nenhuma extensão executável em `arquivos`. Foram encontrados 23 arquivos vazios e 19 PDFs sem assinatura inicial reconhecida; nenhum foi apagado. A varredura não é antivírus. Continuam pendentes a análise pelo scanner da instituição e a revisão de retenção dos documentos.
+
+**Para ativar:** seguir [deploy/SECURITY.md](deploy/SECURITY.md), executar a migração SQL em homologação, configurar segredos/HTTPS/armazenamento/SMTP, copiar os currículos antigos e validar os bloqueios HTTP antes de publicar em uma pasta limpa. Credenciais antigas precisam ser rotacionadas no provedor; a remoção no código não limpa histórico/backups. Perfis separados por departamento ainda exigem uma matriz de permissões aprovada e implementação própria. Bibliotecas antigas do restante do painel continuam na lista de modernização.
+
 ## Atualização de execução — etapa 1 aplicada em 22/09/2026
 
 As correções da etapa 1 foram autorizadas e aplicadas no código. O inventário posterior registra os achados anteriores; para esses itens, prevalece o estado desta atualização.

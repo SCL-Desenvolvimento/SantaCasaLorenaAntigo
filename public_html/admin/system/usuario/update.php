@@ -1,3 +1,4 @@
+<?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <?php 
 $login = new Login(1);
 if (!$login->CheckLogin() || (isset($access['admin']) && ($access['admin'] != 1 && $_SESSION['UsuarioLogin']['id_usuario'] != $_GET['id_usuario']) )):

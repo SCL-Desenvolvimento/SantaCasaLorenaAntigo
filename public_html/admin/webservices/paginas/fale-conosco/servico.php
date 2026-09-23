@@ -1,6 +1,7 @@
 <?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	require('../../../../_app/Config.inc.php');
+	require(__DIR__ . '/../../../../_app/Config.inc.php');
+scl_admin_require();
+	$dados = scl_admin_input();
     require_once __DIR__.'/../../../../includes/ouvidoria_queries.php';
 	
 	$login = new Login(3);

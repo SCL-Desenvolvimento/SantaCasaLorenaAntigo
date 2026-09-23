@@ -1,10 +1,12 @@
 <?php
 	ob_start();
 	
-	require('../_app/Config.inc.php');
+	require(__DIR__ . '/../_app/Config.inc.php');
+scl_admin_require();
 
-	$login = new Login(1);
-	$logoff = filter_input(INPUT_GET, 'LogOff', FILTER_VALIDATE_BOOLEAN);
+	define('SCL_ADMIN_PANEL', true);
+	$login = new Login(3);
+	$logoff = ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['LogOff']));
 	$getExe = filter_input(INPUT_GET, 'exe', FILTER_DEFAULT);
 
 	if(!$login->CheckLogin()):
@@ -16,8 +18,9 @@
 	endif;
 
 	if($logoff):
-		unset($_SESSION['UsuarioLogin']);
-		header("Location: index.php?exe=LogOff");
+		scl_logout();
+		header("Location: index.php?exe=LogOff", true, 303);
+		exit;
 	endif;
 
   if(isset($getExe)):
@@ -30,6 +33,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="csrf-token" content="<?= htmlspecialchars(scl_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Área do Administrador | Santa Casa de Lorena</title>
   <link rel="icon" href="../favicon.ico">
@@ -118,10 +122,10 @@
       <!-- Usuario Logado -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="<?php echo ($_SESSION['UsuarioLogin']['img'] != "" ? "includes/tim.php?src={$_SESSION['UsuarioLogin']['img']}&h=160&w=160" : "includes/tim.php?src=../resources/img/user.png&h=160&w=160")?>" class="img-circle" alt="User Image">
+          <img src="<?= htmlspecialchars(scl_avatar_url(), ENT_QUOTES, 'UTF-8') ?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p> <?php echo $_SESSION['UsuarioLogin']['nome']; ?></p>
+          <p> <?php echo htmlspecialchars($_SESSION['UsuarioLogin']['nome'], ENT_QUOTES, 'UTF-8'); ?></p>
           <a></a>
         </div>
       </div>
@@ -170,23 +174,12 @@
     <section class="content">
 
     <?php
-
-    		if(!empty($getExe)):
-    			$includePatch = __DIR__."//system//".strip_tags(trim($getExe).".php");
-    		else:
-    			$includePatch = __DIR__."//system//home.php";
-    		endif;
-
-    		if(file_exists($includePatch)):
-          require_once($includePatch);
-        else:
-          if(file_exists(__DIR__."//system//".strip_tags(trim($getExe)."index.php"))):
-            require_once(__DIR__."//system//".strip_tags(trim($getExe)."index.php"));
-          else:
-            SystemErro("Erro ao incluir tela", "Não foi possível incluir o controller /{$getExe}.php!", System_ERROR);
-          endif;
-        endif
-
+        $route = trim((string) $getExe, '/');
+        $routes = ['home', 'usuario', 'usuario/index', 'usuario/create', 'usuario/update', 'noticias', 'noticias/index', 'noticias/create', 'noticias/update', 'banner', 'banner/index', 'banner/create', 'banner/update', 'galeria', 'galeria/index', 'galeria/create', 'galeria/update', 'paginas/institucional', 'paginas/servicos', 'paginas/instalacoes', 'paginas/fale-conosco'];
+        if ($route === '') $route = 'home';
+        if (!in_array($route, $routes, true)) scl_deny(404);
+        if (in_array($route, ['usuario', 'noticias', 'banner', 'galeria'], true)) $route .= '/index';
+        require __DIR__ . '/system/' . $route . '.php';
     ?>
     </section>
     <!-- /Controller -->

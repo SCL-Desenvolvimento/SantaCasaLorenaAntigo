@@ -1,3 +1,4 @@
+<?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <!-- DataTables -->
 <link rel="stylesheet" href="../resources/plugins/datatables/dataTables.bootstrap.css">
 <?php

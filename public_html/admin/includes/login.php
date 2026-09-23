@@ -1,3 +1,4 @@
+<?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <form action="<?php echo HOME."admin/"?>" method="post">
   <div class="form-group has-feedback">
     <input type="user" name="usuario" class="form-control" placeholder="Usuário">

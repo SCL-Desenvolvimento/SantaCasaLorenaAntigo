@@ -8,12 +8,9 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
    config.entities_latin = false;
-   config.filebrowserBrowseUrl = '../resources/plugins/ckeditor/kcfinder/browse.php?opener=ckeditor&type=files';
-   config.filebrowserImageBrowseUrl = '../resources/plugins/ckeditor/kcfinder/browse.php?opener=ckeditor&type=teste';
-   config.filebrowserFlashBrowseUrl = '../resources/plugins/ckeditor/kcfinder/browse.php?opener=ckeditor&type=flash';
-   config.filebrowserUploadUrl = '../resources/plugins/ckeditor/kcfinder/upload.php?opener=ckeditor&type=files';
-   config.filebrowserImageUploadUrl = '../resources/plugins/ckeditor/kcfinder/upload.php?opener=ckeditor&type=teste';
-   config.filebrowserFlashUploadUrl = '../resources/plugins/ckeditor/kcfinder/upload.php?opener=ckeditor&type=flash';
+   config.filebrowserBrowseUrl = 'media.php';
+   config.filebrowserImageBrowseUrl = 'media.php';
+   config.removeDialogTabs = 'image:Upload;link:upload';
    
    /*config.toolbar = [
             { name: 'document', items : [ 'Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates' ] },

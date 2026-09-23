@@ -1,262 +1,79 @@
 <?php
-	
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	require('../../../_app/Config.inc.php');
-	
-	$login = new Login(1);
-
-	if(!$login->CheckLogin() || (isset($access) && $access['admin'] != 1)):
-		unset($_SESSION['UsuarioLogin']);
-		header("Location: index.php?exe=Restrito");
-	else:
-		$usuarioLogin = $_SESSION['UsuarioLogin'];
-	endif;
-	
-	if(isset($dados['acao'])):
-		switch ($dados['acao']):
-
-			case 'listUsers':
-
-				//if((isset($dados['nivel']) && $_SESSION['UsuarioLogin']['nivel'] >= $dados['nivel']) || $_SESSION['UsuarioLogin']['nivel'] == 1){
-
-	        		$read = new Read;
-
-	        		if($_SESSION['UsuarioLogin']['nivel'] == 1){
-	        			$read->ExeRead(PREFIX.'usuario', "WHERE nivel = :nivel AND id_loja = :id_loja AND id_usuario != :id_usuario", "nivel=1&id_loja={$_SESSION['UsuarioLogin']['id_loja']}&id_usuario={$_SESSION['UsuarioLogin']['id_usuario']}");
-	        		}else{
-						$read->ExeRead(PREFIX.'usuario', "WHERE nivel = :nivel ", "nivel=3");
-	        		}
-
-	        		if($read->getResult()):
-	        			echo json_encode($read->getResult());
-	        		else:
-	        			echo 0;
-	        		endif;
-	        	//}
-
-			break;
-
-			case 'getUser':
-
-				if(($_SESSION['UsuarioLogin']['nivel'] == 3 || ($subUsuario = Check::MeuLojista($dados['id_usuario'])) || $_SESSION['UsuarioLogin']['id_usuario'] == $dados['id_usuario'])){
-
-	        		$read = new Read;
-					$read->ExeRead(PREFIX.'usuario', "WHERE id_usuario = :id_usuario AND nivel <= :nivel", "nivel={$_SESSION['UsuarioLogin']['nivel']}&id_usuario={$dados['id_usuario']}");
-	        		
-	        		if($read->getResult()[0]['nivel'] == 3 && $_SESSION['UsuarioLogin']['nivel'] != 3){
-	        			echo 0;
-	        		}else{
-
-	        			$usuario = $read->getResult()[0];
-	        			if($_SESSION['UsuarioLogin']['nivel'] != 3 && !$subUsuario)
-	        				$usuario['mostra_status'] = $subUsuario;
-
-	        			echo json_encode($usuario);
-
-	        		}
-	        		
-	        	}
-
-			break;
-
-			case 'excluiUser':
-
-				if($_SESSION['UsuarioLogin']['nivel'] == 3):
-					$Delete = new Delete();
-					$Delete->ExeDelete(PREFIX."usuario", "WHERE id_usuario = :id_usuario", "id_usuario={$dados['id_usuario']}");
-		
-					if($Delete->getResult()):
-						echo 1;
-					endif;
-				else:
-					echo 0;
-				endif;
-
-			break;
-
-			case 'createUser':
-
-				if($_SESSION['UsuarioLogin']['nivel'] == 1)
-					$dados['id_loja'] = $_SESSION['UsuarioLogin']['id_loja'];
-
-				if(isset($_FILES['img'])){ $file = $_FILES['img']; }
-				if(isset($file)):
-	                if(!empty($file['name'])){
-	                    $Upload = new Upload("arquivos");
-	                    $Upload->Image($file, Check::urlAmigavel(Check::urlAmigavel($dados['nome'])."-".date("dmYHis")), NULL,"/fotousuario");
-	                    $dados['img'] = $Upload->getResult();
-	                }
-	            endif;
-
-
-	        	unset($dados['acao']);
-    			$dados['status'] = (isset($dados['status']) ? 1 : 0 );
-
-    			$dados['criado_por'] = $_SESSION['UsuarioLogin']['id_usuario'];
-    			$dados['cadastro'] = date("Y-m-d H:i:s");
-    			$dados['nivel'] = 3;
-	        	$dados['senha'] = md5($dados['senha']);
-
-	        	$Create = new Create();
-	        	$Create->ExeCreate(PREFIX."usuario", $dados);
-
-	        	if (!$Create->getResult()):
-	            	echo "0";
-	        	else:
-					echo $Create->getResult();
-	        	endif;
-
-			break;
-
-			case 'updateUser':
-
-				if($_SESSION['UsuarioLogin']['nivel'] == 1)
-					$dados['id_loja'] = $_SESSION['UsuarioLogin']['id_loja'];
-
-				if($_SESSION['UsuarioLogin']['nivel'] == 3 || $_SESSION['UsuarioLogin']['id_usuario'] == $dados['id_usuario'] || Check::MeuLojista($dados['id_usuario'])){
-
-					if(isset($_FILES['img'])) $file = $_FILES['img'];
-
-					if(isset($file)):
-	                    if (!empty($file['name'])){
-	                        $Upload = new Upload("arquivos");
-	                        $Upload->Image($file, Check::urlAmigavel($dados['nome'])."-".date("dmYHis") , NULL,"/fotousuario");
-	                        $dados['img'] = $Upload->getResult();
-	                    }
-	        		endif;
-
-	    			unset($dados['acao']);
-	    			$dados['status'] = (isset($dados['status']) ? 1 : 0 );
-
-	    			$dados['alterado_por'] = $_SESSION['UsuarioLogin']['id_usuario'];
-	    			$dados['data_alteracao'] = date("Y-m-d H:i:s");
-	    			$dados['nivel'] = 3;
-	    			if($dados['senha'] != ""){
-	    				$dados['senha'] = md5($dados['senha']);
-	    			}else{
-	    				unset($dados['senha']);
-	    			}	
-
-	    			if($_SESSION['UsuarioLogin']['nivel'] != 3 && $_SESSION['UsuarioLogin']['id_usuario'] == $dados['id_usuario'])
-	    				unset($dados['status']);
-
-
-					$Update = new Update();
-					$Update->ExeUpdate(PREFIX."usuario", $dados, "WHERE id_usuario= :id_usuario", "id_usuario={$dados['id_usuario']}");
-					if(!$Update->getResult()):
-	            		echo $Update->getResult();
-	        		else:
-						if($_SESSION['UsuarioLogin']['id_usuario'] == $dados['id_usuario']):
-							$_SESSION['UsuarioLogin']['nome'] = $dados['nome'];
-							$_SESSION['UsuarioLogin']['email'] = $dados['email'];
-							if(isset($dados['img'])):
-								$_SESSION['UsuarioLogin']['img'] = $dados['img'];
-							endif;
-		           		endif;
-		           		echo 1;
-	        		endif;
-	        	}
-
-			break;
-
-			case 'alteraStatus':
-
-        		$read = new Read;
-				$read->ExeRead(PREFIX.'usuario', "WHERE id_usuario = :id_usuario", "id_usuario={$dados['id_usuario']}");
-
-				if($read->getResult()):
-					$update = new Update();
-					$dadosUpdate = array();
-					if($read->getResult()[0]['status'] == 0):
-						$dadosUpdate['status'] = 1;
-						$update->ExeUpdate(PREFIX."usuario", $dadosUpdate, "WHERE id_usuario = :id_usuario", "id_usuario={$dados['id_usuario']}");
-						if($update->getResult()):
-							echo 1;
-						endif;
-					else:
-						$dadosUpdate['status'] = 0;
-						$update->ExeUpdate(PREFIX."usuario", $dadosUpdate, "WHERE id_usuario = :id_usuario", "id_usuario={$dados['id_usuario']}");
-						if($update->getResult()):
-							echo 0;
-						endif;
-					endif;
-				endif;
-
-			break;
-
-			case 'ValidarEmail':
-
-		        $read = new Read;
-				$read->ExeRead(PREFIX.'usuario', "WHERE email = :e_mail", "e_mail={$dados['email']}");
-				
-				if($read->getResult()):
-
-					if(isset($dados['atual']) && $read->getResult()[0]['id_usuario'] == $dados['atual'])
-						echo 1;
-					else
-						echo 0;
-
-				else:
-					echo 1;
-				endif;
-
-		    break;
-		    
-		    case 'ValidarLogin':
-
-		        $read = new Read;
-				$read->ExeRead(PREFIX.'usuario', "WHERE usuario = :user", "user={$dados['login']}");
-				
-				if($read->getResult()):
-
-					if(isset($dados['atual']) && $read->getResult()[0]['id_usuario'] == $dados['atual'])
-						echo 1;
-					else
-						echo 0;
-					
-				else:
-					echo 1;
-				endif;
-
-		    break;
-		    
-		   case 'ValidarRG':
-
-		        $read = new Read;
-				$read->ExeRead(PREFIX.'usuario', "WHERE rg = :rg", "rg={$dados['rg']}");
-				
-				if($read->getResult()):
-
-					if(isset($dados['atual']) && $read->getResult()[0]['id_usuario'] == $dados['atual'])
-						echo 1;
-					else
-						echo 0;
-					
-				else:
-					echo 1;
-				endif;
-		    
-		    break;
-		    
-		    case 'ValidarCPF':
-
-		        $read = new Read;
-				$read->ExeRead(PREFIX.'usuario', "WHERE cpf = :cpf", "cpf={$dados['cpf']}");
-				
-		    	if($read->getResult()):
-
-					if(isset($dados['atual']) && $read->getResult()[0]['id_usuario'] == $dados['atual'])
-						echo 1;
-					else
-						echo 0;
-					
-				else:
-					echo 1;
-				endif;
-
-		    break;
-
-		endswitch;
-	endif;
-	
-?>
+require __DIR__ . '/../../../_app/Config.inc.php';
+$user = scl_admin_require();
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') scl_deny(405);
+$data = scl_admin_input();
+$action = $data['acao'] ?? '';
+$db = Conn::getConn();
+$table = PREFIX . 'usuario';
+$id = (int) ($data['id_usuario'] ?? 0);
+$select = 'id_usuario, nome, email, usuario, nivel, status, img, cadastro';
+if ($action === 'listUsers') {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($db->query("SELECT $select FROM $table WHERE nivel = 3")->fetchAll()); exit;
+}
+if ($action === 'getUser') {
+    $q = $db->prepare("SELECT $select FROM $table WHERE id_usuario = ? AND nivel = 3");
+    $q->execute([$id]);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($q->fetch() ?: null); exit;
+}
+$validators = ['ValidarEmail' => ['email', 'email'], 'ValidarLogin' => ['usuario', 'login'], 'ValidarRG' => ['rg', 'rg'], 'ValidarCPF' => ['cpf', 'cpf']];
+if (isset($validators[$action])) {
+    [$column, $field] = $validators[$action];
+    $q = $db->prepare("SELECT id_usuario FROM $table WHERE $column = ? AND id_usuario <> ? LIMIT 1");
+    $q->execute([(string) ($data[$field] ?? ''), (int) ($data['atual'] ?? 0)]);
+    echo $q->fetch() ? '0' : '1'; exit;
+}
+if (in_array($action, ['excluiUser', 'alteraStatus'], true)) {
+    // Prevent removal of the operator's own access. Other administrators can manage it.
+    if ($id < 1 || $id === (int) $user['id_usuario']) scl_deny();
+    $sql = $action === 'excluiUser' ? "DELETE FROM $table WHERE id_usuario = ? AND nivel = 3" : "UPDATE $table SET status = IF(status = 1, 0, 1), security_version = security_version + 1 WHERE id_usuario = ? AND nivel = 3";
+    $db->beginTransaction();
+    $q = $db->prepare($sql); $q->execute([$id]);
+    $affected = $q->rowCount();
+    $cleanup = $db->prepare('DELETE FROM ' . PREFIX . 'password_reset WHERE id_usuario = ?'); $cleanup->execute([$id]);
+    $db->commit();
+    if ($action === 'alteraStatus') {
+        $q = $db->prepare("SELECT status FROM $table WHERE id_usuario = ?"); $q->execute([$id]); echo (int) $q->fetchColumn();
+    } else echo $affected === 1 ? '1' : '0';
+    exit;
+}
+if (!in_array($action, ['createUser', 'updateUser'], true)) scl_deny(400);
+$fields = ['nome' => trim((string) ($data['nome'] ?? '')), 'email' => trim((string) ($data['email'] ?? '')), 'usuario' => trim((string) ($data['usuario'] ?? ''))];
+if (!$fields['nome'] || strlen($fields['nome']) > 150 || !filter_var($fields['email'], FILTER_VALIDATE_EMAIL) || !preg_match('/^[a-zA-Z0-9_.@-]{3,100}$/D', $fields['usuario'])) scl_deny(422);
+if ($action === 'updateUser') {
+    $q = $db->prepare("SELECT id_usuario FROM $table WHERE id_usuario = ? AND nivel = 3"); $q->execute([$id]);
+    if (!$q->fetch()) scl_deny(404);
+}
+$q = $db->prepare("SELECT id_usuario FROM $table WHERE (usuario = ? OR email = ?) AND id_usuario <> ? LIMIT 1");
+$q->execute([$fields['usuario'], $fields['email'], $action === 'updateUser' ? $id : 0]);
+if ($q->fetch()) scl_deny(409);
+$password = (string) ($data['senha'] ?? '');
+if ($action === 'createUser' || $password !== '') {
+    try { $fields['senha'] = scl_password_hash($password); } catch (InvalidArgumentException $e) { scl_deny(422); }
+}
+if (!empty($_FILES['img']['name'])) {
+    $upload = new Upload('arquivos');
+    $upload->Image($_FILES['img'], null, 500, '/fotousuario');
+    if (!$upload->getResult()) scl_deny(422);
+    $fields['img'] = $upload->getResult();
+}
+$fields['status'] = isset($data['status']) ? 1 : 0;
+if ($action === 'createUser') {
+    $fields += ['nivel' => 3, 'criado_por' => $user['id_usuario'], 'cadastro' => date('Y-m-d H:i:s')];
+    $q = $db->prepare("INSERT INTO $table (" . implode(',', array_keys($fields)) . ') VALUES (' . implode(',', array_fill(0, count($fields), '?')) . ')');
+    $q->execute(array_values($fields)); echo $db->lastInsertId();
+} else {
+    if ($id === (int) $user['id_usuario']) $fields['status'] = 1;
+    $fields += ['alterado_por' => $user['id_usuario'], 'data_alteracao' => date('Y-m-d H:i:s')];
+    $sets = implode(', ', array_map(fn($key) => "$key = ?", array_keys($fields)));
+    $db->beginTransaction();
+    $q = $db->prepare("UPDATE $table SET $sets, security_version = security_version + 1 WHERE id_usuario = ? AND nivel = 3");
+    $q->execute([...array_values($fields), $id]);
+    $q = $db->prepare('DELETE FROM ' . PREFIX . 'password_reset WHERE id_usuario = ?'); $q->execute([$id]);
+    $db->commit();
+    // Changing credentials or access revokes existing sessions, including this one.
+    if ($id === (int) $user['id_usuario']) scl_logout();
+    echo '1';
+}

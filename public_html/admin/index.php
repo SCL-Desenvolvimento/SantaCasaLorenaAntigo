@@ -1,244 +1,46 @@
 <?php
-	ob_start();
-	
-	require('../_app/Config.inc.php');
-?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta http-equiv="Content-Type" content="txt/html; charset=utf-8" />
-  <title>Login | Santa Casa de Lorena</title>
-  <link rel="icon" href="../favicon.ico">
-
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
-  <!-- Bootstrap 3.3.5 -->
-  <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap.min.css">
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../resources/dist/css/AdminLTE.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="../resources/dist/css/skins/_all-skins.css">
-
-  <!-- Style -->
-  <link rel="stylesheet" href="../resources/css/style.css">
-
-</head>
-<body class="hold-transition login-page">
-
-<div class="modal fade" id="recuperar-senha" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" onclick="limpaRecuperarSenhaModal()">&times;</button>
-        <h4 class="modal-title">Recuperar de senha</h4>
-      </div>
-
-      <div class="modal-body">
-        <form method="post" id="recuperarSenhaForm" action="<?php echo HOME."admin/index.php"; ?>">
-
-          <div class="form-group">
-            <label for="">E-mail cadastrado</label>
-            <input type="email" id="rEmail" class="form-control" name="email" >
-            <label class="msg-erro"></label>
-          </div>
-
-          <input type="hidden" name="recuperar_senha" value="recuperar_senha">
-
-        </form>
-      </div>
-          
-          
-      <div class="modal-footer">
-        <button type="button" onclick="getSenha();" class="btn btn-success btn-sm">Confirmar</button>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<?php 
-
-if(isset($_POST['email'])):
-
-    $checkEmail = new Read();
-    $checkEmail->fullRead("SELECT id_usuario, nome, usuario FROM ".PREFIX."usuario WHERE email = :email","email={$_POST['email']}");
-    if($checkEmail->getResult()):
-      
-      $dadosUpdate = array(); 
-      $senha = Check::geraSenha(8);
-      $dadosUpdate['senha'] = md5($senha);
-      $dadodUpdate['data_alteracao'] = date("Y-m-d H:i:s");
-      $atualizaSenha = new Update();
-
-      $atualizaSenha->ExeUpdate(PREFIX."usuario", $dadosUpdate, "WHERE id_usuario = :id_usuario", "id_usuario={$checkEmail->getResult()[0]['id_usuario']}");
-
-      if($atualizaSenha->getResult()):
-
-        $Message = "<br><br><img src='".HOME."resources/img/logo2.png'><br><br>Você solicitou uma nova senha através site Santa Casa de Lorena.<br><br>
-            <b>Senha temporária:</b> $senha<br><br>
-            Acesse o Santa Casa de Lorena com seu LOGIN e esta SENHA acima e altere ela o quanto antes, acessando o menu 'Perfil' na barra lateral direita.<br><br>
-            Não responda este e-mail. Ele foi gerado automaticamente pelo sistema.";
-       
-        $body = utf8_decode($Message);
-        $mail = new PHPMailer();
-        $nomeRemetente = 'ASC';
-        $mail->Subject =  utf8_decode("Alteração de senha");
-
-        if(HOME == 'http://localhost/ASC/'):
-
-          $usuario = 'pentaxialdev@gmail.com';
-          $To = $_POST['email'];
-
-          $mail->SetFrom($usuario, utf8_decode($nomeRemetente));
-          $mail->IsSMTP();
-          //$mail->SMTPDebug = 6;
-          $mail->SMTPSecure = 'tls'; 
-          $mail->Port = 25; //Indica a porta de conexão para a saída de e-mails
-          $mail->Host = 'smtp.gmail.com'; //smtp.dominio.com.br
-          $mail->SMTPAuth = true; //define se haverá ou não autenticação no SMTP
-          $mail->Username = $usuario;
-          $mail->Password = 'PX705co*10';
-      
-        else:
-
-          $usuario = 'webmaster@autoshoppingcristal.com.br';
-          $To = $_POST['email'];
-
-        endif;
-
-        $mail->SetFrom($usuario, utf8_decode($nomeRemetente));
-
-        $mail->MsgHTML($body);
-        $mail->AddAddress($To, "");
-
-        $mail->Send();
-
-        SystemErro("Recuperação de senha", "Uma nova senha foi enviada para o e-mail <b>{$_POST['email']}</b>.", System_ACCEPT);
-
-      else:
-        SystemErro("Recuperação de senha", "Não foi possível alterar a senha. Tente novamente mais tarde.", System_ACCEPT);
-      endif;
-
-    else:
-      SystemErro("Recuperação de senha", "O e-mail informado não consta em nosso sistema.", System_INFOR);
-    endif;
-  endif;
-
-?>
-
-<?php
-
-    $get = filter_input(INPUT_GET, 'exe',FILTER_DEFAULT);
-    if(!empty($get)):
-        if($get == "LogOff"):
-            SystemErro("", "LogOff realizado com sucesso", System_INFOR);
-        elseif($get == "Restrito"):
-            SystemErro("", "Opss, área restrita!", System_ALERT);
-        endif;
-    endif;
-
-
-    $login = new Login(0);
-    if($login->CheckLogin()):
-      if($_SESSION['UsuarioLogin']['nivel'] >= 1):
-        header('Location: painel.php');
-      endif;
-    endif;
-
-    $dadosLogin = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    if(!empty($dadosLogin['AdminLogin'])):
-        $login->ExeLogin($dadosLogin);
-        if(!$login->GetResultado()):
-            SystemErro("Acesso negado", $login->GetErro()[0], System_ALERT);
-        elseif($_SESSION['UsuarioLogin']['nivel'] < $login->GetNivel()):
-            SystemErro("", $login->GetErro()[0], System_ALERT);
-        else:
-          if($_SESSION['UsuarioLogin']['nivel'] >= 1):
-            header('Location: painel.php');
-          else:
-            header("Location: ".HOME."admin");
-          endif;
-        endif;
-    endif;
-?>
-
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#">
-        <img src="../resources/img/logo.svg" alt="logo" class="img-responsive" style="display: inline;">
-    </a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="login-box-body">
-    <p class="login-box-msg">Área reservada</p>
-
-    <!-- Login -->
-    <?php require_once('includes/login.php'); ?>
-
-  </div>
-  <!-- /.login-box-body -->
-</div>
-<!-- /.login-box -->
-
-<!-- jQuery 2.1.4 -->
-<script src="../resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-</script>
-
-<!-- Bootstrap 3.3.5 -->
-<script src="../resources/bootstrap/js/bootstrap.min.js"></script>
-
-<script type="text/javascript">
-  
-  //Validação de e-mail
-  function validaEmail(email){
-    var exclude=/[^@\-\.\w]|^[_@\.\-]|[\._\-]{2}|[@\.]{2}|(@)[^@]*\1/;
-    var check=/@[\w\-]+\./;
-    var checkend=/\.[a-zA-Z]{2,3}$/;
-    if(((email.search(exclude) != -1)||(email.search(check)) == -1)||(email.search(checkend) == -1)){
-      return false;}
-    else{
-      return true;
+require __DIR__ . '/../_app/Config.inc.php';
+header('Cache-Control: no-store');
+header('Referrer-Policy: no-referrer');
+$notice = '';
+$token = (string) ($_POST['token'] ?? $_GET['token'] ?? '');
+if (!preg_match('/^[a-f0-9]{64}$/D', $token)) $token = '';
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    if (!scl_csrf_valid($_POST['_csrf'] ?? null)) scl_deny();
+    switch ($_POST['action'] ?? '') {
+        case 'login':
+            if (scl_authenticate((string) ($_POST['usuario'] ?? ''), (string) ($_POST['senha'] ?? ''))) {
+                header('Location: painel.php', true, 303); exit;
+            }
+            $notice = 'Não foi possível entrar. Confira seus dados ou tente novamente mais tarde.';
+            break;
+        case 'request':
+            scl_reset_request((string) ($_POST['email'] ?? ''));
+            $notice = 'Se houver uma conta ativa com esse e-mail, você receberá um link válido por 30 minutos.';
+            break;
+        case 'reset':
+            try {
+                $allowed = scl_rate_allow(Conn::getConn(), 'reset-consume', $_SERVER['REMOTE_ADDR'] ?? '', 10);
+                $done = $allowed && scl_reset_complete($token, (string) ($_POST['senha'] ?? ''));
+                $notice = $done ? 'Senha atualizada. Entre com sua nova senha.' : 'Link inválido ou expirado. Solicite um novo link.';
+                if ($done) { $token = ''; scl_logout(); }
+            } catch (InvalidArgumentException $e) { $notice = $e->getMessage(); }
+            break;
+        default: scl_deny(400);
     }
-  }
-
-
-  function getSenha(){
-    if(!validaEmail($("#rEmail").val())){
-      $("#rEmail").focus();
-      $("#rEmail").closest(".form-group").addClass('has-error');
-      $("#rEmail").closest(".form-group").find('.msg-erro').html("Insira um email válido");
-    }else{
-      $("#rEmail").closest(".form-group").removeClass('has-error').find('.msg-erro').html("");
-      $('#recuperarSenha').modal('hide');
-      $("#recuperarSenhaForm").submit();
-    }
-  }
-
-function limpaRecuperarSenhaModal(){
-  $("#rEmail").val('').closest(".form-group").removeClass('has-error').find('.msg-erro').html("");
 }
-
-</script>
-
-</body>
-</html>
+function login_escape($value) { return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8'); }
+?>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Acesso administrativo | Santa Casa de Lorena</title>
+<style>body{margin:0;background:#edf4f5;color:#19393d;font:16px/1.5 system-ui,sans-serif}main{max-width:420px;margin:8vh auto;padding:32px;background:white;border-radius:16px;box-shadow:0 12px 40px #163e3e12}h1{font-size:26px}label{display:block;margin-top:16px}input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #718b91;border-radius:6px;font:inherit}button{margin-top:24px;padding:12px 20px;border:0;border-radius:6px;background:#00666c;color:white;font:inherit;cursor:pointer}summary{cursor:pointer}details{margin-top:28px}a{color:#00666c}.notice{background:#e3f2ef;padding:16px;border-radius:6px}small{display:block}*:focus-visible{outline:3px solid #be7600;outline-offset:3px}@media(max-width:480px){main{margin:20px;padding:24px}}</style></head><body><main>
+<p>Santa Casa de Lorena</p><h1><?= $token ? 'Criar nova senha' : 'Acesso administrativo' ?></h1>
+<?php if ($notice): ?><p class="notice" role="status"><?= login_escape($notice) ?></p><?php endif ?>
+<form method="post" action="index.php">
+<input type="hidden" name="_csrf" value="<?= login_escape(scl_csrf_token()) ?>">
+<input type="hidden" name="action" value="<?= $token ? 'reset' : 'login' ?>">
+<?php if ($token): ?><input type="hidden" name="token" value="<?= login_escape($token) ?>"><?php else: ?><label for="usuario">Usuário</label><input id="usuario" name="usuario" autocomplete="username" maxlength="190" required><?php endif ?>
+<label for="senha"><?= $token ? 'Nova senha' : 'Senha' ?></label><input id="senha" type="password" name="senha" autocomplete="<?= $token ? 'new-password' : 'current-password' ?>" <?= $token ? 'minlength="12" maxlength="72"' : '' ?> required>
+<?php if ($token): ?><small>Use de 12 a 72 caracteres. Prefira uma frase longa e exclusiva.</small><?php endif ?>
+<button type="submit"><?= $token ? 'Salvar nova senha' : 'Entrar' ?></button></form>
+<details><summary>Esqueci minha senha</summary><form method="post" action="index.php"><input type="hidden" name="_csrf" value="<?= login_escape(scl_csrf_token()) ?>"><input type="hidden" name="action" value="request"><label for="email">E-mail cadastrado</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required><button type="submit">Receber link de recuperação</button></form></details>
+<p><a href="../">Voltar ao site</a></p></main></body></html>

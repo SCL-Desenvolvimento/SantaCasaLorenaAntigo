@@ -1,7 +1,7 @@
 <?php
 
 class Create extends Conn{
-		
+
 	private $Tabela;
 	private $Dados;
 	private $Result;
@@ -10,16 +10,17 @@ class Create extends Conn{
 
 	public function ExeCreate($Tabela, array $Dados){
 		$this->Tabela = (String) $Tabela;
-		$this->Dados = $Dados; 
-		
+		$this->Dados = $Dados;
+        foreach (array_keys($Dados) as $column) { if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/D', $column)) throw new InvalidArgumentException('Invalid column.'); }
+
 		$this->getSyntax();
 		$this->Execute();
 	}
-	
+
 	public function getResult(){
 		return $this->Result;
 	}
-	
+
 	private function Connect(){
 		$this->Conn = parent::getConn();
 		$this->Create = $this->Conn->prepare($this->Create);
@@ -30,7 +31,7 @@ class Create extends Conn{
 		$Places = ':'.implode(', :', array_keys($this->Dados));
 		$this->Create = "INSERT INTO {$this->Tabela} ({$Filds}) VALUES ({$Places})";
 	}
-	
+
 	private function Execute(){
 		$this->Connect();
 		try{
@@ -38,10 +39,10 @@ class Create extends Conn{
 			$this->Result = $this->Conn->lastInsertId();
 		}catch (PDOException $e){
 			$this->Result = null;
-			SystemErro("", "<b> Erro ao cadastrar:</b> {$e->getMessage()}", $e->getCode());
+			error_log('SCL: database operation failed.');
 		}
 	}
-	
-} 
+
+}
 
 ?>

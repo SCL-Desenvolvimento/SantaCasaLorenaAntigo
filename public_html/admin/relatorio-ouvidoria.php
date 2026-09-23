@@ -1,5 +1,6 @@
 <?php
-	require('../_app/Config.inc.php');
+	require(__DIR__ . '/../_app/Config.inc.php');
+scl_admin_require();
     require_once __DIR__.'/../includes/ui.php';
     require_once __DIR__.'/../includes/ouvidoria_queries.php';
 	
@@ -13,7 +14,7 @@
 		$usuarioLogin = $_SESSION['UsuarioLogin'];
 	endif;
 
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = scl_admin_input();
 
     try {
         [$sql, $params] = scl_ouvidoria_query($_GET);
@@ -67,19 +68,19 @@
 			$i++;
 	?>
     <tr bgcolor="<?php echo $bg; ?>">
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_escape($ouvidoria['nome'] ?? ''); ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($ouvidoria['nome'] ?? ''); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_escape($ouvidoria['email'] ?? ''); ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($ouvidoria['email'] ?? ''); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_escape($ouvidoria['cidade'] ?? ''); ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($ouvidoria['cidade'] ?? ''); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_escape($ouvidoria['assunto'] ?? ''); ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($ouvidoria['assunto'] ?? ''); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_escape($ouvidoria['razao'] ?? ''); ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($ouvidoria['razao'] ?? ''); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo date("d/m/Y - H:i:s", strtotime($ouvidoria['data_cadastro'])); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
-        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_escape($ouvidoria['mensagem'] ?? ''); ?></b></td>
+        <td bgcolor="<?php echo $bg; ?>">&nbsp;<b><?php echo scl_report_text($ouvidoria['mensagem'] ?? ''); ?></b></td>
         <td bgcolor="<?php echo $bg; ?>">&nbsp;</td>
     </tr>
 	<?php

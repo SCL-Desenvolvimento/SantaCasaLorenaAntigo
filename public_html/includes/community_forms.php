@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/about_helpers.php';
 require_once __DIR__ . '/ouvidoria_queries.php';
+require_once __DIR__ . '/private_files.php';
 
 function scl_form_fields($mode) {
     if ($mode === 'pesquisa') {
@@ -61,10 +62,11 @@ function scl_process_form($allowed, $secret, $verifyCaptcha = null, $mailerFacto
     $attachment = '';
     try {
         if ($mode === 'trabalhe_conosco') {
-            $directory = DIR.'arquivos/curriculuns';
+            $directory = scl_private_directory().'/curriculuns';
             if (!is_dir($directory) && !mkdir($directory, 0750, true)) throw new RuntimeException('Upload directory unavailable');
-            $data['curriculum'] = 'arquivos/curriculuns/'.bin2hex(random_bytes(24)).'.pdf';
-            $attachment = DIR.$data['curriculum'];
+            $filename = bin2hex(random_bytes(24)).'.pdf';
+            $data['curriculum'] = 'private/curriculuns/'.$filename;
+            $attachment = $directory.'/'.$filename;
             if (!move_uploaded_file($file['tmp_name'], $attachment)) throw new RuntimeException('Upload failed');
         }
         $create = new Create();

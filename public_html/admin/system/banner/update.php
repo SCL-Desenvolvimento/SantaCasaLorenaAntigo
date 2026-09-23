@@ -1,3 +1,4 @@
+<?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <?php 
 	if(!$login->CheckLogin(3)):
     header('Location: painel.php');
