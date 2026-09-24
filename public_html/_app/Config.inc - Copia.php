@@ -7,7 +7,7 @@ session_start();
 define('HOME', 'http://172.16.0.124/SCL/');
 define('ROOT', "http://172.16.0.124/SCL/");
 define('DIR', 'D:/xampp/htdocs/SCL/');
-define('HOST', 'mysql');
+define('HOST', 'localhost');
 define('USER', 'root');
 define('PASS', '');
 define('DBSA', 'scl');
@@ -28,17 +28,17 @@ define('JS', '/scl/');
 */
 
 //Produção
-define('HOME', 'http://docker-w3.sp.santacasalorena.org.br:8080/');
+
+define('HOME', 'http://www.santacasalorena.org.br/');
 define('ROOT', "/");
-define('DIR', '/var/www/html/');
-
-define('HOST', 'mysql57');
-define('USER', 'usr_www-santacasalorena-org-br');
-define('PASS', 'BUm50Q4V-K7_9xA');
-define('DBSA', 'db_www-santacasalorena-org-br');
-
+define('DIR', '/home/santacasalorena/public_html/');
+define('HOST', 'localhost');
+define('USER', 'santacas_novo');
+define('PASS', 'CVzmLNt3)CR#jkMd');
+define('DBSA', 'santacas_novo');
 define('PREFIX', 'scl_');
 define('JS', '/');
+
 
 // sua chave secreta
 $secret = "6LfM4TkUAAAAANX5puo7Yau-AI_jZ-DdoFrjY79i";
