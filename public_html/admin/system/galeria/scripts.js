@@ -4,12 +4,12 @@
 
   $(function () {
     // if(($('#conteudo').length > 0)){
-    //   CKEDITOR.replace('conteudo');
+    //   SCLEditor.replace('conteudo');
     //   console.log("teste");
     // }
 
     //Initialize Select2 Elements
-    $('.select2').select2();
+    $('.select2').sclSelect();
 
     $('#data-list').DataTable( {
       'columnDefs': [
@@ -22,13 +22,10 @@
       ]
     } );
 
-    $('[data-mask]').inputmask();
+
 
     //iCheck for checkbox and radio inputs
-    $("input[type='checkbox'].minimal, input[type='radio'].minimal").iCheck({
-      checkboxClass: 'icheckbox_minimal-blue',
-      radioClass: 'iradio_minimal-blue'
-    });
+    $("input[type='checkbox'].minimal, input[type='radio'].minimal").addClass('form-check-input');
   });
 
     function PreviewImg(input){
@@ -44,7 +41,7 @@
 
     function CreateGaleria() {
 
-          // $('#descricao').val(CKEDITOR.instances['descricao'].getData());
+          // $('#descricao').val(SCLEditor.instances['descricao'].getData());
         var formData = new FormData(document.getElementById("newGaleria"));
         formData.append("acao", "CreateGaleria");
 
@@ -55,7 +52,7 @@
          if (!isNaN(dataresult)){
 
                       mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                       '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                       '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                        'Galeria cadastrada com sucesso'+
                        '</div>';
 
@@ -69,7 +66,7 @@
                      else
                      {
                        mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-                          '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                          '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                           'Não foi possível adicionar à Galeria! detalhes:'+ dataresult +
                           '</div>';
                      }
@@ -81,7 +78,7 @@
 
 function CreateAnexo() {
 
-      // $('#descricao').val(CKEDITOR.instances['descricao'].getData());
+      // $('#descricao').val(SCLEditor.instances['descricao'].getData());
     var formData = new FormData(document.getElementById("newGaleria"));
     formData.append("acao", "CreateAnexo");
 
@@ -93,7 +90,7 @@ function CreateAnexo() {
     $('#newimagem').val(null);
     $('#previewimg').attr('src', null);
 
-    var myarray = $.parseJSON(dataresult);
+    var myarray = JSON.parse(dataresult);
 
      var html='';
 
@@ -112,7 +109,7 @@ function CreateAnexo() {
     //  if (!isNaN(dataresult)){
      //
     //               mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-    //                '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+    //                '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
     //                'Galeria cadastrada com sucesso'+
     //                '</div>';
      //
@@ -126,7 +123,7 @@ function CreateAnexo() {
     //              else
     //              {
     //                mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-    //                   '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+    //                   '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
     //                   'Não foi possível adicionar à Galeria! detalhes:'+ dataresult +
     //                   '</div>';
     //              }
@@ -137,7 +134,7 @@ function CreateAnexo() {
 
 function UpdateGaleria() {
 
-      // $('#descricao').val(CKEDITOR.instances['descricao'].getData());
+      // $('#descricao').val(SCLEditor.instances['descricao'].getData());
     var formData = new FormData(document.getElementById("newGaleria"));
     formData.append("acao", "UpdateGaleria");
 
@@ -148,7 +145,7 @@ function UpdateGaleria() {
      if (!isNaN(dataresult)){
 
                   mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                   '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                   '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                    'Galeria atualizada com sucesso'+
                    '</div>';
 
@@ -162,7 +159,7 @@ function UpdateGaleria() {
                  else
                  {
                    mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-                      '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                      '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                       'Não foi possível adicionar à Galeria! detalhes:'+ dataresult +
                       '</div>';
                  }
@@ -176,7 +173,7 @@ function deleteAnexo(elemento, id){
      console.log('id delete',id)
      var request = $.ajax({ url: 'webservices/galeria/servico.php', type: 'POST',data: {acao:'deleteAnexo',id:id}});
      request.done(function(resultado){
-      //  var myarray = $.parseJSON(resultado);
+      //  var myarray = JSON.parse(resultado);
      alert('Deletado com sucesso!', resultado);
     });
 
@@ -187,7 +184,7 @@ function deleteAnexoUpdate(elemento, id){
      console.log('id delete',id)
      var request = $.ajax({ url: 'webservices/galeria/servico.php', type: 'POST',data: {acao:'deleteAnexoUpdate',id:id}});
      request.done(function(resultado){
-      //  var myarray = $.parseJSON(resultado);
+      //  var myarray = JSON.parse(resultado);
      alert('Deletado com sucesso!', resultado);
     });
 

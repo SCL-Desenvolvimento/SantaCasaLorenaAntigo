@@ -5,32 +5,10 @@
   //OnLoad
   $(function () {
 
-    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue',
-      radioClass: 'iradio_minimal-blue'
-    });
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').addClass('form-check-input');
 
-    $('.selectSite').select2();
+    $('.selectSite').sclSelect();
 
-    //Delega event ao select para quando for excluir itemss
-    $('.selectSite').on("select2:unselect", function(e){
-
-      //trago as propriedades do obj
-      var args = JSON.stringify(e.params, function (key, value) {
-        if (value && value.nodeName) return "[DOM node]";
-        if (value instanceof $.Event) return "[$.Event]";
-        return value;
-      });
-            
-      //json to array
-      var obj = $.parseJSON(args);
-            
-      if ($('#modo').text() != 'crear'){
-        //Delete do banco de dados
-        console.log( obj['data']['id'] , obj['data']['text'] );  
-      }
-    });
-          
     $( 'h1' ).appendTo( $( '.content-header' ) );
 
     switch ($('#modo').text()){
@@ -38,7 +16,7 @@
 
         $(select2Cats);
         $(iCheck);
-        CKEDITOR.replace('descricao');
+        SCLEditor.replace('descricao');
       break;
       
       case "consulta": 
@@ -50,16 +28,16 @@
         
         GetDetalhesNoticia();
 
-        $('#id_tag').on("select2:unselecting", function(e){
-          DeleteTag(e['params']['args']['data']['id']);
-        }).trigger('change');
+        $('#id_tag').on('change',function(){
+          // Synchronize removed persisted categories with the existing endpoint.
+          const current=new Set($(this).val()||[]);
+          for(const old of this.sclSavedTags||[])if(!current.has(old))DeleteTag(old);
+          this.sclSavedTags=[...current];
+        });
       break;
     }
 
-    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue',
-      radioClass: 'iradio_minimal-blue'
-    });
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').addClass('form-check-input');
   });
     
   function getTags(elemento,idNoticia){
@@ -69,7 +47,7 @@
       var request = $.ajax({ url: 'webservices/noticias/servico.php', type: 'POST', data: {acao:'getTagsNoticia', id_noticia:idNoticia}, async: false});
       request.done(function(response){
           
-        $($.parseJSON(response)).each(function(){
+        $(JSON.parse(response)).each(function(){
             
           tag  = this;
           $("#"+elemento+" option").each(function(){
@@ -78,6 +56,7 @@
         });
 
         $(select2Cats);
+        document.getElementById(elemento).sclSavedTags=$('#'+elemento).val()||[];
 
       });
     }
@@ -103,7 +82,7 @@
 
       success: function(resultado){
 
-        var myarray = $.parseJSON(resultado);
+        var myarray = JSON.parse(resultado);
 
         for (i=0; i <= myarray.length - 1; i++) {
 
@@ -149,7 +128,7 @@
   }
 
   function CreateNoticia() {
-    $('#descricao').val(CKEDITOR.instances['descricao'].getData());
+    $('#descricao').val(SCLEditor.instances['descricao'].getData());
     var formData = new FormData(document.getElementById("newnoticia"));
 
     $.when($.ajax({
@@ -165,7 +144,7 @@
         if (!isNaN(dataresult)){
 
           mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-          '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+          '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
           'Noticia incluida com sucesso'+
           '</div>';
 
@@ -177,7 +156,7 @@
 
         }else{
           mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-          '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+          '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
           'Não foi possível adicionar o Noticia! detalhes:'+ dataresult +  
           '</div>';
         }
@@ -192,7 +171,7 @@
 
 
   function DeleteNoticia(id_noticia, elemento, nome){
-    bootbox.confirm({
+    sclConfirm({
       message: "Realmente deseja excluir esta notícia: "+nome+"?",
       buttons: {
         'cancel': {
@@ -214,7 +193,7 @@
               if (resultado == 'ok'){
 
                 mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                 'Notícia excluida com sucesso'+
                 '</div>';
 
@@ -222,7 +201,7 @@
 
               }else{
                 mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-                '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                 'Não foi possível excluir a notícia, detalhes do error: ' + resultado +
                 '</div>';
              }
@@ -249,7 +228,7 @@
 
         //console.log(resultado);
 
-        var myarray = $.parseJSON(resultado);
+        var myarray = JSON.parse(resultado);
 
         $('input[name="id_noticia"]').val(myarray[0]['id_noticia']);
 
@@ -257,8 +236,8 @@
 
         $('textarea[name="subtitulo"]').text(myarray[0]['subtitulo']);
 
-        CKEDITOR.replace('descricao');
-        $('#descricao').text(myarray[0]['descricao']);
+        $('#descricao').val(myarray[0]['descricao']);
+        SCLEditor.replace('descricao');
           
         $('input[name="link"]').val(myarray[0]['link']);
           
@@ -268,10 +247,7 @@
           
         myarray[0]['status'] == '1' ? $('#status').attr('checked', true) : $('#status').attr('checked', false);
 
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-          checkboxClass: 'icheckbox_minimal-blue',
-          radioClass: 'iradio_minimal-blue'
-        });
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').addClass('form-check-input');
         getTags('id_tag', myarray[0]['id_noticia']);
       }
     });
@@ -282,7 +258,7 @@
     $.ajax({ url: 'webservices/noticias/servico.php', type: 'POST', data: {acao:'excluirTag', id_noticia:GetURLParameter('id_noticia'), id_tag:id_tag,}}).done(function(resultado){
       if(resultado == 1){
         mensagem = '<div class="alert alert-success alert-dismissible">'+
-        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
+        '<button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>'+
         'Categoria excluida com sucesso'+
         '</div>';
         $('#mensagem_evento').html(mensagem);
@@ -294,7 +270,7 @@
 
   function UpdateNoticia(){
 
-    $('#descricao').val(CKEDITOR.instances['descricao'].getData());
+    $('#descricao').val(SCLEditor.instances['descricao'].getData());
     var formData = new FormData(document.getElementById("newnoticia"));
 
     $.when($.ajax({
@@ -310,7 +286,7 @@
         if (!isNaN(dataresult)){
 
           mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-          '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+          '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
           'Notícia atualizada com sucesso'+
           '</div>';
 
@@ -318,7 +294,7 @@
         }else{
                        
           mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-          '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+          '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
           'Não foi possível atualizar a notícia! detalhes:'+ dataresult +  
           '</div>';
         }
@@ -334,11 +310,10 @@
 </script>
 
 <!-- DataTables -->
-<script src='../resources/plugins/datatables/jquery.dataTables.min.js'></script>
-<script src='../resources/plugins/datatables/dataTables.bootstrap.min.js'></script>
+
+
 
 <!-- Select2 -->
-<script src='../resources/plugins/select2/select2.full.min.js'></script>
+
 
 <!-- CK Editor -->
-<script src='../resources/plugins/ckeditor/ckeditor.js'></script>

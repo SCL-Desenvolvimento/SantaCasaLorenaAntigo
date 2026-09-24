@@ -2,6 +2,8 @@
 	require(__DIR__ . '/../../../_app/Config.inc.php');
 scl_admin_require();
 	$dados = scl_admin_input();
+    $domains=['galeria_sobre','provedor','balanco','galeria_acao','galeria_humanizacao','unidade_internacao','pronto_atendimento','hotelaria','clinica_emilia','centro_diagnostico_por_imagem','convenios','especialidades','manual_paciente','capacidade','download_manual_paciente'];
+    if(isset($dados['dominio'])&&(!is_string($dados['dominio'])||!in_array($dados['dominio'],$domains,true)))scl_deny(400);
 	
 	$login = new Login(3);
 
@@ -21,13 +23,14 @@ scl_admin_require();
 				$readPagina = new Read;
 				$readPagina->fullRead("SELECT P.* FROM ".PREFIX."paginas AS P");
 
-				if($readPagina->getResult()){
-
-					echo json_encode($readPagina->getResult());
-				}
+				echo json_encode($readPagina->getResult() ?: []);
 			break;
 
 			case 'updatePaginas':
+                $transaction=Conn::getConn();$transaction->beginTransaction();
+                register_shutdown_function(function()use($transaction){if($transaction->inTransaction())$transaction->rollBack();});
+                $metadata=new Read();$metadata->fullRead('SELECT url_amigavel FROM '.PREFIX.'paginas');
+                $allowedPages=array_column($metadata->getResult()?:[],'url_amigavel');
 
 				unset($dados['acao']);
 
@@ -38,7 +41,7 @@ scl_admin_require();
 					
 					$Paginas = array();
 
-					if((!preg_match("/_sub_titulo/", $key) && !preg_match("/_seo/", $key) && !preg_match("/_image/", $key)) || preg_match("/por_imagem/", $key)){
+					if(in_array($key,$allowedPages,true)){
 
 						$Paginas["titulo"] = $value;
 
@@ -62,6 +65,7 @@ scl_admin_require();
 
 							$Paginas["url_amigavel"] = $key;
 							$createPagina->ExeCreate(PREFIX."paginas_historico", $Paginas);
+                            if(!$createPagina->getResult())scl_deny(500);
 						}else{
 
 							exit;
@@ -91,6 +95,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_sobre", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Humanização
 					$dadosGerais = array(
@@ -102,6 +107,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_humanizacao", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Programa Nacional Segurança
 					$getImages->fullRead("SELECT * FROM ".PREFIX."pagina_programa_nacional_seguranca ORDER BY id_programa_nacional_seguranca DESC");
@@ -118,6 +124,7 @@ scl_admin_require();
 						$dadosGerais['img1'] = $getImages->getResult()[0]['img1'];
 					
 					$createDados->ExeCreate(PREFIX."pagina_programa_nacional_seguranca", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Ações Sociais e Ambientais
 					$getImages->fullRead("SELECT * FROM ".PREFIX."pagina_acoes_sociais_ambientais ORDER BY id_acoes_sociais_ambientais DESC");
@@ -142,6 +149,7 @@ scl_admin_require();
 						$dadosGerais['img2'] = $getImages->getResult()[0]['img2'];
 					
 					$createDados->ExeCreate(PREFIX."pagina_acoes_sociais_ambientais", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 				}
 				
 				//Verifica se são páginas Fale Conosco
@@ -156,6 +164,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_localizacao", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Doações
 					$dadosGerais = array(
@@ -166,6 +175,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_doacao", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 				}
 
 				//Verifica se são páginas Institucional
@@ -179,6 +189,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_especialidades", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Quem somos
 					$dadosGerais = array(
@@ -188,6 +199,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_capacidade_instalacao_producao", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Quem somos
 					$dadosGerais = array(
@@ -197,6 +209,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_manual_paciente_visitante", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 				}
 
 				//Verifica se são páginas de Instalações
@@ -211,6 +224,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_unidade_internacao", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Pronto Atendimento
 					$dadosGerais = array(
@@ -226,6 +240,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_pronto_atendimento", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Hotelaria
 					$dadosGerais = array(
@@ -235,6 +250,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_hotelaria", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Clínica Emília
 					$dadosGerais = array(
@@ -244,6 +260,7 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_clinica_emilia", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 
 					//Pega dados Centro de diagnóstico por imagem
 					$dadosGerais = array(
@@ -253,8 +270,10 @@ scl_admin_require();
 						"id_usuario" => $_SESSION['UsuarioLogin']['id_usuario']
 					);
 					$createDados->ExeCreate(PREFIX."pagina_centro_diagnostico_por_imagem", $dadosGerais);
+                    if(!$createDados->getResult())scl_deny(500);
 				}
 
+                $transaction->commit();
 				echo 1;
 			break;
 
@@ -267,10 +286,7 @@ scl_admin_require();
 				$getLista = new Read;
 				$getLista->fullRead("SELECT L.* FROM ".PREFIX."{$dominio} AS L");
 
-				if($getLista->getResult()){
-
-					echo json_encode($getLista->getResult());
-				}
+				echo json_encode($getLista->getResult() ?: []);
 			break;
 
 			case 'createConteudo':

@@ -1,10 +1,10 @@
 <?php
 /** Isolated SQLite adapter; never loads production configuration or credentials. */
 if (PHP_SAPI !== 'cli' && (PHP_SAPI !== 'cli-server' || !in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true))) { http_response_code(404); exit; }
-class SecurityTestPDO extends PDO {
+class SecurityTestPDO extends \Pdo\Sqlite {
     public function __construct(string $file = ':memory:') {
         parent::__construct('sqlite:' . $file, null, null, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
-        $this->sqliteCreateFunction('IF', fn($condition, $yes, $no) => $condition ? $yes : $no, 3);
+        $this->createFunction('IF', fn($condition, $yes, $no) => $condition ? $yes : $no, 3);
     }
     public function prepare(string $query, array $options = []): PDOStatement|false {
         $query = str_replace(' FOR UPDATE', '', $query);

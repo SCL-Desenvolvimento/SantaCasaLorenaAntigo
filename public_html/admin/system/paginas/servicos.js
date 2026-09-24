@@ -1,9 +1,9 @@
 <!-- CK Editor -->
-<script src='../resources/plugins/ckeditor/ckeditor.js'></script>
+
 
 <script>
 
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 
 function get_convenio(convenios){
 
@@ -97,7 +97,7 @@ function get_capacidade(capacidade){
 }
 
 /* Início - Balanço */
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 function get_download_manual_paciente(download_manual_paciente){
 
   //console.log(galeria_sobre);
@@ -119,7 +119,7 @@ function editeDownloadManualPaciente(download_manual_paciente){
 
   //console.log(convenio);
 
-  $("#edite-download_manual_paciente").modal("show");
+  $("#edite-download_manual_paciente").sclModal("show");
   $("#edite-download_manual_paciente").find(".modal-body");
 
   $('#edite-download_manual_paciente input[name="id"]').val(download_manual_paciente['id_download_manual_paciente']);
@@ -128,7 +128,7 @@ function editeDownloadManualPaciente(download_manual_paciente){
 /* Fim - Balanço */
 
 function getlistas(){
-  $('.modal-form').modal('hide');
+  $('.modal-form').sclModal('hide');
   getLista("convenios", 1, get_convenio);
   getLista("especialidades", 1, get_especialidades);
   getLista("manual_paciente", 1, get_manual_paciente);
@@ -140,13 +140,13 @@ function editeConvenio(convenio){
 
   //console.log(convenio);
 
-  $("#edite-convenios").modal("show");
+  $("#edite-convenios").sclModal("show");
   $("#edite-convenios").find(".modal-body");
 
   $('#edite-convenios input[name="id"]').val(convenio['id_convenio']);
   $('#edite-convenios img').attr("src", "../"+convenio['img']);
   $('#edite-convenios input[name="nome"]').val(convenio['nome']);
-  $('#edite-convenios textarea[name="descricao"]').text(convenio['descricao']);
+  $('#edite-convenios textarea[name="descricao"]').val(convenio['descricao']);
   $('#edite-convenios').find(".msg").html("");
 }
 
@@ -154,12 +154,12 @@ function editeCapacidade(capacidade){
 
   //console.log(convenio);
 
-  $("#edite-capacidade").modal("show");
+  $("#edite-capacidade").sclModal("show");
   $("#edite-capacidade").find(".modal-body");
 
   $('#edite-capacidade input[name="id"]').val(capacidade['id_capacidade']);
   $('#edite-capacidade input[name="titulo"]').val(capacidade['titulo']);
-  $('#edite-capacidade textarea[name="descricao"]').text(capacidade['descricao']);
+  $('#edite-capacidade textarea[name="descricao"]').val(capacidade['descricao']);
   $('#edite-capacidade').find(".msg").html("");
 
   getImagesCapacidade(capacidade['id_capacidade']);
@@ -210,7 +210,7 @@ function makeFileListCapacidade(input, acao) {
       
       if(response != ""){
 
-        var image = $.parseJSON(response);
+        var image = JSON.parse(response);
 
         $("#capacidade-imagens").append(`<div class='form-group col-md-6 capacidade-imagem'>
           <center><img src='../${image['img']}' class='img-responsive'></center>
@@ -257,12 +257,12 @@ function editeEspecialidade(especialidade){
   //console.log(especialidade);
   //console.log(convenio);
 
-  $("#edite-especialidades").modal("show");
+  $("#edite-especialidades").sclModal("show");
   $("#edite-especialidades").find(".modal-body");
 
   $('#edite-especialidades input[name="id"]').val(especialidade['id_especialidade']);
   $('#edite-especialidades input[name="nome"]').val(especialidade['nome']);
-  $('#edite-especialidades textarea[name="descricao"]').text(especialidade['descricao']);
+  $('#edite-especialidades textarea[name="descricao"]').val(especialidade['descricao']);
   $('#edite-especialidades').find(".msg").html("");
 }
 
@@ -270,20 +270,20 @@ function editeManualPaciente(manual_paciente){
   //console.log(especialidade);
   //console.log(convenio);
 
-  $("#edite-manual_paciente").modal("show");
+  $("#edite-manual_paciente").sclModal("show");
   $("#edite-manual_paciente").find(".modal-body");
 
   $('#edite-manual_paciente input[name="id"]').val(manual_paciente['id_manual_paciente']);
   $('#edite-manual_paciente input[name="titulo"]').val(manual_paciente['titulo']);
-  $('#edite-manual_paciente textarea[name="descricao"]').text(manual_paciente['descricao']);
+  $('#edite-manual_paciente textarea[name="descricao"]').val(manual_paciente['descricao']);
 
-  if(CKEDITOR.instances['update-manual_paciente']) {
-    CKEDITOR.instances['update-manual_paciente'].destroy();
+  if(SCLEditor.instances['update-manual_paciente']) {
+    SCLEditor.instances['update-manual_paciente'].destroy();
     $('#edite-manual_paciente textarea[name="descricao"]').val(manual_paciente['descricao']);
   }
 
 
-  CKEDITOR.replace('update-manual_paciente');
+  SCLEditor.replace('update-manual_paciente');
 
   $('#edite-manual_paciente').find(".msg").html("");
 }
@@ -294,8 +294,8 @@ function getEspecialidadesTextos(){
   request.done(function (response){  
     //console.log(response);
 
-    $("textarea[name='especialidades-texto1']").text(response['bloco1']);
-    $("textarea[name='especialidades-texto2']").text(response['bloco2']);
+    $("textarea[name='especialidades-texto1']").val(response['bloco1']);
+    $("textarea[name='especialidades-texto2']").val(response['bloco2']);
   });
 }
 
@@ -305,8 +305,8 @@ function getCapacidadeTextos(){
   request.done(function (response){  
     //console.log(response);
 
-    $("textarea[name='capacidade_instalacao_producao-texto1']").text(response['bloco1']);
-    $("textarea[name='capacidade_instalacao_producao-texto2']").text(response['bloco2']);
+    $("textarea[name='capacidade_instalacao_producao-texto1']").val(response['bloco1']);
+    $("textarea[name='capacidade_instalacao_producao-texto2']").val(response['bloco2']);
   });
 }
 
@@ -316,8 +316,8 @@ function getManualPacienteTextos(){
   request.done(function (response){  
     //console.log(response);
 
-    $("textarea[name='manual_paciente_visitante-texto1']").text(response['bloco1']);
-    $("textarea[name='manual_paciente_visitante-texto2']").text(response['bloco2']);
+    $("textarea[name='manual_paciente_visitante-texto1']").val(response['bloco1']);
+    $("textarea[name='manual_paciente_visitante-texto2']").val(response['bloco2']);
   });
 }
 

@@ -31,15 +31,6 @@ if (isset($_POST['newsletter']) && is_string($_POST['newsletter'])) {
 <div><h2>Encontre a Santa Casa</h2><p class="footer-contact"><?= scl_icon('pin') ?><span><?= scl_escape(strip_tags($localizacao['localizacao'] ?? 'Lorena · São Paulo')) ?></span></p><?php if (!empty($localizacao['telefone'])): ?><a class="footer-contact" href="tel:<?= scl_escape(preg_replace('/[^0-9+]/', '', $localizacao['telefone'])) ?>"><?= scl_icon('phone') ?><?= scl_escape($localizacao['telefone']) ?></a><?php endif; ?><a class="footer-contact" href="tel:+551231593349"><?= scl_icon('phone') ?>(12) 3159-3349</a><a class="footer-location" href="<?= scl_escape(scl_contact_url('localizacao')) ?>">Localização e contatos →</a></div>
 <div><h2>Vamos manter contato?</h2><p>Receba novidades e acompanhe nossas ações.</p><form method="post" action="#footer" id="form_news"><label for="newsletter">Seu e-mail</label><div class="newsletter-field"><input type="email" id="newsletter" name="newsletter" autocomplete="email" placeholder="voce@exemplo.com" required maxlength="254"><button type="submit" aria-label="Cadastrar e-mail"><?= scl_icon('arrow') ?></button></div><input type="hidden" name="newsletter_token" value="<?= scl_escape($_SESSION['newsletter_token']) ?>"><?php if ($newsletterMessage): ?><p class="newsletter-message <?= $newsletterSuccess ? 'success' : 'error' ?>" role="status"><?= scl_escape($newsletterMessage) ?></p><?php endif; ?></form></div>
 </div><div class="footer-bottom"><span>© <?= date('Y') ?> Santa Casa de Lorena. Todos os direitos reservados.</span><a href="#conteudo">Voltar ao topo ↑</a></div></div></footer>
-<?php if ($needsLegacy): ?>
-<script>
-function validaEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
-jQuery(function ($) {
-    $('.carousel-noticias').owlCarousel({loop:false,margin:24,responsive:{0:{items:1},740:{items:2},1170:{items:3}}});
-    $('.carousel-convenios').owlCarousel({loop:false,margin:24,responsive:{0:{items:2},740:{items:4}}});
-});
-</script>
-<?php endif; ?>
 <?php if (!defined('SCL_PREVIEW') && in_array($r_DIR['page'] ?? '', array('fale-conosco', 'fale_conosco', 'doacoes'), true)): ?><script src="https://www.google.com/recaptcha/api.js" async defer></script><?php endif; ?>
 </body>
 </html>

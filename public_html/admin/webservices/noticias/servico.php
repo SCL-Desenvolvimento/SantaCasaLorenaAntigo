@@ -169,7 +169,7 @@ if(isset($dados['acao'])):
 			$idnoticia = $dados['IdNoticia'];
 
 			$Read = new Read();
-			$Read->fullRead("SELECT * FROM ".PREFIX."noticia WHERE id_noticia =:idnoticia", "idnoticia=$idnoticia)");
+			$Read->fullRead("SELECT * FROM ".PREFIX."noticia WHERE id_noticia =:idnoticia", "idnoticia=$idnoticia");
 			$response = $Read->getResult();
 
 			echo json_encode($response);
@@ -213,7 +213,7 @@ if(isset($dados['acao'])):
 			$tag = isset($dados['id_tag']) ? $dados['id_tag'] : 0;
 			unset($dados['id_tag']);
 
-			$dados['link'] = Check::urlAmigavel($dados['link']);
+			$dados['link'] = Check::urlAmigavel($dados['link'] ?: $dados['titulo']);
 			$dados['subtitulo'] = mb_substr(strip_tags($dados['subtitulo'], '<(.*?)>') ,0,250);
 
 			$dados['alterador'] = $_SESSION['UsuarioLogin']['id_usuario'];
@@ -269,7 +269,7 @@ if(isset($dados['acao'])):
 			$idnoticia = $dados['IdNoticia'];
 
 			$Read = new Read();
-			$Read->fullRead("select img from ".PREFIX."noticia WHERE id_noticia =:idnoticia", "idnoticia=$idnoticia)");
+			$Read->fullRead("select img from ".PREFIX."noticia WHERE id_noticia =:idnoticia", "idnoticia=$idnoticia");
 			$imagen = $Read->getResult()[0]['img'];
 
 			$Delete = new Delete();

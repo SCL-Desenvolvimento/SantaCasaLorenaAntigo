@@ -1,6 +1,6 @@
 <?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <!-- DataTables -->
-<link rel="stylesheet" href="../resources/plugins/datatables/dataTables.bootstrap.css">
+
 
 <?php
 
@@ -21,12 +21,12 @@ endif;
       <div class="box-header">
         
         <h1 class="pagina-titulo">
-          Páginas
-          <small>atualização</small>
+          Atendimento e localização
+            <small>Textos, imagens e informações publicadas no site</small>
         </h1>
 
         <div class="pull-right">
-          <a href="painel.php?exe=paginas/index" class="btn btn-primary btn-sm">
+          <a href="painel.php" class="btn btn-primary btn-sm">
             <i class="fa fa-list"></i>
           </a>
         </div>
@@ -40,75 +40,16 @@ endif;
         <div class="nav-tabs-custom" style="margin:10px;">
 
           <ul class="nav nav-tabs">
-            <li><a href='#ouvidoria_' data-toggle='tab'>Ouvidoria</a></li>
-            <li><a href='#trabalhe-conosco' data-toggle='tab'>Trabalhe Conosco</a></li>
-            <li><a href='#doacoes_' data-toggle='tab'>Doações</a></li>
-            <li><a href='#pesquisa_atendimento_' data-toggle='tab'>Pesquisa de Atendimento</a></li>
-            <li><a href='#localizacao_' data-toggle='tab'>Localização</a></li>
+            <li><a href='#ouvidoria_' data-bs-toggle='tab'>Ouvidoria</a></li>
+            <li><a href='#trabalhe-conosco' data-bs-toggle='tab'>Trabalhe Conosco</a></li>
+            <li><a href='#doacoes_' data-bs-toggle='tab'>Doações</a></li>
+            <li><a href='#pesquisa_atendimento_' data-bs-toggle='tab'>Pesquisa de Atendimento</a></li>
+            <li><a href='#localizacao_' data-bs-toggle='tab'>Localização</a></li>
           </ul>
 
           <div class="tab-content col-md-12">
 
-            <!--
-            <div class="tab-pane" id="fale-conosco">
-
-              <div class='col-md-3'>
-                <div class="form-group col-md-9">
-                  <label for="img">Imagem em destaque</label>
-                  <img class='fale-conosco-image previewimg' style="max-width: 100%">
-                  <br><br>         
-                  <input type="file" name="fale_conosco_image" onchange="PreviewImg(this)">
-                  <p class="help-block">Escolha a imagem .</p>
-                </div>
-              </div>
-
-              <div class='col-md-9'>
-
-                <div class="form-group col-md-6">
-                  <label>Título</label>
-                    <textarea id="fale_conosco" name="fale_conosco" class='col-md-12' rows='2' style="width: 100%;"></textarea>
-                </div>
-
-                <div class="form-group col-md-6">
-                  <label>Sub título</label>
-                  <textarea id="fale_conosco_sub_titulo" name="fale_conosco_sub_titulo" class='col-md-12' rows='2' style="width: 100%;"></textarea>
-                </div>
-
-                <div class="form-group col-md-12">
-                  <label>Descrição</label>
-                  <textarea id="fale_conosco_descricao" name="fale_conosco_descricao" class='col-md-12' rows='4' style="width: 100%;"></textarea>
-                </div>
-
-                <div class="form-group col-md-12">
-                  <label>SEO <p>(max 155 caracteres)</p> </label>
-                  <textarea id="fale_conosco_seo" name="fale_conosco_seo" class='col-md-12' rows='2' style="width: 100%;"></textarea>
-                </div>
-              </div>
-
-              <div class='col-md-12'><hr></div>
-              <div class='col-md-12'>
-
-                <table id="lista-contatos" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>E-mail</th>
-                      <th>Data</th>
-                      <th>
-                        <a href="relatorio-contatos.php" class="btn btn-success btn-sm" target="_blank" data-toggle="tooltip" title="Gerar relatório de contatos">
-                          <i class="fa fa-file-excel-o"></i>
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                </table>
-              </div>
-
-            </div>
-            -->
+            
 
             <div class="tab-pane" id="ouvidoria_">
 
@@ -148,23 +89,7 @@ endif;
               <div class='col-md-12'><hr></div>
               <div class='col-md-12'>
 
-                <table id="lista-ouvidoria" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>E-mail</th>
-                      <th>Data</th>
-                      <th>
-                        <a href="relatorio-ouvidoria.php" class="btn btn-success btn-sm" target="_blank" data-toggle="tooltip" title="Gerar relatório de ouvidoria">
-                          <i class="fa fa-file-excel-o"></i>
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                </table>
+                <a class="btn btn-default mb-3" href="painel.php?exe=atendimento&amp;canal=ouvidoria">Consultar recebimentos e relatórios →</a>
               </div>
 
             </div>
@@ -207,24 +132,7 @@ endif;
               <div class='col-md-12'><hr></div>
               <div class='col-md-12'>
 
-                <table id="lista-trabalhe_conosco" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>E-mail</th>
-                      <th>Curriculum</th>
-                      <th>Data</th>
-                      <th>
-                        <a href="relatorio-trabalhe_conosco.php" class="btn btn-success btn-sm" target="_blank" data-toggle="tooltip" title="Gerar relatório de trabalhe conosco">
-                          <i class="fa fa-file-excel-o"></i>
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                </table>
+                <a class="btn btn-default mb-3" href="painel.php?exe=atendimento&amp;canal=curriculos">Consultar recebimentos e relatórios →</a>
               </div>
 
             </div>
@@ -292,24 +200,7 @@ endif;
               <div class='col-md-12'><hr></div>
               <div class='col-md-12'>
 
-                <table id="lista-doacoes" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>E-mail</th>
-                      <th>Cidade</th>
-                      <th>Data</th>
-                      <th>
-                        <a href="relatorio-doacoes.php" class="btn btn-success btn-sm" target="_blank" data-toggle="tooltip" title="Gerar relatório de doações">
-                          <i class="fa fa-file-excel-o"></i>
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                </table>
+                <a class="btn btn-default mb-3" href="painel.php?exe=atendimento&amp;canal=doacoes">Consultar recebimentos e relatórios →</a>
               </div>
 
             </div>
@@ -337,7 +228,7 @@ endif;
               <div class='col-md-6'>
 
                 <div class="form-group col-md-12">
-                  <a href="relatorio-pesquisa_atendimento.php" class="btn btn-success btn-sm pull-right" target="_blank" data-toggle="tooltip" title="Gerar relatório de pesquisa de atendimento">
+                  <a href="relatorio-pesquisa_atendimento.php" class="btn btn-success btn-sm pull-right" target="_blank" data-bs-toggle="tooltip" title="Gerar relatório de pesquisa de atendimento">
                     <i class="fa fa-file-excel-o"></i>
                   </a>
                 </div>
@@ -349,31 +240,7 @@ endif;
 
               </div>
 
-              <!-- 
-
-              <div class='col-md-12'><hr></div>
-
-              <div class='col-md-12'>
-
-                <table id="lista-pesquisa_atendimento" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>E-mail</th>
-                      <th>Data</th>
-                      <th>
-                        <a href="relatorio-pesquisa_atendimento.php" class="btn btn-success btn-sm" target="_blank" data-toggle="tooltip" title="Gerar relatório de pesquisa de atendimento">
-                          <i class="fa fa-file-excel-o"></i>
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                </table>
-              </div>
-              -->
+              
 
             </div>
 

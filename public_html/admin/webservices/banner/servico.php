@@ -70,7 +70,7 @@ scl_admin_require();
 				$idbanner = $dados['IdBanner'];
 
 				$Read = new Read();
-				$Read->fullRead("SELECT * FROM ".PREFIX."banner WHERE id_banner =:idbanner", "idbanner=$idbanner)");
+				$Read->fullRead("SELECT * FROM ".PREFIX."banner WHERE id_banner =:idbanner", "idbanner=$idbanner");
 				$response = $Read->getResult();
 
 				echo json_encode($response);
@@ -132,7 +132,7 @@ scl_admin_require();
 				$idbanner = $dados['IdBanner'];
 
 				$Read = new Read();
-				$Read->fullRead("select img from ".PREFIX."banner WHERE id_banner =:idbanner", "idbanner=$idbanner)");
+				$Read->fullRead("select img from ".PREFIX."banner WHERE id_banner =:idbanner", "idbanner=$idbanner");
 				$imagen = $Read->getResult()[0]['img'];
 
 				$Delete = new Delete();

@@ -1,0 +1,16 @@
+{
+  "name": "santa-casa-lorena-web",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "vendor": "node scripts/vendor-assets.cjs"
+  },
+  "dependencies": {
+    "bootstrap": "5.3.8",
+    "datatables.net-bs5": "3.1.1",
+    "jquery": "4.0.0",
+    "tinymce": "8.9.2",
+    "tinymce-i18n": "26.8.2",
+    "tom-select": "2.6.2"
+  }
+}

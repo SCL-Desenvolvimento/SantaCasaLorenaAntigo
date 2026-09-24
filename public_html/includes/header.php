@@ -14,7 +14,6 @@ $isService = in_array($r_DIR['page'] ?? '', array('convenios', 'especialidades',
 $isNewsListing = ($r_DIR['page'] ?? '') === 'noticias';
 $isArticle = ($r_DIR['page'] ?? '') === 'noticia';
 $isContact = in_array($r_DIR['page'] ?? '', array('fale-conosco', 'fale_conosco', 'doacoes'), true);
-$needsLegacy = !$isHome && !$isAbout && !$isHumanization && !$isSocialActions && !$isPatientSafety && !$isTransparency && !$isUrgentCare && !$isHospitality && !$isEmilia && !$isFacility && !$isService && !$isNewsListing && !$isArticle && !$isContact;
 $pageTitle = $r_DIR['info']['titulo'] ?? ($isHome ? 'Cuidado que acolhe. Saúde que transforma.' : 'Página não encontrada');
 $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null) : null) ?? $r_DIR['info']['seo'] ?? $r_DIR['info']['descricao_pagina'] ?? 'Santa Casa de Lorena: conheça nossos serviços, encontre orientações para pacientes e acompanhe as notícias da instituição.');
 ?>
@@ -33,16 +32,6 @@ $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null)
 <meta property="og:image" content="<?= scl_escape(scl_asset($r_DIR['info']['imagem'])) ?>">
 <?php endif; ?>
 <link rel="icon" href="<?= scl_url('favicon.ico') ?>">
-<?php if ($needsLegacy): // Compatibility for existing CMS forms and galleries. ?>
-<link rel="stylesheet" href="<?= scl_url('resources/bootstrap/css/bootstrap.min.css') ?>">
-<link rel="stylesheet" href="<?= scl_url('resources/plugins/owlcarousel/owl.carousel.min.css') ?>">
-<link rel="stylesheet" href="<?= scl_url('resources/plugins/owlcarousel/owl.theme.default.min.css') ?>">
-<link rel="stylesheet" href="<?= scl_url('resources/css/style.css') ?>">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-<script src="<?= scl_url('resources/plugins/jQuery/jQuery-2.1.4.min.js') ?>"></script>
-<script src="<?= scl_url('resources/bootstrap/js/bootstrap.min.js') ?>"></script>
-<script src="<?= scl_url('resources/plugins/owlcarousel/owl.carousel.min.js') ?>"></script>
-<?php endif; ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=1">
 <script src="<?= scl_url('resources/js/modern.js') ?>?v=2" defer></script>
 <?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality || $isEmilia || $isFacility || $isService || $isArticle || $isContact): ?>

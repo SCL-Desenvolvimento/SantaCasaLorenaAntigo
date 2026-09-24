@@ -7,9 +7,14 @@ function allowed(relative) {
   const p=relative.replace(/\\/g,'/');
   return !/(^|\/)(\.git|\.env(?:\..*)?|error_log|Thumbs\.db|desktop\.ini)(\/|$)/i.test(p)
     && !/^_app\/(PHPMailer-master\/|Config\.inc - Copia\.php$)/i.test(p)
-    && !/^resources\/plugins\/ckeditor\/(kcfinder|samples)(\/|$)/i.test(p)
+    && !/^resources\/(plugins|bootstrap|dist)(\/|$)/i.test(p)
+    && !/^resources\/vendor\/flatpickr(?:\/|$)/i.test(p)
+    && !/^resources\/vendor\/licenses\/flatpickr-/i.test(p)
+    && !/^resources\/js\/(app|activeMenu|scripts)\.js$/i.test(p)
+    && !/^resources\/css\/style\.css(?:\.22072022)?$/i.test(p)
+    && !/^_app\/vendor\/phpmailer\/(src(?:\/|$)|composer\.json$|LICENSE$|README-SCL\.md$)/i.test(p)
     && !/^arquivos\/curriculuns\/(?!\.htaccess$)/i.test(p)
-    && !/\.(bak|old|log|sql|phps|md|yml|yaml|toml)$/i.test(p)
+    && (!/\.(bak|old|log|sql|phps|md|yml|yaml|toml)$/i.test(p) || /^resources\/vendor\/licenses\//.test(p))
     && !(p.startsWith('resources/') && /\.(php\d*|phtml|phar)$/i.test(p))
     && !(p.startsWith('arquivos/') && /\.(php\d*|phtml|phar|exe|html?|js|svg|cgi|pl|py|sh)$/i.test(p));
 }

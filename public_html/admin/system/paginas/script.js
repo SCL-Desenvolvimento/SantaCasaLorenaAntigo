@@ -17,7 +17,7 @@ function getPaginas(){
   //if (GetURLParameter('id_pagina') == undefined) return;
   var request = $.ajax({ url: 'webservices/paginas/servico.php', type: 'POST', dataType:'json', data: {acao:"getPaginas"}});
   request.done(function (response){
-    
+
     response = response;
     $.each(response, function(i, p){
 
@@ -34,7 +34,7 @@ function getPaginas(){
     });
 
     //$('textarea[name=""]').text(response['']);
-    //CKEDITOR.replace('');
+    //SCLEditor.replace('');
 
     /*
     if(response[''] == null || response[''] == 0)
@@ -47,10 +47,10 @@ function getPaginas(){
     else
       $(".").html("");
     */
-    
+
     /*
       $('# option[value="'+response['']+'"]').prop("selected", "selected");
-      $('#').select2({
+      $('#').sclSelect({
         placeholder: "Selecione"
       });
     */
@@ -60,11 +60,12 @@ function getPaginas(){
 }
 
 function updatePaginas(){
+  sclSyncEditors();
 
   //Mensagem de erro padrão para UPDATE
   /*
   msg_erro = '<div class=\"alert alert-warning alert-dismissible\">'+
-  '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+  '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
   'Preencha corretamente todos os campos'+
   '</div>';
   */
@@ -72,9 +73,9 @@ function updatePaginas(){
   //Pega formulario
   f = document.getElementById("paginasForm");
 
-  $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');  
+  $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
 
-  //$('#').val(CKEDITOR.instances[''].getData());
+  //$('#').val(SCLEditor.instances[''].getData());
 
   var formData = new FormData(document.getElementById("paginasForm"));
   formData.append("acao", "updatePaginas");
@@ -88,65 +89,56 @@ function updatePaginas(){
     if (response == 1){
 
       mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-      '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+      '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
       'Páginas atualizadas com sucesso'+
       '</div>';
     }else{
 
       mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-      '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+      '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
       'Não foi possível atualizar as páginas! :'+ response +
       '</div>';
     }
 
     $('#mensagem_evento').html(mensagem);
-    window.location.href = "#";
+    if(response == 1) document.sclDirty=false;
   });
 }
 
 function createConteudoModal(dominio){
-
-  //console.log((`#create-${dominio}`));
-  $(`#create-${dominio}`).modal("show");
-  $(`#create-${dominio}`).find('input').val("");
-  //$(`#create-${dominio}`).find(".modal-body");
-
-  if(CKEDITOR.instances['ck-manual_paciente']) {
-    CKEDITOR.instances['ck-manual_paciente'].destroy();
-    $('#create-manual_paciente textarea[name="descricao"]').val("");
-    CKEDITOR.replace('ck-manual_paciente');
-  }else{
-    CKEDITOR.replace('ck-manual_paciente');
-  }
-
-  
+  const modal=document.getElementById('create-'+dominio),form=modal.querySelector('form');
+  form?.reset();modal.querySelectorAll('textarea').forEach(field=>{field.value='';if(SCLEditor.instances[field.id])SCLEditor.instances[field.id].setData('');});
+  $(modal).sclModal('show');
 }
 
 function getLista(dominio, lista, FUNC){
   if(lista == 1){
     var request = $.ajax({ url: 'webservices/paginas/servico.php', type: 'POST', dataType:'json', data: {acao:"getLista", dominio:dominio}});
-    request.done(function (response){  
+    request.done(function (response){
       FUNC(response);
-    }); 
+    });
   }
 }
 
 function getConteudo(dominio, id, FUNC){
   var request = $.ajax({url: 'webservices/paginas/servico.php', type: 'POST', dataType:'json', data: {acao:"getConteudo", dominio:dominio, id:id}});
-  request.done(function (response){  
+  request.done(function (response){
     //console.log(response);
     FUNC(response);
-  }); 
+  });
 }
 
 function updateConteudo(dominio, id){
+  const form=document.getElementById(`form-${dominio}`);
+  if(!form.reportValidity())return;
+  window.sclSyncEditors();
 
   var formData = new FormData(document.getElementById(`form-${dominio}`));
   formData.append("acao", "updateConteudo");
   formData.append("dominio", dominio);
 
   if(dominio == 'manual_paciente')
-    formData.append("descricao", CKEDITOR.instances['update-manual_paciente'].getData());
+    formData.append("descricao", SCLEditor.instances['update-manual_paciente'].getData());
 
   formData.append("id", (id == null ? $(`#form-${dominio} input[name="id"]`).val() : id ));
 
@@ -160,7 +152,7 @@ function updateConteudo(dominio, id){
       setTimeout(function(){
 
         $(`#form-${dominio}`).find(".msg").html(`${dominio} alterado com sucesso`);
-        setTimeout(getlistas(), 3000);
+        getlistas();
       }, 1000);
     }else{
 
@@ -170,13 +162,16 @@ function updateConteudo(dominio, id){
 }
 
 function createConteudo(dominio){
+  const activeForm=document.getElementById('form-create-'+dominio);
+  if(activeForm&&!activeForm.reportValidity())return;
+  sclSyncEditors();
 
   var formData = new FormData(document.getElementById(`form-create-${dominio}`));
   formData.append("acao", "createConteudo");
   formData.append("dominio", dominio);
 
   if(dominio == 'manual_paciente')
-    formData.append("descricao", CKEDITOR.instances['ck-manual_paciente'].getData());
+    formData.append("descricao", SCLEditor.instances['ck-manual_paciente'].getData());
 
   var request = $.ajax({ url: 'webservices/paginas/servico.php', type: 'POST',  data: formData, async: true, cache: false, contentType: false, processData: false});
   request.done(function ( response ) {
@@ -199,7 +194,7 @@ function createConteudo(dominio){
 
 function excluiConteudo(elemento, id, dominio){
 
-  bootbox.confirm({
+  sclConfirm({
     message: "Realmente deseja excluir este conteúdo",
     buttons: {
       'cancel': {
@@ -211,7 +206,7 @@ function excluiConteudo(elemento, id, dominio){
         className: 'btn-success'
       }
     },
-    
+
     callback: function(result) {
 
       if(result == 1){
@@ -224,7 +219,7 @@ function excluiConteudo(elemento, id, dominio){
           if(response == 1){
             $(elemento).closest('tr').fadeOut();
             mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-              '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+              '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
               'Conteúdo excluido com sucesso'+
               '</div>';
 
@@ -237,7 +232,3 @@ function excluiConteudo(elemento, id, dominio){
 }
 
 </script>
-<script src='../resources/js/util.js'></script>
-<script src='../resources/plugins/input-mask/jquery.inputmask.js'></script>
-<script src='../resources/plugins/input-mask/jquery.inputmask.date.extensions.js'></script>
-<script src='../resources/plugins/ckeditor/ckeditor.js'></script>

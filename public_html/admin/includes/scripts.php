@@ -1,67 +1,15 @@
 <?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
-<!-- jQuery 2.1.4 -->
-<script src="../resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-
+<script src="../resources/vendor/jquery/jquery.min.js"></script>
+<script src="../resources/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../resources/vendor/datatables/dataTables.min.js"></script>
+<script src="../resources/vendor/datatables/dataTables.bootstrap5.min.js"></script>
+<script src="../resources/vendor/tom-select/tom-select.complete.min.js"></script>
+<script src="../resources/vendor/tinymce/tinymce.min.js"></script>
 <script src="../resources/js/admin-security.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-</script>
-
-<!-- Bootstrap 3.3.5 -->
-<script src="../resources/bootstrap/js/bootstrap.min.js"></script>
-
-<!-- BootBox -->
-<script src="../resources/plugins/bootbox/bootbox.min.js"></script>
-
-<!-- iCheck 1.0.1 -->
-<script src="../resources/plugins/iCheck/icheck.min.js"></script>
-
-<!-- DataTables -->
-<script src='../resources/plugins/datatables/jquery.dataTables.min.js'></script>
-<script src='../resources/plugins/datatables/dataTables.bootstrap.min.js'></script>
-
-<!-- Select2 -->
-<script src='../resources/plugins/select2/select2.full.min.js'></script>
-
-<!-- Sparkline -->
-<!--<script src="plugins/sparkline/jquery.sparkline.min.js"></script>-->
-
-<!-- jvectormap -->
-<!--<script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>-->
-
-<!-- jQuery Knob Chart -->
-<!--<script src="plugins/knob/jquery.knob.js"></script>-->
-
-<!-- daterangepicker -->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>-->
-
-<!-- datepicker -->
-<!--<script src="plugins/datepicker/bootstrap-datepicker.js"></script>-->
-
-<!-- Bootstrap WYSIHTML5 -->
-<!--<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
-
-<!-- Slimscroll -->
-<script src="../resources/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-
-<!-- FastClick -->
-<!--<script src="plugins/fastclick/fastclick.js"></script>-->
-
-<!-- AdminLTE App -->
-<script src="../resources/dist/js/app.min.js"></script>
-
-<!-- AdminLTE for demo purposes -->
-<!--<script src="../dist/js/demo.js"></script>-->
-
-<!-- AdminLTE App -->
+<script src="../resources/js/admin-components.js"></script>
+<script src="../resources/js/admin-editor.js"></script>
 <script src="../resources/js/util.js"></script>
-
+<script src="../resources/js/admin-workspace.js"></script>
 <script type="text/javascript">
 
   // cache the id
@@ -75,16 +23,16 @@
     // send the hash to the address bar
     window.location.hash = $this.attr('href');
     // activate the clicked tab
-    $this.tab('show');
+    $this.sclTab('show');
   });
 
   // will show tab based on hash
   function refreshHash() {
-    navbox.find('a[href="'+window.location.hash+'"]').tab('show');
+    navbox.find('a[href="'+window.location.hash+'"]').sclTab('show');
   }
 
   // show tab if hash changes in address bar
-  $(window).bind('hashchange', refreshHash);
+  $(window).on('hashchange', refreshHash);
 
   // read has from address bar and show it
   if(window.location.hash) {
@@ -111,7 +59,7 @@
   function setTextCK($textareas){
     $.each( $textareas, function( key, value ) {
       $.each( $("textarea[name^='"+value+"_']"), function( key, value ) {
-        CKEDITOR.replace($(value).prop("name"));
+        SCLEditor.replace($(value).prop("name"));
       });
     });
   }
@@ -119,7 +67,7 @@
   function getTextCK($textareas){
     $.each( $textareas, function( key, value ) {
       $.each( $("textarea[name^='"+value+"_']"), function( key, value ) {
-        $("#"+$(value).prop("name")).val(CKEDITOR.instances[$(value).prop("name")].getData());
+        $("#"+$(value).prop("name")).val(SCLEditor.instances[$(value).prop("name")].getData());
       });
     });
   }
@@ -128,12 +76,12 @@
 
   //Initialize Select2 Elements
   function select2(){
-    $('.select2').select2();
+    $('.select2').sclSelect();
   };
 
   function select2Tags(elemento, entidade){
 
-    $("#"+elemento).select2({
+    $("#"+elemento).sclSelect({
       minimumInputLength: 1,
       //tags: true,
       ajax: {
@@ -164,7 +112,7 @@
   };
 
   function select2Cats(){
-    $(".tagsSelect").select2({
+    $(".tagsSelect").sclSelect({
          tags: true,
          ajax: {
         url: "webservices/noticias/servico.php",
@@ -191,10 +139,7 @@
   };
 
   function iCheck(){
-    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-    	checkboxClass: 'icheckbox_minimal-blue',
-    	radioClass: 'iradio_minimal-blue'
-  	});
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').addClass('form-check-input');
   };
 
   function GetURLParameter(sParam){

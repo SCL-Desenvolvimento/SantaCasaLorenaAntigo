@@ -1,4 +1,33 @@
+# Atualização — painel administrativo (24/09/2026)
+
+A etapa 4 foi aplicada ao código: acesso e navegação responsivos, página inicial com indicadores, formulários de usuários/banners/notícias, galerias com uploads/legendas/ordenação, edição unificada das páginas e central de atendimento com cinco relatórios CSV. As correções incluem carregamento e sincronização do editor, seleção inicial de abas, prévias e validação dos formulários.
+
+**Antes de publicar:** aplicar a migração [deploy/admin-stage4.sql](deploy/admin-stage4.sql) e seguir [deploy/ADMIN.md](deploy/ADMIN.md). Nenhum banco real, serviço de e-mail ou hospedagem foi alterado. O roteiro contém a cobertura de telas, diferenças dos relatórios e a homologação necessária na K2Host.
+
+Validação local: **1.053 verificações em PHP 8.4.25 e outras 1.053 em PHP 8.5.11**, mais 12 do editor. A suíte de operações usa banco sintético e os testes públicos conferem os documentos locais.
+
+Também foi corrigida a seleção de pastas vazias duplicadas que ocultava documentos no Portal da Transparência. Os 211 documentos locais voltaram a ser encontrados pela verificação de integridade.
+
 # Relatório de modernização — inventário e pendências
+
+## Atualização de execução — etapa 3 aplicada ao código em 23/09/2026
+
+A base foi atualizada para PHP 8.4+ e validada localmente em PHP 8.4.25 e 8.5.11. **A versão de PHP, banco e servidor da K2Host ainda precisa ser medida na hospedagem. Nenhum deploy foi realizado.** Esta atualização prevalece sobre os itens históricos de tecnologias abaixo.
+
+| Área | Resultado |
+|---|---|
+| Painel | Bootstrap 5.3.8, estrutura própria sem AdminLTE 2, jQuery 4.0.0, DataTables 3.1.1 e Tom Select 2.6.2. Modais/abas adaptados; diálogos e checkboxes modernizados. |
+| Editor | TinyMCE 8.9.2 local em português substitui CKEditor; integração de imagens/PDFs autenticada e catálogo de galerias preservando os marcadores existentes. |
+| E-mail | PHPMailer 7.1.1 centralizado com Composer e lockfile. Fluxos públicos e administrativos usam o mesmo carregamento. |
+| PHP | Corrigidas chamadas depreciadas de imagens e do adaptador SQLite de testes; suíte pública e de segurança aprovada nas duas versões. |
+| Dependências | npm/Composer com versões fixadas, arquivos locais e licenças incluídos. Slim removido do manifesto por ausência de uso. Bibliotecas antigas sem chamadas e calendários abandonados excluídos do pacote. |
+| K2Host | Diagnóstico autenticado de PHP/banco/servidor/extensões; alternativa de configuração externa a public_html com as credenciais existentes; pacote limpo sem currículos ou ferramentas antigas. |
+
+Validação: **945 verificações em cada versão de PHP** (733 públicas + 58 segurança + 92 HTTP + 11 configuração/diagnóstico + 51 painel/recursos), mais **12 verificações do editor** em JavaScript e conferência visual dos principais componentes com dados fictícios. Nenhum e-mail real ou dado de produção foi alterado. As bibliotecas antigas permanecem na cópia de trabalho, sem carregamento, e não entram no pacote; sua remoção física em lote foi bloqueada pela revisão automática.
+
+Verificação sintática: 153 arquivos PHP e 18 JavaScript aprovados. Pacote gerado com 1.460 arquivos, dependências modernas e licenças; nenhum currículo incluído.
+
+**Para concluir na hospedagem:** seguir [deploy/TECHNOLOGY.md](deploy/TECHNOLOGY.md) e [deploy/SECURITY.md](deploy/SECURITY.md), confirmar runtime/extensões, aplicar migração do banco, configurar segredos e armazenamento privado, publicar o pacote em pasta limpa e homologar MySQL/MariaDB, gravações, SMTP, CAPTCHA e regras HTTP. Copiar arquivos não atualiza o PHP nem o servidor da K2Host.
 
 ## Atualização de execução — etapa 2 aplicada ao código em 23/09/2026
 

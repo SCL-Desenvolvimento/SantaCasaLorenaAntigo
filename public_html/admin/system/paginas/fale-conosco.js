@@ -120,7 +120,7 @@
   /*
   function excluiContato(elemento, id_contato){
 
-    bootbox.confirm({
+    sclConfirm({
       message: "Realmente deseja excluir o contato ?",
       buttons: {
         'cancel': {
@@ -141,7 +141,7 @@
             if(response == 1){
               $(elemento).closest('tr').fadeOut();
               mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                  '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                  '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                   'Contato excluido com sucesso'+
                 '</div>';
 
@@ -186,7 +186,7 @@
 /* JS - Contato fim */
 
 /* Início - Balanço */
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 function get_balanco(balanco){
 
   //console.log(galeria_sobre);
@@ -207,7 +207,7 @@ function editeBalanco(balanco){
 
   //console.log(convenio);
 
-  $("#edite-balanco").modal("show");
+  $("#edite-balanco").sclModal("show");
   $("#edite-balanco").find(".modal-body");
 
   $('#edite-balanco input[name="id"]').val(balanco['id_balanco']);
@@ -216,7 +216,7 @@ function editeBalanco(balanco){
 /* Fim - Balanço */
 
 function getlistas(){
-  $('.modal-form').modal('hide');
+  $('.modal-form').sclModal('hide');
   getLista("balanco", 1, get_balanco); 
 }
 
@@ -240,9 +240,9 @@ function getDoacaoTextos(){
 
     //console.log(response);
 
-    $("textarea[name='doacoes-texto1']").text(response['bloco1']);
-    $("textarea[name='doacoes-texto2']").text(response['bloco2']);
-    $("textarea[name='doacoes-texto3']").text(response['bloco3']);
+    $("textarea[name='doacoes-texto1']").val(response['bloco1']);
+    $("textarea[name='doacoes-texto2']").val(response['bloco2']);
+    $("textarea[name='doacoes-texto3']").val(response['bloco3']);
   });
 }
 
@@ -250,10 +250,6 @@ function getDoacaoTextos(){
 getlistas();
 getLocalizacao();
 
-listContatos();
-listOuvidoria();
-listTrabalheConosco();
 getDoacaoTextos();
-listDoacoes();
 
 </script>

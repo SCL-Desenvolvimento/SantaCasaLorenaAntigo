@@ -18,12 +18,12 @@ endif;
         <div class="box-header">
 
           <h1 class="pagina-titulo">
-            Páginas
-            <small>atualização</small>
+            Instalações
+            <small>Textos, imagens e informações publicadas no site</small>
           </h1>
 
           <div class="pull-right">
-            <a href="painel.php?exe=paginas/index" class="btn btn-primary btn-sm">
+            <a href="painel.php" class="btn btn-primary btn-sm">
               <i class="fa fa-list"></i>
             </a>
           </div>
@@ -37,7 +37,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-pronto_atendimento-Label"> Inserir galeria pronto atendimento </h4>
               </div>
 
@@ -63,7 +63,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("pronto_atendimento", null)'>Gravar alterações</button>
               </div>
 
@@ -77,7 +77,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-pronto_atendimento-Label"> Editar galeria pronto atendimento </h4>
               </div>
 
@@ -105,7 +105,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("pronto_atendimento", null)'>Gravar alterações</button>
               </div>
 
@@ -119,7 +119,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-hotelaria-Label"> Inserir galeria hotelaria </h4>
               </div>
 
@@ -145,7 +145,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("hotelaria", null)'>Gravar alterações</button>
               </div>
 
@@ -159,7 +159,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-hotelaria-Label"> Editar galeria hotelaria </h4>
               </div>
 
@@ -187,7 +187,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("hotelaria", null)'>Gravar alterações</button>
               </div>
 
@@ -201,7 +201,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-clinica_emilia-Label"> Inserir galeria pronto atendimento </h4>
               </div>
 
@@ -227,7 +227,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("clinica_emilia", null)'>Gravar alterações</button>
               </div>
 
@@ -241,7 +241,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-clinica_emilia-Label"> Editar galeria pronto atendimento </h4>
               </div>
 
@@ -269,7 +269,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("clinica_emilia", null)'>Gravar alterações</button>
               </div>
 
@@ -283,7 +283,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-centro_diagnostico_por_imagem-Label"> Inserir imagem na galeria </h4>
               </div>
 
@@ -309,7 +309,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("centro_diagnostico_por_imagem", null)'>Gravar alterações</button>
               </div>
 
@@ -323,7 +323,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-centro_diagnostico_por_imagem-Label"> Editar imagem da galeria </h4>
               </div>
 
@@ -351,7 +351,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("centro_diagnostico_por_imagem", null)'>Gravar alterações</button>
               </div>
 
@@ -365,7 +365,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-unidade_internacao-Label"> Inserir unidade internação </h4>
               </div>
 
@@ -389,7 +389,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("unidade_internacao", null)'>Gravar alterações</button>
               </div>
 
@@ -403,7 +403,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-unidade_internacao-Label"> Editar unidade internação </h4>
               </div>
 
@@ -449,7 +449,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("unidade_internacao", null)'>Gravar alterações</button>
               </div>
 
@@ -463,11 +463,11 @@ endif;
           <div class="nav-tabs-custom" style="margin:10px;">
 
             <ul class="nav nav-tabs">
-              <li><a href='#pronto-atendimento' data-toggle='tab'>Pronto Atendimento</a></li>
-              <li><a href='#hotelaria_' data-toggle='tab'>Hotelaria</a></li>
-              <li><a href='#clinica-emilia' data-toggle='tab'>Clínica Emília</a></li>
-              <li><a href='#centro-diagnostico-por-imagem' data-toggle='tab'>Centro de Diagnóstico por Imagem</a></li>
-              <li><a href='#unidade-internacao' data-toggle='tab'>Unidade de Internação</a></li>
+              <li><a href='#pronto-atendimento' data-bs-toggle='tab'>Pronto Atendimento</a></li>
+              <li><a href='#hotelaria_' data-bs-toggle='tab'>Hotelaria</a></li>
+              <li><a href='#clinica-emilia' data-bs-toggle='tab'>Clínica Emília</a></li>
+              <li><a href='#centro-diagnostico-por-imagem' data-bs-toggle='tab'>Centro de Diagnóstico por Imagem</a></li>
+              <li><a href='#unidade-internacao' data-bs-toggle='tab'>Unidade de Internação</a></li>
             </ul>
 
             <div class="tab-content col-md-12">

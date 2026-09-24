@@ -1,6 +1,6 @@
 <?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <!-- DataTables -->
-<link rel="stylesheet" href="../resources/plugins/datatables/dataTables.bootstrap.css">
+
 
 <?php
 
@@ -21,12 +21,12 @@
         <div class="box-header">
 
           <h1 class="pagina-titulo">
-            Páginas
-            <small>atualização</small>
+            Serviços
+            <small>Textos, imagens e informações publicadas no site</small>
           </h1>
 
           <div class="pull-right">
-            <a href="painel.php?exe=paginas/index" class="btn btn-primary btn-sm">
+            <a href="painel.php" class="btn btn-primary btn-sm">
               <i class="fa fa-list"></i>
             </a>
           </div>
@@ -40,7 +40,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-convenios-Label"> Incluir Convênio </h4>
               </div>
 
@@ -71,7 +71,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("convenios", null)'>Gravar alterações</button>
               </div>
 
@@ -85,7 +85,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-convenios-Label"> Editar Convênio </h4>
               </div>
 
@@ -118,7 +118,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("convenios", null)'>Gravar alterações</button>
               </div>
 
@@ -132,7 +132,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-especialidades-Label"> Incluir especialidades </h4>
               </div>
 
@@ -156,7 +156,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("especialidades", null)'>Gravar alterações</button>
               </div>
 
@@ -170,7 +170,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-especialidades-Label"> Editar especialidades </h4>
               </div>
 
@@ -196,7 +196,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("especialidades", null)'>Gravar alterações</button>
               </div>
 
@@ -210,7 +210,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-capacidade-Label"> Inserir capacidade </h4>
               </div>
 
@@ -234,7 +234,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("capacidade", null)'>Gravar alterações</button>
               </div>
 
@@ -248,7 +248,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-capacidade-Label"> Editar capacidade </h4>
               </div>
 
@@ -294,7 +294,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("capacidade", null)'>Gravar alterações</button>
               </div>
 
@@ -308,7 +308,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-manual_paciente-Label"> Incluir instrução </h4>
               </div>
 
@@ -332,7 +332,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("manual_paciente", null)'>Gravar alterações</button>
               </div>
 
@@ -346,7 +346,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-manual_paciente-Label"> Editar instrução </h4>
               </div>
 
@@ -372,7 +372,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("manual_paciente", null)'>Gravar alterações</button>
               </div>
 
@@ -386,7 +386,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-download_manual_paciente-Label"> Incluir arquivo </h4>
               </div>
 
@@ -412,7 +412,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("download_manual_paciente", null)'>Gravar alterações</button>
               </div>
 
@@ -426,7 +426,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-download_manual_paciente-Label"> Editar arquivo </h4>
               </div>
 
@@ -454,7 +454,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("download_manual_paciente", null)'>Gravar alterações</button>
               </div>
 
@@ -468,10 +468,10 @@
           <div class="nav-tabs-custom" style="margin:10px;">
 
             <ul class="nav nav-tabs">
-              <li><a href='#convenios_' data-toggle='tab'>Convenios</a></li>
-              <li><a href='#especialidades_' data-toggle='tab'>Especialidades</a></li>
-              <li><a href='#capacidade-instalacao-producao' data-toggle='tab'>Capacidade de instalação e produção</a></li>
-              <li><a href='#manual-paciente-visitante' data-toggle='tab'>Manual do paciente e visitante</a></li>
+              <li><a href='#convenios_' data-bs-toggle='tab'>Convenios</a></li>
+              <li><a href='#especialidades_' data-bs-toggle='tab'>Especialidades</a></li>
+              <li><a href='#capacidade-instalacao-producao' data-bs-toggle='tab'>Capacidade de instalação e produção</a></li>
+              <li><a href='#manual-paciente-visitante' data-bs-toggle='tab'>Manual do paciente e visitante</a></li>
             </ul>
 
             <div class="tab-content col-md-12">

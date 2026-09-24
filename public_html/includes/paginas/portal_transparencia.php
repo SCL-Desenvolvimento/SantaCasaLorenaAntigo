@@ -541,6 +541,8 @@ $tpFomentoRelative = null;
 
 list($tpArchiveDirectories) = tpDirectoryEntries($tpArchiveDirectory);
 foreach ($tpArchiveDirectories as $directory) {
+    // Pastas vazias de extrações anteriores não devem ocultar o acervo existente.
+    if (tpCountDocuments($tpArchiveDirectory . DIRECTORY_SEPARATOR . $directory) === 0) continue;
     $directoryKey = tpNormalizeKey($directory);
 
     if (strpos($directoryKey, 'MUNICIPAL') !== false) {

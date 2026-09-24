@@ -1,6 +1,6 @@
 
 <script>
-  
+
   $(function(){
 
     switch ($('#modo').text()){
@@ -18,12 +18,12 @@
 
 	  }
 
-    $('#nivel').select2({
+    $('#nivel').sclSelect({
       placeholder: "Selecione um nível de usuário"
       //allowClear: true
     });
 
-    $('#id_loja').select2({
+    $('#id_loja').sclSelect({
       placeholder: "Selecione a loja"
       //allowClear: true
     });
@@ -88,7 +88,7 @@
 
   function excluiAdministrador(elemento, id_usuario, nome){
 
-    bootbox.confirm({
+    sclConfirm({
       message: "Realmente deseja excluir o "+nome+"?",
       buttons: {
         'cancel': {
@@ -100,7 +100,7 @@
             className: 'btn-success'
         }
       },
-    
+
       callback: function(result) {
 
       if(result == 1){
@@ -109,7 +109,7 @@
             if(response == 1){
               $(elemento).closest('tr').fadeOut();
               mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                  '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                  '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                   'Usuário excluido com sucesso'+
                 '</div>';
 
@@ -125,7 +125,7 @@
 
     //Mensagfem de erro padrão para UPDATE
     msg_erro = '<div class=\"alert alert-warning alert-dismissible\">'+
-      '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+      '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
       'Preencha corretamente todos os campos'+
       '</div>';
 
@@ -142,7 +142,7 @@
         //Valida o nome
       }else{
         $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
-        $("#valido").val(true);   
+        $("#valido").val(true);
 
         if(f.nome.value == ""){
           $(f.nome).closest('.form-group').addClass('has-warning');
@@ -150,15 +150,15 @@
           f.nome.focus();
         }else{
           $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
-          $("#valido").val(true);   
+          $("#valido").val(true);
 
           //Valida o email
-          if(f.email.value == "" || !validaEmail(f.email.value)){   
+          if(f.email.value == "" || !validaEmail(f.email.value)){
             $(f.email).closest('.form-group').addClass('has-warning').find('.msg-erro').html('Insira um e-mail válido');
             f.email.focus();
           }else{
             //Valida existência do email
-            var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarEmail", email:f.email.value}}); 
+            var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarEmail", email:f.email.value}});
             request.done(function (response){
 
               if(response != 1){
@@ -169,7 +169,7 @@
 
               }else{
                 $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
-                $("#valido").val(true);   
+                $("#valido").val(true);
 
                 //Valida o login
                 if(f.usuario.value == ""){
@@ -178,7 +178,7 @@
                 }else{
 
                   //Valida existência do login
-                  var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarLogin", login:f.usuario.value}}); 
+                  var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarLogin", login:f.usuario.value}});
                   request.done(function (response){
 
                     if(response != 1){
@@ -188,7 +188,7 @@
                       $("#valido").val(false);
 
                     }else{
-                      
+
 
                       //Valida o nome
                       if(f.senha.value == "" || (f.senha.value.length < 12 || f.senha.value.length > 72)){
@@ -198,7 +198,7 @@
                       }else{
 
                         $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
-                        $("#btnCreateUsuario").hide(); 
+                        $("#btnCreateUsuario").hide();
 
                         var formData = new FormData(document.getElementById("usuarioForm"));
                         formData.append("acao", "createUser");
@@ -209,7 +209,7 @@
                           var mensagem = "";
                           if (response != '0'){
                             mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                            '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                            '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                             'Usuario incluido com sucesso'+
                             '</div>';
 
@@ -220,7 +220,7 @@
 
                           } else {
                             mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-                            '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                            '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                             'Não foi possível criar o usuario! :'+ response +
                             '</div>';
                           }
@@ -277,7 +277,7 @@
 
     //Mensagfem de erro padrão para UPDATE
     msg_erro = '<div class=\"alert alert-warning alert-dismissible\">'+
-      '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+      '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
       'Preencha corretamente todos os campos'+
       '</div>';
 
@@ -301,15 +301,15 @@
           f.nome.focus();
         }else{
           $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
-          $("#valido").val(true);   
+          $("#valido").val(true);
 
           //Valida o email
-          if(f.email.value == "" || !validaEmail(f.email.value)){   
+          if(f.email.value == "" || !validaEmail(f.email.value)){
             $(f.email).closest('.form-group').addClass('has-warning').find('.msg-erro').html('Insira um e-mail válido');
             f.email.focus();
           }else{
             //Valida existência do email
-            var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarEmail", email:f.email.value, atual:GetURLParameter("id_usuario") }}); 
+            var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarEmail", email:f.email.value, atual:GetURLParameter("id_usuario") }});
             request.done(function (response){
 
               if(response != 1){
@@ -320,7 +320,7 @@
 
               }else{
                 $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
-                $("#valido").val(true);   
+                $("#valido").val(true);
 
                 //Valida o login
                 if(f.usuario.value == ""){
@@ -329,7 +329,7 @@
                 }else{
 
                   //Valida existência do login
-                  var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarLogin", login:f.usuario.value, atual:GetURLParameter("id_usuario") }}); 
+                  var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: { acao:"ValidarLogin", login:f.usuario.value, atual:GetURLParameter("id_usuario") }});
                   request.done(function (response){
 
                     if(response != 1){
@@ -339,7 +339,7 @@
                       $("#valido").val(false);
 
                     }else{
-                      
+
                       //Valida o nome
                       if(f.senha.value != "" && (f.senha.value.length < 12 || f.senha.value.length > 72)){
                         $(f.senha).closest('.form-group').addClass('has-warning');
@@ -348,11 +348,11 @@
                       }else{
 
                         $('.form-group').removeClass('has-warning').removeClass('has-error').find('.msg-erro').html('');
-                        $("#valido").val(true); 
+                        $("#valido").val(true);
 
                         if($("#nivel_atual").val() != $("#nivel").val() && $("#nivel").val() != undefined){
 
-                          bootbox.confirm({
+                          sclConfirm({
                             message: "Realmente deseja alterar o nível de acesso deste usuário?",
                             buttons: {
                               'cancel': {
@@ -364,24 +364,24 @@
                                   className: 'btn-success'
                               }
                             },
-                          
+
                             callback: function(result) {
 
                               if(result == 1){
-                                
+
                                 var formData = new FormData(document.getElementById("usuarioForm"));
                                 formData.append("acao", "updateUser");
                                 formData.append("id_usuario", GetURLParameter('id_usuario'));
 
                                 var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: formData, async: true, cache: false, contentType: false, processData: false});
                                 request.done(function ( response ) {
-                                  
+
                                   //console.log(response);
 
                                   var mensagem = "";
                                   if (response == 1){
                                     mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                                      '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                                      '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                                       'Usuário atualizado com sucesso'+
                                       '</div>';
 
@@ -393,7 +393,7 @@
 
                                   }else{
                                     mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-                                      '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                                      '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                                       'Não foi possível atualizar o usuário! :'+ response +
                                       '</div>';
                                   }
@@ -418,13 +418,13 @@
 
                           var request = $.ajax({ url: 'webservices/usuario/servico.php', type: 'POST',  data: formData, async: true, cache: false, contentType: false, processData: false});
                           request.done(function ( response ) {
-                            
+
                             //console.log(response);
 
                             var mensagem = "";
                             if (response == 1){
                               mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-                                '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                                '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                                 'Usuário atualizado com sucesso'+
                                 '</div>';
                               /*
@@ -435,7 +435,7 @@
 
                             }else{
                               mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-                                '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+                                '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
                                 'Não foi possível atualizar o usuário! :'+ response +
                                 '</div>';
                             }
@@ -472,7 +472,7 @@
 
   }
 
-  
+
   function ValidateLogin(input, atual){
     ConsumeServiceValidate(input, { acao:"ValidarLogin", login:input.value, atual:atual }, "usuario");
   }
@@ -484,7 +484,7 @@
   function ValidateRG(input, atual){
     ConsumeServiceValidate(input, { acao:"ValidarRG", rg:input.value, atual:atual }, "usuario");
   }
-    
+
   function ValidateCPF(input, atual){
     ConsumeServiceValidate(input, { acao:"ValidarCPF", cpf:input.value, atual:atual }, "usuario");
   }
@@ -500,9 +500,6 @@
       $(input).closest('.form-group').find('.msg-erro').html('');
     }
   }
-    
-    
+
+
 </script>
-<script src='../resources/js/util.js'></script>
-<script src='../resources/plugins/input-mask/jquery.inputmask.js'></script>
-<script src='../resources/plugins/input-mask/jquery.inputmask.date.extensions.js'></script>

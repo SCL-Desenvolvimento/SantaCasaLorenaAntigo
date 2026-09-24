@@ -19,7 +19,7 @@ async function post(url,data,token){return request(url,{method:'POST',headers:{'
 (async()=>{
  try {
   let ready=false;for(let i=0;i<40;i++){try{await fetch(base+'/__fixture');ready=true;break;}catch{await new Promise(r=>setTimeout(r,100));}} assert(ready,'test server ready');
-  const endpoints=['/admin/painel.php','/admin/curriculo.php','/admin/media.php','/admin/includes/tim.php',...['contatos','doacoes','ouvidoria','pesquisa_atendimento','trabalhe_conosco'].map(x=>'/admin/relatorio-'+x+'.php'),...['usuario','banner','galeria','noticias','paginas','paginas/servicos','paginas/institucional','paginas/instalacoes','paginas/fale-conosco'].map(x=>'/admin/webservices/'+x+'/servico.php')];
+  const endpoints=['/admin/atendimento-api.php','/admin/galeria-api.php','/admin/diagnostico.php','/admin/galerias.php','/admin/painel.php','/admin/curriculo.php','/admin/media.php','/admin/includes/tim.php',...['contatos','doacoes','ouvidoria','pesquisa_atendimento','trabalhe_conosco'].map(x=>'/admin/relatorio-'+x+'.php'),...['usuario','banner','galeria','noticias','paginas','paginas/servicos','paginas/institucional','paginas/instalacoes','paginas/fale-conosco'].map(x=>'/admin/webservices/'+x+'/servico.php')];
   for(const endpoint of endpoints) {
    await verify(endpoint,401);
    await verify(endpoint,401,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'acao=excluiUser&id_usuario=1'});

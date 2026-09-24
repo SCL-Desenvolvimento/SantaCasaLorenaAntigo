@@ -31,5 +31,5 @@ verify(str_contains($html,'&lt;img') && !str_contains($html,'<img src=x'), 'Esca
 verify(!str_contains($html,'1900 —'), 'No dangling date separator');
 $r_DIR = array('page'=>'404', 'info'=>array('titulo'=>'Página não encontrada'));
 ob_start(); require DIR.'includes/header.php'; $html=ob_get_clean();
-verify(str_contains($html,'jQuery-2.1.4') && !str_contains($html,'about.js'), 'Preserve dependencies on unconverted pages');
+verify(!str_contains($html,'jQuery-2.1.4') && !str_contains($html,'bootstrap.min') && !str_contains($html,'about.js'), '404 uses the modern shell without legacy dependencies');
 echo 'OK: ' . ($count-$before) . " about-page checks.\n";

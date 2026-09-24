@@ -1,6 +1,6 @@
 <?php if (!defined('SCL_ADMIN_PANEL')) { http_response_code(403); exit; } ?>
 <!-- DataTables -->
-<link rel="stylesheet" href="../resources/plugins/datatables/dataTables.bootstrap.css">
+
 
 <?php
 
@@ -21,12 +21,12 @@ endif;
         <div class="box-header">
 
           <h1 class="pagina-titulo">
-            Páginas
-            <small>atualização</small>
+            Institucional
+            <small>Textos, imagens e informações publicadas no site</small>
           </h1>
 
           <div class="pull-right">
-            <a href="painel.php?exe=paginas/index" class="btn btn-primary btn-sm">
+            <a href="painel.php" class="btn btn-primary btn-sm">
               <i class="fa fa-list"></i>
             </a>
           </div>
@@ -40,7 +40,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-galeria_sobre-Label"> Incluir Convênio </h4>
               </div>
 
@@ -61,7 +61,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("galeria_sobre", null)'>Gravar alterações</button>
               </div>
 
@@ -75,7 +75,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-galeria_sobre-Label"> Editar Convênio </h4>
               </div>
 
@@ -98,7 +98,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("galeria_sobre", null)'>Gravar alterações</button>
               </div>
 
@@ -112,7 +112,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-provedor-Label"> Incluir Convênio </h4>
               </div>
 
@@ -150,7 +150,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("provedor", null)'>Gravar alterações</button>
               </div>
 
@@ -164,7 +164,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-provedor-Label"> Editar Convênio </h4>
               </div>
 
@@ -204,7 +204,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("provedor", null)'>Gravar alterações</button>
               </div>
 
@@ -218,7 +218,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-balanco-Label"> Incluir balanço </h4>
               </div>
 
@@ -244,7 +244,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("balanco", null)'>Gravar alterações</button>
               </div>
 
@@ -258,7 +258,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-balanco-Label"> Editar balanço </h4>
               </div>
 
@@ -286,7 +286,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("balanco", null)'>Gravar alterações</button>
               </div>
 
@@ -301,7 +301,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-galeria_acao-Label"> Incluir Foto </h4>
               </div>
 
@@ -327,7 +327,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("galeria_acao", null)'>Gravar alterações</button>
               </div>
 
@@ -341,7 +341,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-galeria_acao-Label"> Editar Foto </h4>
               </div>
 
@@ -369,7 +369,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("galeria_acao", null)'>Gravar alterações</button>
               </div>
 
@@ -383,7 +383,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="create-galeria_humanizacao-Label"> Incluir Foto </h4>
               </div>
 
@@ -409,7 +409,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='createConteudo("galeria_humanizacao", null)'>Gravar alterações</button>
               </div>
 
@@ -423,7 +423,7 @@ endif;
             <div class="modal-content">
 
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edite-galeria_humanizacao-Label"> Editar Foto </h4>
               </div>
 
@@ -451,7 +451,7 @@ endif;
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onClick='updateConteudo("galeria_humanizacao", null)'>Gravar alterações</button>
               </div>
 
@@ -465,11 +465,11 @@ endif;
           <div class="nav-tabs-custom" style="margin:10px;">
 
             <ul class="nav nav-tabs">
-              <li><a href='#sobre-santa-casa-lorena' data-toggle='tab'>Sobre</a></li>
-              <li><a href='#humanizacao_' data-toggle='tab'>Humanização</a></li>
-              <li><a href='#acoes-sociais-ambientais' data-toggle='tab'>Ações Sociais Ambientais</a></li>
-              <li><a href='#programa-nacional-seguranca' data-toggle='tab'>Programa Nacional de Segurança</a></li>
-              <li><a href='#portal-transparencia' data-toggle='tab'>Portal Transparência</a></li>
+              <li><a href='#sobre-santa-casa-lorena' data-bs-toggle='tab'>Sobre</a></li>
+              <li><a href='#humanizacao_' data-bs-toggle='tab'>Humanização</a></li>
+              <li><a href='#acoes-sociais-ambientais' data-bs-toggle='tab'>Ações Sociais Ambientais</a></li>
+              <li><a href='#programa-nacional-seguranca' data-bs-toggle='tab'>Programa Nacional de Segurança</a></li>
+              <li><a href='#portal-transparencia' data-bs-toggle='tab'>Portal Transparência</a></li>
             </ul>
 
             <div class="tab-content col-md-12">

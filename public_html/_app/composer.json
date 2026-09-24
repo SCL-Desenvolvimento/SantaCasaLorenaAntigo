@@ -1,10 +1,21 @@
 {
-	"require": {
-		"slim/slim": "2.*"
-	},
-	"autoload": {
-		"psr-4": {
-			"controllers\\": "controllers"
-		}
-	}
+  "name": "santa-casa-lorena/site",
+  "description": "Portal e administração da Santa Casa de Lorena",
+  "type": "project",
+  "require": {
+    "php": "^8.4",
+    "ext-pdo": "*",
+    "ext-fileinfo": "*",
+    "ext-gd": "*",
+    "ext-mbstring": "*",
+    "ext-dom": "*",
+    "ext-openssl": "*",
+    "phpmailer/phpmailer": "7.1.1",
+    "ext-pdo_mysql": "*",
+    "ext-iconv": "*"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": false
+  }
 }

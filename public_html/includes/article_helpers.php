@@ -18,7 +18,7 @@ function scl_article_content($value) {
             $id = $input ? filter_var($input->getAttribute('value'), FILTER_VALIDATE_INT, array('options'=>array('min_range'=>1))) : false;
             if (!$id) return '';
             $read = new Read();
-            $read->fullRead('SELECT DISTINCT A.* FROM '.PREFIX.'galeria_anexo AS GA INNER JOIN '.PREFIX.'anexo AS A ON A.id_anexo = GA.id_anexo WHERE GA.id_galeria = :gallery', 'gallery='.$id);
+            $read->fullRead('SELECT A.*, COALESCE(GA.legenda,A.descricao) AS descricao FROM '.PREFIX.'galeria_anexo AS GA INNER JOIN '.PREFIX.'anexo AS A ON A.id_anexo = GA.id_anexo WHERE GA.id_galeria = :gallery ORDER BY GA.ordem,A.id_anexo', 'gallery='.$id);
             $photos = array();
             foreach ($read->getResult() ?: array() as $photo) if (scl_link($photo['url'] ?? '')) $photos[] = array('img'=>$photo['url'], 'descricao'=>$photo['descricao'] ?? '');
             if (!$photos) return '';

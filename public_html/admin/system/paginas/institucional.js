@@ -1,7 +1,7 @@
 <script>
 
 /* Início - Galeria */
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 function get_galeria_sobre(galeria_sobre){
 
   //console.log(galeria_sobre);
@@ -22,7 +22,7 @@ function editeGaleriaSobre(galeria){
 
   //console.log(convenio);
 
-  $("#edite-galeria_sobre").modal("show");
+  $("#edite-galeria_sobre").sclModal("show");
   $("#edite-galeria_sobre").find(".modal-body");
 
   $('#edite-galeria_sobre input[name="id"]').val(galeria['id_galeria_sobre']);
@@ -32,7 +32,7 @@ function editeGaleriaSobre(galeria){
 /* Fim - Galeria */
 
 /* Início - Provedor */
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 function get_provedor(provedor){
 
   //console.log(galeria_sobre);
@@ -54,7 +54,7 @@ function editeProvedores(provedor){
 
   //console.log(convenio);
 
-  $("#edite-provedor").modal("show");
+  $("#edite-provedor").sclModal("show");
   $("#edite-provedor").find(".modal-body");
 
   $('#edite-provedor input[name="id"]').val(provedor['id_provedor']);
@@ -67,7 +67,7 @@ function editeProvedores(provedor){
 /* Fim - Provedor */
 
 /* Início - Ações */
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 function get_galeria_acao(galeria_acao){
 
   //console.log(galeria_sobre);
@@ -89,7 +89,7 @@ function editeAcoes(galeria_acao){
 
   //console.log(convenio);
 
-  $("#edite-galeria_acao").modal("show");
+  $("#edite-galeria_acao").sclModal("show");
   $("#edite-galeria_acao").find(".modal-body");
 
   $('#edite-galeria_acao input[name="id"]').val(galeria_acao['id_galeria_acao']);
@@ -99,7 +99,7 @@ function editeAcoes(galeria_acao){
 /* Fim - Ações */
 
 /* Início - Galeria Humanização */
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 function get_galeria_humanizacao(galeria_humanizacao){
 
   //console.log(galeria_sobre);
@@ -121,7 +121,7 @@ function editeGaleriaHumanizacao(galeria_humanizacao){
 
   //console.log(convenio);
 
-  $("#edite-galeria_humanizacao").modal("show");
+  $("#edite-galeria_humanizacao").sclModal("show");
   $("#edite-galeria_humanizacao").find(".modal-body");
 
   $('#edite-galeria_humanizacao input[name="id"]').val(galeria_humanizacao['id_galeria_humanizacao']);
@@ -131,7 +131,7 @@ function editeGaleriaHumanizacao(galeria_humanizacao){
 /* Fim - Ações */
 
 /* Início - Balanço */
-//data-toggle="modal" data-target="#myModal"
+//data-bs-toggle="modal" data-bs-target="#myModal"
 function get_balanco(balanco){
 
   //console.log(galeria_sobre);
@@ -153,7 +153,7 @@ function editeBalanco(balanco){
 
   //console.log(convenio);
 
-  $("#edite-balanco").modal("show");
+  $("#edite-balanco").sclModal("show");
   $("#edite-balanco").find(".modal-body");
 
   $('#edite-balanco input[name="id"]').val(balanco['id_balanco']);
@@ -162,7 +162,7 @@ function editeBalanco(balanco){
 /* Fim - Balanço */
 
 function getlistas(){
-  $('.modal-form').modal('hide');
+  $('.modal-form').sclModal('hide');
   getLista("galeria_sobre", 1, get_galeria_sobre); 
   getLista("provedor", 1, get_provedor);
   getLista("balanco", 1, get_balanco); 
@@ -176,14 +176,14 @@ function getSobre(){
   request.done(function (response){  
     //console.log(response);
 
-    $("textarea[name='sobre_santa_casa_lorena-texto1']").text(response['bloco1']);
-    $("textarea[name='sobre_santa_casa_lorena-texto2']").text(response['bloco2']);
-    $("textarea[name='sobre_santa_casa_lorena-texto3']").text(response['bloco3']);
-    $("textarea[name='sobre_santa_casa_lorena-texto4']").text(response['bloco4']);
-    $("textarea[name='sobre_santa_casa_lorena-missao']").text(response['missao']);
-    $("textarea[name='sobre_santa_casa_lorena-visao']").text(response['visao']);
-    $("textarea[name='sobre_santa_casa_lorena-valor']").text(response['valor']);
-    $("textarea[name='sobre_santa_casa_lorena-provedor']").text(response['provedor']);
+    $("textarea[name='sobre_santa_casa_lorena-texto1']").val(response['bloco1']);
+    $("textarea[name='sobre_santa_casa_lorena-texto2']").val(response['bloco2']);
+    $("textarea[name='sobre_santa_casa_lorena-texto3']").val(response['bloco3']);
+    $("textarea[name='sobre_santa_casa_lorena-texto4']").val(response['bloco4']);
+    $("textarea[name='sobre_santa_casa_lorena-missao']").val(response['missao']);
+    $("textarea[name='sobre_santa_casa_lorena-visao']").val(response['visao']);
+    $("textarea[name='sobre_santa_casa_lorena-valor']").val(response['valor']);
+    $("textarea[name='sobre_santa_casa_lorena-provedor']").val(response['provedor']);
   });
 }
 
@@ -194,8 +194,8 @@ function getProgramaNacionalSeguranca(){
     //console.log(response);
 
     $('.programa_nacional_seguranca-image1').attr("src", "../"+response['img1']);
-    $("textarea[name='programa_nacional_seguranca-texto2']").text(response['bloco2']);
-    $("textarea[name='programa_nacional_seguranca-texto1']").text(response['bloco1']);
+    $("textarea[name='programa_nacional_seguranca-texto2']").val(response['bloco2']);
+    $("textarea[name='programa_nacional_seguranca-texto1']").val(response['bloco1']);
   });
 }
 
@@ -207,10 +207,10 @@ function getAcoesSociaisAmbientais(){
 
     $('.acoes_sociais_ambientais-image1').attr("src", "../"+response['img1']);
     $('.acoes_sociais_ambientais-image2').attr("src", "../"+response['img2']);
-    $("textarea[name='acoes_sociais_ambientais-texto1']").text(response['bloco1']);
-    $("textarea[name='acoes_sociais_ambientais-texto2']").text(response['bloco2']);
-    $("textarea[name='acoes_sociais_ambientais-texto3']").text(response['bloco3']);
-    $("textarea[name='acoes_sociais_ambientais-texto4']").text(response['bloco4']);
+    $("textarea[name='acoes_sociais_ambientais-texto1']").val(response['bloco1']);
+    $("textarea[name='acoes_sociais_ambientais-texto2']").val(response['bloco2']);
+    $("textarea[name='acoes_sociais_ambientais-texto3']").val(response['bloco3']);
+    $("textarea[name='acoes_sociais_ambientais-texto4']").val(response['bloco4']);
   });
 }
 
@@ -220,10 +220,10 @@ function getHumanizacao(){
   request.done(function (response){  
     //console.log(response);
 
-    $("textarea[name='humanizacao-texto1']").text(response['bloco1']);
-    $("textarea[name='humanizacao-texto2']").text(response['bloco2']);
-    $("textarea[name='humanizacao-texto3']").text(response['bloco3']);
-    $("textarea[name='humanizacao-texto4']").text(response['bloco4']);
+    $("textarea[name='humanizacao-texto1']").val(response['bloco1']);
+    $("textarea[name='humanizacao-texto2']").val(response['bloco2']);
+    $("textarea[name='humanizacao-texto3']").val(response['bloco3']);
+    $("textarea[name='humanizacao-texto4']").val(response['bloco4']);
   });
 }
 

@@ -1,7 +1,8 @@
 <?php
 require __DIR__ . '/../_app/Config.inc.php';
 scl_admin_require();
-$callback = filter_input(INPUT_GET, 'CKEditorFuncNum', FILTER_VALIDATE_INT) ?: 0;
+$picker = (string) ($_GET['picker'] ?? '');
+if (!preg_match('/^[a-zA-Z0-9-]{1,80}$/D', $picker)) $picker = '';
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $upload = new Upload('arquivos');
@@ -32,8 +33,8 @@ function media_escape($text) { return htmlspecialchars((string) $text, ENT_QUOTE
 <?php endforeach ?></ul><script>
 document.addEventListener('click', function (event) {
   var button = event.target.closest('[data-url]');
-  if (!button || !window.opener || window.opener.location.origin !== location.origin || !window.opener.CKEDITOR) return;
-  window.opener.CKEDITOR.tools.callFunction(<?= (int) $callback ?>, button.dataset.url);
+  if (!button || !window.opener || window.opener.location.origin !== location.origin) return;
+  window.opener.postMessage({type:'scl-media',id:<?= json_encode($picker) ?>,url:button.dataset.url},location.origin);
   window.close();
 });
 </script></body></html>

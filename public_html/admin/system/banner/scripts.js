@@ -4,7 +4,7 @@
 //OnLoad
 $(function () {
       
-  $('.selectSite').select2();
+  $('.selectSite').sclSelect();
           
   //Delega event ao select para quando for excluir itemss
   $('.selectSite').on("select2:unselect", function(e){
@@ -17,7 +17,7 @@ $(function () {
     });
             
     //json to array
-    var obj = $.parseJSON(args);
+    var obj = JSON.parse(args);
             
     if ($('#modo').text() != 'crear'){
       //Delete do banco de dados
@@ -36,10 +36,7 @@ $(function () {
     break;
   }
 
-  $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-    checkboxClass: 'icheckbox_minimal-blue',
-    radioClass: 'iradio_minimal-blue'
-  });
+  $('input[type="checkbox"].minimal, input[type="radio"].minimal').addClass('form-check-input');
 
 });
     
@@ -65,7 +62,7 @@ function getListBanner(){
       
       console.log(resultado);
 
-      var myarray = $.parseJSON(resultado);
+      var myarray = JSON.parse(resultado);
 
       for (i=0; i <= myarray.length - 1; i++) {
 
@@ -115,7 +112,7 @@ function CreateBanner() {
       if (!isNaN(dataresult)){
 
         mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-          '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+          '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
           'Banner incluido com sucesso'+
           '</div>';
 
@@ -127,7 +124,7 @@ function CreateBanner() {
 
       }else{
         mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-          '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+          '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
           'Não foi possível adionar o Banner! detalhes:'+ dataresult +  
           '</div>';
       }
@@ -152,7 +149,7 @@ function CreateBanner() {
         if (resultado == 'ok'){
 
           mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-            '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+            '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
             'Banner excluido com sucesso'+
             '</div>';
 
@@ -161,7 +158,7 @@ function CreateBanner() {
         }else{
           
           mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-            '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+            '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
             'Não foi possível excluir o banner, detalhes do error: ' + resultado +
             '</div>';
         }
@@ -184,7 +181,7 @@ function CreateBanner() {
 
         console.log(resultado);
                
-        var myarray = $.parseJSON(resultado);
+        var myarray = JSON.parse(resultado);
 
         $('input[name="id_banner"]').val(myarray[0]['id_banner']);
         $('input[name="titulo"]').val(myarray[0]['titulo']);
@@ -198,10 +195,7 @@ function CreateBanner() {
           
         myarray[0]['status'] == '1' ? $('#status').attr('checked', true) : $('#status').attr('checked', false);
 
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-          checkboxClass: 'icheckbox_minimal-blue',
-          radioClass: 'iradio_minimal-blue'
-        });
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').addClass('form-check-input');
 
       }
 
@@ -227,7 +221,7 @@ function CreateBanner() {
         if (!isNaN(dataresult)){
 
           mensagem = '<div class=\"alert alert-success alert-dismissible\">'+
-            '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+            '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
             'Banner atualizado com sucesso'+
             '</div>';
                        
@@ -236,7 +230,7 @@ function CreateBanner() {
         }else{
           
           mensagem = '<div class=\"alert alert-warning alert-dismissible\">'+
-            '<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
+            '<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>'+
             'Não foi possível atualizar o banner! detalhes:'+ dataresult +  
             '</div>';
 
@@ -254,7 +248,6 @@ function CreateBanner() {
 </script>
 
 <!-- DataTables -->
-<script src='../resources/plugins/datatables/jquery.dataTables.min.js'></script>
-<script src='../resources/plugins/datatables/dataTables.bootstrap.min.js'></script>
+
+
 <!-- Select2 -->
-<script src='../resources/plugins/select2/select2.full.min.js'></script>

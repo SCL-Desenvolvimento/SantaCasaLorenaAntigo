@@ -1,7 +1,5 @@
 <?php
-require_once __DIR__.'/../_app/vendor/phpmailer/src/Exception.php';
-require_once __DIR__.'/../_app/vendor/phpmailer/src/PHPMailer.php';
-require_once __DIR__.'/../_app/vendor/phpmailer/src/SMTP.php';
+require_once __DIR__.'/../_app/vendor/autoload.php';
 function scl_community_mailer() {
     $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
     if (getenv('SCL_SMTP_HOST')) {

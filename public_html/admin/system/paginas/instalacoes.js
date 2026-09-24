@@ -20,12 +20,12 @@ function editeUnidadeInternacao(unidade_internacao){
 
   //console.log(convenio);
 
-  $("#edite-unidade_internacao").modal("show");
+  $("#edite-unidade_internacao").sclModal("show");
   $("#edite-unidade_internacao").find(".modal-body");
 
   $('#edite-unidade_internacao input[name="id"]').val(unidade_internacao['id_unidade_internacao']);
   $('#edite-unidade_internacao input[name="titulo"]').val(unidade_internacao['titulo']);
-  $('#edite-unidade_internacao textarea[name="descricao"]').text(unidade_internacao['descricao']);
+  $('#edite-unidade_internacao textarea[name="descricao"]').val(unidade_internacao['descricao']);
   $('#edite-unidade_internacao').find(".msg").html("");
 
   getImagesUnidadeInternacao(unidade_internacao['id_unidade_internacao']);
@@ -52,7 +52,7 @@ function editeProntoAtendimento(pronto_atendimento){
 
   //console.log(convenio);
 
-  $("#edite-pronto_atendimento").modal("show");
+  $("#edite-pronto_atendimento").sclModal("show");
   $("#edite-pronto_atendimento").find(".modal-body");
 
   $('#edite-pronto_atendimento input[name="id"]').val(pronto_atendimento['id_pronto_atendimento']);
@@ -81,7 +81,7 @@ function get_hotelaria(hotelaria){
 function editeHotelaria(hotelaria){
 
   //console.log(convenio);
-  $("#edite-hotelaria").modal("show");
+  $("#edite-hotelaria").sclModal("show");
   $("#edite-hotelaria").find(".modal-body");
 
   $('#edite-hotelaria input[name="id"]').val(hotelaria['id_hotelaria']);
@@ -110,7 +110,7 @@ function get_clinica_emilia(clinica_emilia){
 function editeClinicaEmilia(clinica_emilia){
 
   //console.log(convenio);
-  $("#edite-clinica_emilia").modal("show");
+  $("#edite-clinica_emilia").sclModal("show");
   $("#edite-clinica_emilia").find(".modal-body");
 
   $('#edite-clinica_emilia input[name="id"]').val(clinica_emilia['id_clinica_emilia']);
@@ -139,7 +139,7 @@ function get_centro_diagnostico_por_imagem(centro_diagnostico_por_imagem){
 function editeCentroDiagnosticoImagem(centro_diagnostico_por_imagem){
 
   //console.log(convenio);
-  $("#edite-centro_diagnostico_por_imagem").modal("show");
+  $("#edite-centro_diagnostico_por_imagem").sclModal("show");
   $("#edite-centro_diagnostico_por_imagem").find(".modal-body");
 
   $('#edite-centro_diagnostico_por_imagem input[name="id"]').val(centro_diagnostico_por_imagem['id_centro_diagnostico_por_imagem']);
@@ -149,7 +149,7 @@ function editeCentroDiagnosticoImagem(centro_diagnostico_por_imagem){
 }
 
 function getlistas(){
-  $('.modal-form').modal('hide');
+  $('.modal-form').sclModal('hide');
   getLista("unidade_internacao", 1, get_unidade_internacao);
   getLista("pronto_atendimento", 1, get_pronto_atendimento);
   getLista("hotelaria", 1, get_hotelaria);
@@ -202,7 +202,7 @@ function makeFileListUnidadeInternacao(input, acao) {
       
       if(response != ""){
 
-        var image = $.parseJSON(response);
+        var image = JSON.parse(response);
 
         $("#unidade_internacao-imagens").append(`<div class='form-group col-md-6 unidade_internacao-imagem'>
           <center><img src='../${image['img']}' class='img-responsive'></center>
@@ -250,9 +250,9 @@ function getUnidadeInternacaoTextos(){
   var request = $.ajax({ url: 'webservices/paginas/instalacoes/servico.php', type: 'POST', dataType:'json', data: {acao:"getUnidadeInternacaoTextos"}});
   request.done(function (response){  
 
-    $("textarea[name='unidade_internacao-texto1']").text(response['bloco1']);
-    $("textarea[name='unidade_internacao-texto2']").text(response['bloco2']);
-    $("textarea[name='unidade_internacao-texto3']").text(response['bloco3']);
+    $("textarea[name='unidade_internacao-texto1']").val(response['bloco1']);
+    $("textarea[name='unidade_internacao-texto2']").val(response['bloco2']);
+    $("textarea[name='unidade_internacao-texto3']").val(response['bloco3']);
   });
 }
 
@@ -261,16 +261,16 @@ function getProntoAtendimentoTextos(){
   var request = $.ajax({ url: 'webservices/paginas/instalacoes/servico.php', type: 'POST', dataType:'json', data: {acao:"getProntoAtendimentoTextos"}});
   request.done(function (response){  
 
-    $("textarea[name='pronto_atendimento-texto1']").text(response['bloco1']);
-    $("textarea[name='pronto_atendimento-texto2']").text(response['bloco2']);
-    $("textarea[name='pronto_atendimento-texto3']").text(response['bloco3']);
-    $("textarea[name='pronto_atendimento-texto4']").text(response['bloco4']);
+    $("textarea[name='pronto_atendimento-texto1']").val(response['bloco1']);
+    $("textarea[name='pronto_atendimento-texto2']").val(response['bloco2']);
+    $("textarea[name='pronto_atendimento-texto3']").val(response['bloco3']);
+    $("textarea[name='pronto_atendimento-texto4']").val(response['bloco4']);
 
-    $("textarea[name='pronto_atendimento-emergencia']").text(response['emergencia']);
-    $("textarea[name='pronto_atendimento-urgencia']").text(response['urgencia']);
-    $("textarea[name='pronto_atendimento-urgencia_relativa']").text(response['urgencia_relativa']);
+    $("textarea[name='pronto_atendimento-emergencia']").val(response['emergencia']);
+    $("textarea[name='pronto_atendimento-urgencia']").val(response['urgencia']);
+    $("textarea[name='pronto_atendimento-urgencia_relativa']").val(response['urgencia_relativa']);
 
-    $("textarea[name='pronto_atendimento-texto5']").text(response['bloco5']);
+    $("textarea[name='pronto_atendimento-texto5']").val(response['bloco5']);
   });
 }
 
@@ -279,8 +279,8 @@ function getHotelariaTextos(){
   var request = $.ajax({ url: 'webservices/paginas/instalacoes/servico.php', type: 'POST', dataType:'json', data: {acao:"getHotelariaTextos"}});
   request.done(function (response){  
 
-    $("textarea[name='hotelaria-texto1']").text(response['bloco1']);
-    $("textarea[name='hotelaria-texto2']").text(response['bloco2']);
+    $("textarea[name='hotelaria-texto1']").val(response['bloco1']);
+    $("textarea[name='hotelaria-texto2']").val(response['bloco2']);
   });
 }
 
@@ -289,8 +289,8 @@ function getClinicaEmiliaTextos(){
   var request = $.ajax({ url: 'webservices/paginas/instalacoes/servico.php', type: 'POST', dataType:'json', data: {acao:"getClinicaEmiliaTextos"}});
   request.done(function (response){  
 
-    $("textarea[name='clinica_emilia-texto1']").text(response['bloco1']);
-    $("textarea[name='clinica_emilia-texto2']").text(response['bloco2']);
+    $("textarea[name='clinica_emilia-texto1']").val(response['bloco1']);
+    $("textarea[name='clinica_emilia-texto2']").val(response['bloco2']);
   });
 }
 
@@ -299,8 +299,8 @@ function getCentroDiagnosticoImagem(){
   var request = $.ajax({ url: 'webservices/paginas/instalacoes/servico.php', type: 'POST', dataType:'json', data: {acao:"getCentroDiagnosticoImagem"}});
   request.done(function (response){  
 
-    $("textarea[name='centro_diagnostico_por_imagem-texto1']").text(response['bloco1']);
-    $("textarea[name='centro_diagnostico_por_imagem-texto2']").text(response['bloco2']);
+    $("textarea[name='centro_diagnostico_por_imagem-texto1']").val(response['bloco1']);
+    $("textarea[name='centro_diagnostico_por_imagem-texto2']").val(response['bloco2']);
   });
 }
 

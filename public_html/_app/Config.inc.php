@@ -1,9 +1,11 @@
 <?php
+require_once dirname(__DIR__) . '/includes/environment.php';
+scl_load_environment(dirname(__DIR__, 2) . '/scl-config.php');
 require_once dirname(__DIR__) . '/includes/security.php';
 scl_security_boot();
 ob_start();
 define('DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
-// Secrets are supplied by the server environment, never by a published file.
+// Secrets come from server variables or the optional file outside public_html.
 define('HOME', rtrim(getenv('SCL_HOME') ?: '/', '/') . '/');
 define('ROOT', rtrim(parse_url(HOME, PHP_URL_PATH) ?: '/', '/') . '/');
 define('HOST', getenv('SCL_DB_HOST') ?: '');

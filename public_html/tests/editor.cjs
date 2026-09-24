@@ -1,0 +1,25 @@
+// Exercise the adapter's asynchronous lifecycle without modifying browser/user data.
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const original='<p class="legacy">Texto <strong>preservado</strong></p><div class="ck-galleria"><input type="hidden" value="7"></div>';
+const field={value:original,style:{}};
+let config,content='',removed=false,fail;
+const handlers={};
+const editor={getContent:()=>content,setContent:v=>{content=v;},remove:()=>{removed=true;},on:(events,handler)=>events.split(' ').forEach(name=>handlers[name]=handler),ui:{registry:{addButton(){}}}};
+const context={window:{addEventListener(){}},document:{getElementById:()=>field,addEventListener(){}},tinymce:{init:options=>{config=options;options.setup(editor);return {catch:fn=>{fail=fn;}};}},Map,URL,crypto:{},location:{}};
+vm.runInNewContext(fs.readFileSync(require('path').join(__dirname,'../resources/js/admin-editor.js'),'utf8'),context);
+const adapter=context.window.SCLEditor;
+const instance=adapter.replace('description');
+handlers.init();
+assert.equal(content,original);
+content='<p>Normalized but untouched</p>';
+assert.equal(instance.getData(),original,'Do not normalize untouched saved HTML');
+instance.setData('<p>Updated via controller</p>');
+assert.equal(content,'<p>Updated via controller</p>');
+content='<p>Edited in editor</p>';handlers.input();
+assert.equal(instance.getData(),content);assert.equal(field.value,content);
+assert.equal(adapter.replace('description'),instance,'Do not duplicate an editor');
+instance.destroy();assert(removed);assert(!adapter.instances.description);
+removed=false;const pending=adapter.replace('description');pending.destroy();handlers.init();assert(removed,'Remove an editor destroyed while initialization was pending');
+const fallback=adapter.replace('description');fail();field.value='<p>Plain-text fallback</p>';assert.equal(fallback.getData(),field.value);
+assert.equal(config.language,'pt-BR');assert(config.extended_valid_elements.includes('input[value|type|class]'));
+console.log('OK: 12 editor lifecycle and content preservation checks.');

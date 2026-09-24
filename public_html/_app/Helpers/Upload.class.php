@@ -42,7 +42,7 @@ class Upload {
                 imagealphablending($target, false); imagesavealpha($target, true);
                 imagecopyresampled($target, $source, 0, 0, 0, 0, $w, $h, $size[0], $size[1]);
                 $ok = $mime === 'image/png' ? imagepng($target, $destination, 8) : imagejpeg($target, $destination, 90);
-                imagedestroy($source); imagedestroy($target);
+                unset($source, $target);
             } else $ok = move_uploaded_file($tmp, $destination);
             if (!$ok) throw new RuntimeException('Não foi possível salvar o arquivo.');
             chmod($destination, 0640);
