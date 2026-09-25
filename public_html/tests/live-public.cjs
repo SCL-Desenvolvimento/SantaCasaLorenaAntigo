@@ -1,0 +1,9 @@
+const assert=require('assert/strict');
+const base=process.argv[2]||'http://127.0.0.1:8000';
+const routes=['/','/institucional/sobre-a-santa-casa','/institucional/humanizacao','/institucional/acoes-sociais-ambientais','/institucional/programa-nacional-seguranca','/institucional/portal-transparencia','/instalacoes/pronto-atendimento','/instalacoes/hotelaria','/instalacoes/clinica-emilia','/instalacoes/centro-diagnostico-por-imagem','/instalacoes/unidades-de-internacao','/instalacoes/particular_convenio','/servicos/convenios','/servicos/especialidades','/servicos/capacidade-instalacao-producao','/servicos/manual-do-paciente-e-visitantes','/noticias','/fale-conosco','/doacoes'];
+(async()=>{let checks=0;const assets=new Set(),broken=[];for(const route of routes){const r=await fetch(base+route);const h=await r.text();assert.equal(r.status,200,route);const headings=[...h.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)];assert.equal(headings.length,1,route);if(route!=='/')assert(!headings[0][1].includes('É o que nos move'),route+' renders homepage');checks++;
+ for(const match of h.matchAll(/(?:src|href)=["']([^"']+)["']/g)){const url=new URL(match[1].replaceAll('&amp;','&'),base+route);if(url.origin===base&&/\.(?:png|jpe?g|svg|webp|css|js)(?:\?|$)/i.test(url.href))assets.add(url.href);}
+ if(route==='/noticias'){const article=[...h.matchAll(/href=["']([^"']*\/noticias\/[^"']+)["']/g)].find(m=>!m[1].includes('/categoria/'));if(article){const ar=await fetch(new URL(article[1],base));assert.equal(ar.status,200,'article');assert((await ar.text()).includes('<h1'));checks++;}}
+}
+for(const url of assets){const r=await fetch(url,{method:'HEAD'});if(!r.ok)broken.push(new URL(url).pathname);}
+console.log(JSON.stringify({pages:checks,assets:assets.size,missing:broken},null,2));if(broken.length)process.exitCode=1;})().catch(e=>{console.error(e);process.exitCode=1;});

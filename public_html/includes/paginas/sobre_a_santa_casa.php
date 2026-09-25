@@ -22,7 +22,7 @@ $hasProviders = $providers || !empty($about['provedor']);
 <section class="site-container section-space"><h2>Conheça a Santa Casa</h2><p class="about-empty">As informações institucionais serão disponibilizadas nesta página. Para saber mais, <a href="<?= scl_url('fale-conosco') ?>">fale com a nossa equipe</a>.</p></section>
 <?php endif; ?>
 <?php if ($hasHistory): ?>
-<section id="historia" class="site-container about-history" aria-labelledby="history-title"><div class="about-history-heading"><span class="eyebrow">NOSSA HISTÓRIA</span><h2 id="history-title"><?= !empty($about['bloco1']) ? scl_escape(strip_tags($about['bloco1'])) : 'Sobre a Santa Casa' ?></h2></div><div class="about-story-columns"><?php foreach (array('bloco2','bloco3') as $block): if (!empty($about[$block])): ?><div class="about-prose"><?= scl_about_content($about[$block]) ?></div><?php endif; endforeach; ?></div></section>
+<section id="historia" class="site-container about-history" aria-labelledby="history-title"><div class="about-history-heading"><span class="eyebrow">NOSSA HISTÓRIA</span><h2 id="history-title"><?= scl_cms_heading($about['bloco1'] ?? '', 'Sobre a Santa Casa') ?></h2><?= scl_cms_introduction($about['bloco1'] ?? '') ?></div><div class="about-story-columns"><?php foreach (array('bloco2','bloco3') as $block): if (!empty($about[$block])): ?><div class="about-prose"><?= scl_about_content($about[$block]) ?></div><?php endif; endforeach; ?></div></section>
 <?php endif; ?>
 <?php if ($hasGallery): ?>
 <section id="memoria" class="about-memory" aria-labelledby="memory-title"><div class="site-container about-memory-grid <?= !$photos ? 'without-gallery' : '' ?>">

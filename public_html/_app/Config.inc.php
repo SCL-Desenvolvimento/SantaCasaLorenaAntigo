@@ -19,7 +19,8 @@ $secret = getenv('SCL_RECAPTCHA_SECRET') ?: '';
 define('PA', $_SERVER['REQUEST_URI'] ?? '/');
 define('QUERY_STRING', $_SERVER['QUERY_STRING'] ?? '');
 parse_str(QUERY_STRING, $routeParameters);
-define('REDIRECT_URL', $routeParameters['url'] ?? $routeParameters['qs'] ?? '');
+require_once dirname(__DIR__) . '/includes/request_route.php';
+define('REDIRECT_URL', scl_request_route($_SERVER, $routeParameters, ROOT));
 date_default_timezone_set('America/Sao_Paulo');
 spl_autoload_register(function ($class) {
     if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/D', $class)) return;

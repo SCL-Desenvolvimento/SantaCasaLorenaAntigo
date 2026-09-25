@@ -28,3 +28,15 @@ function scl_about_content($value) {
     $html = $body ? $render($body) : '';
     return preg_match('~<(?:p|ul|ol|blockquote)\b~i', $html) ? $html : nl2br($html);
 }
+
+/** Older CMS blocks may contain paragraphs instead of short section headings. */
+function scl_cms_heading_text($value): string {
+    return trim(preg_replace('/\s+/u',' ',html_entity_decode(strip_tags((string)$value),ENT_QUOTES|ENT_HTML5,'UTF-8')) ?? '');
+}
+function scl_cms_heading($value, string $fallback): string {
+    $text=scl_cms_heading_text($value);
+    return scl_escape($text!==''&&mb_strlen($text)<=160?$text:$fallback);
+}
+function scl_cms_introduction($value): string {
+    return mb_strlen(scl_cms_heading_text($value))>160?'<div class="about-prose cms-introduction">'.scl_about_content($value).'</div>':'';
+}

@@ -2,7 +2,7 @@
 const fs = require('fs'), path = require('path');
 const root = path.resolve(__dirname, '..');
 const destination = process.argv[2] && path.resolve(process.argv[2]);
-const roots = ['.htaccess','index.php','favicon.ico','touch-icon-ipad-retina.png','touch-icon-ipad.png','touch-icon-iphone-retina.png','touch-icon-iphone.png','_app','admin','includes','resources','arquivos'];
+const roots = ['.user.ini','.htaccess','index.php','favicon.ico','touch-icon-ipad-retina.png','touch-icon-ipad.png','touch-icon-iphone-retina.png','touch-icon-iphone.png','_app','admin','includes','resources','arquivos'];
 function allowed(relative) {
   const p=relative.replace(/\\/g,'/');
   return !/(^|\/)(\.git|\.env(?:\..*)?|error_log|Thumbs\.db|desktop\.ini)(\/|$)/i.test(p)

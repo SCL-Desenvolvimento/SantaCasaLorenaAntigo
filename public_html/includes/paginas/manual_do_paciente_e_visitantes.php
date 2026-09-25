@@ -7,7 +7,7 @@ $downloadQuery=new Read();$downloadQuery->fullRead('SELECT * FROM '.PREFIX.'down
 <div class="facility-page">
 <nav class="about-section-nav site-container" aria-label="Nesta página"><span>Nesta página</span><a href="#manual-orientacoes">Orientações</a><?php if($downloads): ?><a href="#manual-downloads">Documentos</a><?php endif; ?><a href="<?= scl_url('fale-conosco') ?>">Fale conosco</a></nav>
 <section id="manual-orientacoes" class="site-container service-section" aria-labelledby="manual-title" data-service-directory>
-<div class="section-heading"><div><span class="eyebrow">PACIENTES E VISITANTES</span><h2 id="manual-title"><?= !empty($manualContent['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n",$manualContent['bloco1']))) : 'Orientações para sua visita.' ?></h2><p>Selecione um assunto para ler as orientações disponibilizadas pela Santa Casa.</p></div></div>
+<div class="section-heading"><div><span class="eyebrow">PACIENTES E VISITANTES</span><h2 id="manual-title"><?= scl_cms_heading($manualContent['bloco1'] ?? '', 'Orientações para sua visita.') ?></h2><?= scl_cms_introduction($manualContent['bloco1'] ?? '') ?><p>Selecione um assunto para ler as orientações disponibilizadas pela Santa Casa.</p></div></div>
 <?php if($topics): ?>
 <?php $searchId='manual-search';$searchLabel='Buscar nas orientações';require __DIR__.'/../service_search.php'; ?>
 <div class="service-topic-tools" data-service-expand-tools hidden><button type="button" data-service-expand>Expandir assuntos</button><button type="button" data-service-collapse>Recolher assuntos</button></div>

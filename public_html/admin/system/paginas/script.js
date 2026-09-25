@@ -183,7 +183,7 @@ function createConteudo(dominio){
       setTimeout(function(){
 
         $(`#form-create-${dominio}`).find(".msg").html(`${dominio} cadastrado com sucesso`);
-        setTimeout(getlistas(), 3000);
+        getlistas();
       }, 1000);
     }else{
 

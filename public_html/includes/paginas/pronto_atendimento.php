@@ -28,7 +28,7 @@ $classifications = array(
     <a href="#pa-contato">Informações e contato</a>
 </nav>
 <section id="pa-atendimento" class="site-container care-intro" aria-labelledby="care-title">
-    <div class="care-heading"><span class="care-symbol" aria-hidden="true"><?= scl_icon('cross') ?></span><div><span class="eyebrow">PRONTO ATENDIMENTO SUS</span><h2 id="care-title"><?= !empty($care['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $care['bloco1']))) : 'Conheça o atendimento' ?></h2></div></div>
+    <div class="care-heading"><span class="care-symbol" aria-hidden="true"><?= scl_icon('cross') ?></span><div><span class="eyebrow">PRONTO ATENDIMENTO SUS</span><h2 id="care-title"><?= scl_cms_heading($care['bloco1'] ?? '', 'Conheça o atendimento') ?></h2><?= scl_cms_introduction($care['bloco1'] ?? '') ?></div></div>
     <?php if (!empty($care['bloco2'])): ?><div class="about-prose care-copy"><?= scl_about_content($care['bloco2']) ?></div><?php endif; ?>
     <?php if (!empty($care['bloco3'])): ?><div class="care-highlight about-prose"><?= scl_about_content($care['bloco3']) ?></div><?php endif; ?>
     <?php if (!$hasIntro): ?><p class="about-empty">As informações sobre o pronto atendimento serão disponibilizadas nesta página. Para saber mais, <a href="<?= scl_url('fale-conosco') ?>">fale com a nossa equipe</a>.</p><?php endif; ?>

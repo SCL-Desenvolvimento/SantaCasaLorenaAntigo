@@ -29,7 +29,7 @@ $hasEvolution = !empty($humanization['bloco4']);
     <div class="humanization-intro-heading">
         <span class="humanization-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span>
         <div><span class="eyebrow">NOSSO CUIDADO</span>
-            <h2 id="humanization-title"><?= !empty($humanization['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $humanization['bloco1']))) : 'Humanização na Santa Casa' ?></h2>
+            <h2 id="humanization-title"><?= scl_cms_heading($humanization['bloco1'] ?? '', 'Humanização na Santa Casa') ?></h2><?= scl_cms_introduction($humanization['bloco1'] ?? '') ?>
         </div>
     </div>
     <div class="about-story-columns">

@@ -3,7 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "vendor": "node scripts/vendor-assets.cjs"
+    "vendor": "node scripts/vendor-assets.cjs",
+    "serve": "php -d upload_max_filesize=10M -d post_max_size=64M -d max_file_uploads=40 -d memory_limit=256M -S 127.0.0.1:8000 -t . router.php"
   },
   "dependencies": {
     "bootstrap": "5.3.8",

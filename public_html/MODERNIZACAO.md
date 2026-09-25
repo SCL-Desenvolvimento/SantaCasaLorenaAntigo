@@ -1,3 +1,7 @@
+## Verificação com banco local — 25/09/2026
+
+Navegação, compatibilidade do esquema MySQL, gravação administrativa e apresentação dos conteúdos reais corrigidas. Migrações aplicadas **somente ao banco local**, com backup. Veja [validação e pendências de configuração](deploy/LOCAL-VALIDATION.md). O envio real por CAPTCHA/SMTP ainda depende das configurações ausentes.
+
 # Atualização — painel administrativo (24/09/2026)
 
 A etapa 4 foi aplicada ao código: acesso e navegação responsivos, página inicial com indicadores, formulários de usuários/banners/notícias, galerias com uploads/legendas/ordenação, edição unificada das páginas e central de atendimento com cinco relatórios CSV. As correções incluem carregamento e sincronização do editor, seleção inicial de abas, prévias e validação dos formulários.

@@ -20,7 +20,7 @@ $hasContent = !empty($hospitality['bloco1']) || !empty($hospitality['bloco2']);
     <a href="#hotelaria-orientacoes">Informações e contato</a>
 </nav>
 <section id="hotelaria-apresentacao" class="site-container hospitality-intro" aria-labelledby="hospitality-title">
-    <div class="hospitality-heading"><span class="hospitality-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">HOTELARIA HOSPITALAR</span><h2 id="hospitality-title"><?= !empty($hospitality['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $hospitality['bloco1']))) : 'Hotelaria na Santa Casa' ?></h2></div>
+    <div class="hospitality-heading"><span class="hospitality-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">HOTELARIA HOSPITALAR</span><h2 id="hospitality-title"><?= scl_cms_heading($hospitality['bloco1'] ?? '', 'Hotelaria na Santa Casa') ?></h2><?= scl_cms_introduction($hospitality['bloco1'] ?? '') ?></div>
     <div class="hospitality-copy">
         <?php if (!empty($hospitality['bloco2'])): ?><div class="about-prose"><?= scl_about_content($hospitality['bloco2']) ?></div><?php endif; ?>
         <?php if (!$hasContent): ?><p class="about-empty">As informações sobre a hotelaria serão disponibilizadas nesta página. Para saber mais, <a href="<?= scl_url('fale-conosco') ?>">fale com a nossa equipe</a>.</p><?php endif; ?>

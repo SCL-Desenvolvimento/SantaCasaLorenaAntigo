@@ -20,7 +20,7 @@ $hasContent = !empty($facility['bloco1']) || !empty($facility['bloco2']);
     <a href="#diagnostico-orientacoes">Informações e contato</a>
 </nav>
 <section id="diagnostico-apresentacao" class="site-container facility-intro" aria-labelledby="facility-title">
-    <div class="facility-heading"><span class="facility-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">DIAGNÓSTICO POR IMAGEM</span><h2 id="facility-title"><?= !empty($facility['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $facility['bloco1']))) : 'Conheça o Diagnóstico por imagem' ?></h2></div>
+    <div class="facility-heading"><span class="facility-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">DIAGNÓSTICO POR IMAGEM</span><h2 id="facility-title"><?= scl_cms_heading($facility['bloco1'] ?? '', 'Conheça o Diagnóstico por imagem') ?></h2><?= scl_cms_introduction($facility['bloco1'] ?? '') ?></div>
     <div class="facility-copy">
         <?php if (!empty($facility['bloco2'])): ?><div class="about-prose"><?= scl_about_content($facility['bloco2']) ?></div><?php endif; ?>
         <?php if (!$hasContent): ?><p class="about-empty">As informações sobre o Diagnóstico por imagem serão disponibilizadas nesta página. Para saber mais, <a href="<?= scl_url('fale-conosco') ?>">fale com a nossa equipe</a>.</p><?php endif; ?>

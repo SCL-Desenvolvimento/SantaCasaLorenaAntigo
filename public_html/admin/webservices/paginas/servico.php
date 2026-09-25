@@ -65,7 +65,7 @@ scl_admin_require();
 
 							$Paginas["url_amigavel"] = $key;
 							$createPagina->ExeCreate(PREFIX."paginas_historico", $Paginas);
-                            if(!$createPagina->getResult())scl_deny(500);
+                            if($createPagina->getResult()===null)scl_deny(500);
 						}else{
 
 							exit;
@@ -309,6 +309,7 @@ scl_admin_require();
 				unset($dados['dominio']);
 				$createConteudo = new Create;
 				$dados['data_criacao'] = date("Y-m-d H:i:s");
+                $dados['id_usuario'] = (int)$_SESSION['UsuarioLogin']['id_usuario'];
 				$createConteudo->ExeCreate(PREFIX."{$dominio}", $dados);
 
 				if($createConteudo->getResult()){
@@ -363,7 +364,7 @@ scl_admin_require();
 				//var_dump($dados);
 				//exit;
 
-				$dados['data_alteracao'] = date("Y-m-d H:i:s");
+				if($dominio!=='balanco')$dados['data_alteracao'] = date("Y-m-d H:i:s");
 				$updateConteudo->ExeUpdate(PREFIX."{$dominio}", $dados, "WHERE id_{$dominio} = :id_{$dominio}", "id_{$dominio}={$id}");
 
 				//var_dump($updateConteudo);

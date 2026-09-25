@@ -9,7 +9,7 @@ $wards = $wardQuery->getResult() ?: array();
 <div class="facility-page">
 <nav class="about-section-nav site-container" aria-label="Nesta página"><span>Nesta página</span><a href="#internacao-apresentacao">Sobre a internação</a><?php if ($wards): ?><a href="#internacao-unidades">Conheça as unidades</a><?php endif; ?><a href="#facility-contato">Informações e contato</a></nav>
 <section id="internacao-apresentacao" class="site-container facility-intro" aria-labelledby="wards-title">
-<div class="facility-heading"><span class="facility-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">UNIDADES DE INTERNAÇÃO</span><h2 id="wards-title"><?= !empty($wardContent['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $wardContent['bloco1']))) : 'Conheça nossas unidades' ?></h2></div>
+<div class="facility-heading"><span class="facility-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">UNIDADES DE INTERNAÇÃO</span><h2 id="wards-title"><?= scl_cms_heading($wardContent['bloco1'] ?? '', 'Conheça nossas unidades') ?></h2><?= scl_cms_introduction($wardContent['bloco1'] ?? '') ?></div>
 <div class="facility-copy">
 <?php foreach (array('bloco2','bloco3') as $field): if (!empty($wardContent[$field])): ?><div class="about-prose"><?= scl_about_content($wardContent[$field]) ?></div><?php endif; endforeach; ?>
 <?php if (!$wardContent): ?><p class="about-empty">As informações sobre as unidades de internação serão disponibilizadas nesta página. <a href="<?= scl_url('fale-conosco') ?>">Fale com a nossa equipe</a> para saber mais.</p><?php endif; ?>

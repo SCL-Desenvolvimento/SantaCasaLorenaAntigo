@@ -1,3 +1,5 @@
+SET @scl_previous_mode = @@SESSION.sql_mode;
+SET SESSION sql_mode = REPLACE(REPLACE(@@SESSION.sql_mode, 'NO_ZERO_DATE', ''), 'NO_ZERO_IN_DATE', '');
 -- Execute once, with a backup, BEFORE publishing this version.
 -- Adjust scl_ if your configured table prefix is different. MySQL/MariaDB, InnoDB.
 ALTER TABLE scl_usuario MODIFY senha VARCHAR(255) NOT NULL;
@@ -14,3 +16,5 @@ CREATE TABLE scl_auth_attempt (
   attempts INT UNSIGNED NOT NULL DEFAULT 0,
   INDEX (window_start)
 ) ENGINE=InnoDB;
+
+SET SESSION sql_mode = @scl_previous_mode;

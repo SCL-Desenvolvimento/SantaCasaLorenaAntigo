@@ -23,9 +23,7 @@ scl_admin_require();
 				$getLocalizacao = new Read;
 				$getLocalizacao->fullRead("SELECT L.* FROM ".PREFIX."pagina_localizacao AS L ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getLocalizacao->getResult()){
-					echo json_encode($getLocalizacao->getResult()[0]);
-				}
+				echo json_encode($getLocalizacao->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'listContatos':
@@ -90,10 +88,7 @@ scl_admin_require();
 				$getDoacaoTextos = new Read;
 				$getDoacaoTextos->fullRead("SELECT DT.* FROM ".PREFIX."pagina_doacao AS DT ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getDoacaoTextos->getResult()){
-
-					echo json_encode($getDoacaoTextos->getResult()[0]);
-				}
+				echo json_encode($getDoacaoTextos->getResult()[0] ?? new stdClass());
 			break;
 
 		endswitch;

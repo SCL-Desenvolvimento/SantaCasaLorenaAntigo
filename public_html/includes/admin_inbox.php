@@ -12,7 +12,7 @@ function scl_inbox_columns(string $channel): array {
 function scl_inbox_query(string $channel,array $filters): array {
  $channels=scl_inbox_channels();if(!isset($channels[$channel]))throw new InvalidArgumentException('Canal inválido.');
  $table=$channels[$channel][1];[$sql,$encoded]=scl_ouvidoria_query($filters);parse_str($encoded,$params);
- $sql=str_replace([PREFIX.'ouvidoria','C.id_ouvidoria'],[PREFIX.$table,'C.id_'.$table],$sql);
+ $sql=str_replace([PREFIX.'ouvidoria','C.id_ouvidoria'],[PREFIX.$table,'C.id_'.($channel==='doacoes'?'doacao':$table)],$sql);
  if(isset($filters['q'])&&!is_string($filters['q']))throw new InvalidArgumentException('Busca inválida.');
  $q=trim((string)($filters['q']??''));if(mb_strlen($q)>150)throw new InvalidArgumentException('A busca deve ter até 150 caracteres.');
  if($q!==''){$fields=$channel==='pesquisa'?['mensagem','experiencia']:($channel==='curriculos'?['nome','email']:['nome','email','mensagem']);$parts=[];foreach($fields as $i=>$field){$parts[]='C.'.$field.' LIKE :search'.$i;$params['search'.$i]='%'.$q.'%';}$sql=str_replace(' ORDER BY',' AND ('.implode(' OR ',$parts).') ORDER BY',$sql);}

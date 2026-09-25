@@ -20,7 +20,7 @@ $hasContent = !empty($emilia['bloco1']) || !empty($emilia['bloco2']);
     <a href="#clinica-emilia-orientacoes">Informações e contato</a>
 </nav>
 <section id="clinica-emilia-apresentacao" class="site-container emilia-intro" aria-labelledby="emilia-title">
-    <div class="emilia-heading"><span class="emilia-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">CLÍNICA EMÍLIA</span><h2 id="emilia-title"><?= !empty($emilia['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $emilia['bloco1']))) : 'Conheça a Clínica Emília' ?></h2></div>
+    <div class="emilia-heading"><span class="emilia-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">CLÍNICA EMÍLIA</span><h2 id="emilia-title"><?= scl_cms_heading($emilia['bloco1'] ?? '', 'Conheça a Clínica Emília') ?></h2><?= scl_cms_introduction($emilia['bloco1'] ?? '') ?></div>
     <div class="emilia-copy">
         <?php if (!empty($emilia['bloco2'])): ?><div class="about-prose"><?= scl_about_content($emilia['bloco2']) ?></div><?php endif; ?>
         <?php if (!$hasContent): ?><p class="about-empty">As informações sobre a Clínica Emília serão disponibilizadas nesta página. Para saber mais, <a href="<?= scl_url('fale-conosco') ?>">fale com a nossa equipe</a>.</p><?php endif; ?>

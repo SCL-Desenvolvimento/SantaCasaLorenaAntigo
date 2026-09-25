@@ -1,3 +1,7 @@
+## Verificação com banco local — 25/09/2026
+
+Navegação, compatibilidade do esquema MySQL, gravação administrativa e apresentação dos conteúdos reais corrigidas. Migrações aplicadas **somente ao banco local**, com backup. Veja [validação e pendências de configuração](LOCAL-VALIDATION.md). O envio real por CAPTCHA/SMTP ainda depende das configurações ausentes.
+
 # Painel administrativo — etapa 4
 
 Atualizado em 24/09/2026. Implementado no projeto; não publicado na K2Host.

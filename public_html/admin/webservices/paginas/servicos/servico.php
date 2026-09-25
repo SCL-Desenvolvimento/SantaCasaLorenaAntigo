@@ -22,9 +22,7 @@ scl_admin_require();
 				$getEspecialidades = new Read;
 				$getEspecialidades->fullRead("SELECT ES.* FROM ".PREFIX."pagina_especialidades AS ES ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getEspecialidades->getResult()){
-					echo json_encode($getEspecialidades->getResult()[0]);
-				}
+				echo json_encode($getEspecialidades->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'getCapacidadeTextos':
@@ -32,9 +30,7 @@ scl_admin_require();
 				$getCapacidade = new Read;
 				$getCapacidade->fullRead("SELECT CIP.* FROM ".PREFIX."pagina_capacidade_instalacao_producao AS CIP ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getCapacidade->getResult()){
-					echo json_encode($getCapacidade->getResult()[0]);
-				}
+				echo json_encode($getCapacidade->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'getManualPacienteTextos':
@@ -42,9 +38,7 @@ scl_admin_require();
 				$getManual = new Read;
 				$getManual->fullRead("SELECT MPV.* FROM ".PREFIX."pagina_manual_paciente_visitante AS MPV ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getManual->getResult()){
-					echo json_encode($getManual->getResult()[0]);
-				}
+				echo json_encode($getManual->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'getImagesCapacidade':
@@ -52,10 +46,7 @@ scl_admin_require();
 				$getImage = new Read;
 				$getImage->fullRead("SELECT I.* FROM ".PREFIX."capacidade_imagem AS I WHERE id_capacidade = {$dados['id_capacidade']}");
 
-				if($getImage->getResult()){
-
-					echo json_encode($getImage->getResult());
-				}
+				echo json_encode($getImage->getResult() ?: []);
 			break;
 
 			case 'excluiImagemCapacidade':

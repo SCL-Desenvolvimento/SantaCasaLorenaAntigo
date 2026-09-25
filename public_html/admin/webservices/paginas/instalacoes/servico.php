@@ -22,9 +22,7 @@ scl_admin_require();
 				$getUnidadeInternacaoTextos = new Read;
 				$getUnidadeInternacaoTextos->fullRead("SELECT UT.* FROM ".PREFIX."pagina_unidade_internacao AS UT ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getUnidadeInternacaoTextos->getResult()){
-					echo json_encode($getUnidadeInternacaoTextos->getResult()[0]);
-				}
+				echo json_encode($getUnidadeInternacaoTextos->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'getImagesUnidadeInternacao':
@@ -32,10 +30,7 @@ scl_admin_require();
 				$getImage = new Read;
 				$getImage->fullRead("SELECT I.* FROM ".PREFIX."unidade_internacao_imagem AS I WHERE id_unidade_internacao = {$dados['id_unidade_internacao']}");
 
-				if($getImage->getResult()){
-
-					echo json_encode($getImage->getResult());
-				}
+				echo json_encode($getImage->getResult() ?: []);
 			break;
 
 			case 'excluiImagemUnidadeInternacao':
@@ -86,9 +81,7 @@ scl_admin_require();
 				$getProntoAtendimentoTextos = new Read;
 				$getProntoAtendimentoTextos->fullRead("SELECT PA.* FROM ".PREFIX."pagina_pronto_atendimento AS PA ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getProntoAtendimentoTextos->getResult()){
-					echo json_encode($getProntoAtendimentoTextos->getResult()[0]);
-				}
+				echo json_encode($getProntoAtendimentoTextos->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'getHotelariaTextos':
@@ -96,9 +89,7 @@ scl_admin_require();
 				$getHotelariaTextos = new Read;
 				$getHotelariaTextos->fullRead("SELECT H.* FROM ".PREFIX."pagina_hotelaria AS H ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getHotelariaTextos->getResult()){
-					echo json_encode($getHotelariaTextos->getResult()[0]);
-				}
+				echo json_encode($getHotelariaTextos->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'getClinicaEmiliaTextos':
@@ -106,9 +97,7 @@ scl_admin_require();
 				$getClinicaEmiliaTextos = new Read;
 				$getClinicaEmiliaTextos->fullRead("SELECT CE.* FROM ".PREFIX."pagina_clinica_emilia AS CE ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getClinicaEmiliaTextos->getResult()){
-					echo json_encode($getClinicaEmiliaTextos->getResult()[0]);
-				}
+				echo json_encode($getClinicaEmiliaTextos->getResult()[0] ?? new stdClass());
 			break;
 
 			case 'getCentroDiagnosticoImagem':
@@ -116,9 +105,7 @@ scl_admin_require();
 				$getCentroDiagnosticoImagem = new Read;
 				$getCentroDiagnosticoImagem->fullRead("SELECT CDI.* FROM ".PREFIX."pagina_centro_diagnostico_por_imagem AS CDI ORDER BY id_pagina DESC LIMIT 1");
 
-				if($getCentroDiagnosticoImagem->getResult()){
-					echo json_encode($getCentroDiagnosticoImagem->getResult()[0]);
-				}
+				echo json_encode($getCentroDiagnosticoImagem->getResult()[0] ?? new stdClass());
 			break;
 
 		endswitch;

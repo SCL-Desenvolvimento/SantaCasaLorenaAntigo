@@ -41,7 +41,7 @@ if (in_array($action, ['excluiUser', 'alteraStatus'], true)) {
 }
 if (!in_array($action, ['createUser', 'updateUser'], true)) scl_deny(400);
 $fields = ['nome' => trim((string) ($data['nome'] ?? '')), 'email' => trim((string) ($data['email'] ?? '')), 'usuario' => trim((string) ($data['usuario'] ?? ''))];
-if (!$fields['nome'] || strlen($fields['nome']) > 150 || !filter_var($fields['email'], FILTER_VALIDATE_EMAIL) || !preg_match('/^[a-zA-Z0-9_.@-]{3,100}$/D', $fields['usuario'])) scl_deny(422);
+if (!$fields['nome'] || mb_strlen($fields['nome']) > 150 || strlen($fields['email'])>254 || !filter_var($fields['email'], FILTER_VALIDATE_EMAIL) || !preg_match('/^[a-zA-Z0-9_.@-]{3,100}$/D', $fields['usuario'])) scl_deny(422);
 if ($action === 'updateUser') {
     $q = $db->prepare("SELECT id_usuario FROM $table WHERE id_usuario = ? AND nivel = 3"); $q->execute([$id]);
     if (!$q->fetch()) scl_deny(404);
@@ -59,7 +59,7 @@ if (!empty($_FILES['img']['name'])) {
     if (!$upload->getResult()) scl_deny(422);
     $fields['img'] = $upload->getResult();
 }
-$fields['status'] = isset($data['status']) ? 1 : 0;
+$fields['status'] = isset($data['status']) && (string)$data['status']==='1' ? 1 : 0;
 if ($action === 'createUser') {
     $fields += ['nivel' => 3, 'criado_por' => $user['id_usuario'], 'cadastro' => date('Y-m-d H:i:s')];
     $q = $db->prepare("INSERT INTO $table (" . implode(',', array_keys($fields)) . ') VALUES (' . implode(',', array_fill(0, count($fields), '?')) . ')');

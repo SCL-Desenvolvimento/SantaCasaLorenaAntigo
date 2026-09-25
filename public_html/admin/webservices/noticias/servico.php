@@ -148,6 +148,7 @@ if(isset($dados['acao'])):
 						}else {
 							$new_tag['nome'] = $value;
 							$new_tag['status'] = 1;
+                            $new_tag['descricao'] = '';
 							$new_tag['url'] = Check::urlAmigavel($value);
 							$Create->ExeCreate(PREFIX."tag",$new_tag);
 
@@ -239,6 +240,7 @@ if(isset($dados['acao'])):
 							}else {
 								$new_tag['nome'] = $value;
 								$new_tag['status'] = 1;
+                            $new_tag['descricao'] = '';
 								$new_tag['url'] = Check::urlAmigavel($value);
 								$Create->ExeCreate(PREFIX."tag",$new_tag);
 

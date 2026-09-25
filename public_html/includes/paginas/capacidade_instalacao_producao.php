@@ -9,7 +9,7 @@ $capacities = $capacityQuery->getResult() ?: array();
 <div class="facility-page">
 <nav class="about-section-nav site-container" aria-label="Nesta página"><span>Nesta página</span><a href="#capacidade-apresentacao">Apresentação</a><?php if ($capacities): ?><a href="#capacidade-estruturas">Instalações e produção</a><?php endif; ?><a href="#facility-contato">Informações e contato</a></nav>
 <section id="capacidade-apresentacao" class="site-container facility-intro" aria-labelledby="capacities-title">
-<div class="facility-heading"><span class="facility-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">ESTRUTURA E PRODUÇÃO</span><h2 id="capacities-title"><?= !empty($capacityContent['bloco1']) ? scl_escape(strip_tags(preg_replace('~<br\s*/?>~i', "\n", $capacityContent['bloco1']))) : 'Estrutura e produção' ?></h2></div>
+<div class="facility-heading"><span class="facility-symbol" aria-hidden="true"><?= scl_icon('heart') ?></span><span class="eyebrow">ESTRUTURA E PRODUÇÃO</span><h2 id="capacities-title"><?= scl_cms_heading($capacityContent['bloco1'] ?? '', 'Estrutura e produção') ?></h2><?= scl_cms_introduction($capacityContent['bloco1'] ?? '') ?></div>
 <div class="facility-copy">
 <?php foreach (array('bloco2') as $field): if (!empty($capacityContent[$field])): ?><div class="about-prose"><?= scl_about_content($capacityContent[$field]) ?></div><?php endif; endforeach; ?>
 <?php if (!$capacityContent): ?><p class="about-empty">As informações sobre a capacidade de instalação e produção serão disponibilizadas nesta página. <a href="<?= scl_url('fale-conosco') ?>">Fale com a nossa equipe</a> para saber mais.</p><?php endif; ?>
