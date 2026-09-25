@@ -78,7 +78,7 @@ if (rtrim($path, '/') === '/instalacoes/hotelaria') {
 if (in_array(rtrim($path, '/'), array('/instalacoes/clinica-emilia','/instalacoes/clinica_emilia'), true)) {
     $r_DIR = array('page'=>'clinica-emilia', 'info'=>array('titulo'=>'Clínica Emília', 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça a Clínica Emília e seus ambientes.', 'descricao_pagina'=>''));
 }
-foreach (array('centro-diagnostico-por-imagem'=>'Diagnóstico por imagem', 'unidades-de-internacao'=>'Unidades de internação', 'particular-convenio'=>'Particular / Convênio') as $slug=>$title) {
+foreach (array('centro-diagnostico-por-imagem'=>'Diagnóstico por imagem', 'unidades-de-internacao'=>'Unidades de internação') as $slug=>$title) {
     if (in_array(rtrim($path, '/'), array('/instalacoes/'.$slug, '/instalacoes/'.str_replace('-', '_', $slug)), true)) $r_DIR = array('page'=>$slug, 'info'=>array('titulo'=>$title, 'sessao'=>'Atendimento', 'sub_titulo'=>'Conheça os serviços e encontre informações para seu atendimento.', 'descricao_pagina'=>''));
 }
 foreach(array('convenios'=>'Convênios','especialidades'=>'Especialidades','capacidade-instalacao-producao'=>'Capacidade de instalação e produção','manual-do-paciente-e-visitantes'=>'Manual do paciente e visitante') as $slug=>$title){if(in_array(rtrim($path,'/'),array('/servicos/'.$slug,'/servicos/'.str_replace('-','_',$slug)),true))$r_DIR=array('page'=>$slug,'info'=>array('titulo'=>$title,'sessao'=>'Para você','sub_titulo'=>'Encontre informações da Santa Casa para seu atendimento.','descricao_pagina'=>''));}
@@ -117,7 +117,7 @@ else {
     elseif ($r_DIR['page'] === 'pronto-atendimento') { $getPagina = new Read(); require 'includes/paginas/pronto_atendimento.php'; }
     elseif ($r_DIR['page'] === 'hotelaria') { $getPagina = new Read(); require 'includes/paginas/hotelaria.php'; }
     elseif ($r_DIR['page'] === 'clinica-emilia') { $getPagina = new Read(); require 'includes/paginas/clinica_emilia.php'; }
-    elseif (in_array($r_DIR['page'], array('centro-diagnostico-por-imagem','unidades-de-internacao','particular-convenio'), true)) { $getPagina = new Read(); require 'includes/paginas/'.str_replace('-', '_', $r_DIR['page']).'.php'; }
+    elseif (in_array($r_DIR['page'], array('centro-diagnostico-por-imagem','unidades-de-internacao'), true)) { $getPagina = new Read(); require 'includes/paginas/'.str_replace('-', '_', $r_DIR['page']).'.php'; }
     elseif(in_array($r_DIR['page'],array('convenios','especialidades','capacidade-instalacao-producao','manual-do-paciente-e-visitantes'),true)){$getPagina=new Read();require 'includes/paginas/'.str_replace('-','_',$r_DIR['page']).'.php';}
     elseif(in_array($r_DIR['page'],array('noticia','fale-conosco','doacoes'),true))require 'includes/paginas/'.str_replace('-','_',$r_DIR['page']).'.php';
     elseif($r_DIR['page']==='noticias')require 'includes/paginas/noticias.php';

@@ -1404,3 +1404,6 @@ html {
     max-height: 220px;
   }
 }
+
+/* Complete slides, circular navigation and visible playback controls. */
+.carousel-ready .campaign-list{display:block;overflow:hidden;padding:0;scroll-snap-type:none}.carousel-ready [hidden]{display:none!important}.campaign-item img{aspect-ratio:2/1;object-fit:contain;background:#eef4f8}.carousel-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px}.carousel-controls[hidden]{display:none}.carousel-controls button{border:1px solid #aec3d0;background:white;color:#145474;border-radius:999px;min-width:44px;min-height:44px;padding:10px 16px;cursor:pointer}.carousel-controls button:hover{background:#e6f3fb}.carousel-controls span{font-size:14px;color:#526c7a}.site-navigation{gap:18px}@media(min-width:1051px) and (max-width:1250px){.header-content{gap:16px}.site-navigation{gap:12px}.site-navigation>a{font-size:12px}.site-navigation .scl-button{padding:14px 12px}.site-brand img{width:145px}}

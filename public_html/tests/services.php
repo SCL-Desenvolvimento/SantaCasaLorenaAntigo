@@ -8,7 +8,7 @@ foreach(array('convenios','especialidades','capacidade-instalacao-producao','man
  $empty=$renderFacility($page,array());verify(str_contains($empty,'about-empty'),'Service empty state');
  $alias=$renderFacility(str_replace('-','_',$page),$serviceFixture);verify(str_contains($alias,'services.css'),'Service alias');
 }
-$plans=$renderFacility('convenios',array('convenio'=>array(array('nome'=>'Plano de teste','img'=>'resources/img/convenios/amil.png'))));verify(str_contains($plans,'SINEEVALI')&&substr_count($plans,'class="facility-plan"')===2,'Preserve additional legacy plan');
+$plans=$renderFacility('convenios',array('convenio'=>array(array('nome'=>'Plano de teste','img'=>'resources/img/convenios/amil.png'))));verify(!str_contains($plans,'SINEEVALI')&&substr_count($plans,'class="facility-plan"')===1,'Only registered plans appear');
 $plans=$renderFacility('convenios',array('convenio'=>array(array('nome'=>'SINEEVALI','img'=>'arquivos/convenio/cas.png'))));verify(substr_count($plans,'class="facility-plan"')===1,'No duplicate legacy plan');
 $specialties=$renderFacility('especialidades',$serviceFixture);verify(substr_count($specialties,'<li data-service-item>')===6&&str_contains($specialties,'Buscar especialidade'),'Specialties preserved and searchable');
 $capacity=$renderFacility('capacidade-instalacao-producao',$serviceFixture);verify(str_contains($capacity,'Produção demonstrativa')&&str_contains($capacity,'sem imagens'),'Capacity record without photos retains content');

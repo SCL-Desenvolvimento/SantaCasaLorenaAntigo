@@ -1,5 +1,5 @@
 <?php // Shared gallery. Callers provide $photos, $galleryId and $galleryLabel. ?>
-<div class="about-gallery" data-about-gallery><div class="about-gallery-track" id="<?= scl_escape($galleryId) ?>" tabindex="0" role="region" aria-label="<?= scl_escape($galleryLabel) ?>; role horizontalmente para ver as imagens">
+<div class="about-gallery" data-about-gallery><div class="about-gallery-track" id="<?= scl_escape($galleryId) ?>" tabindex="0" role="region" aria-label="<?= scl_escape($galleryLabel) ?>">
 <?php foreach ($photos as $index=>$photo): $caption = trim(strip_tags($photo['descricao'] ?? '')); ?>
 <figure class="about-slide"><a class="about-photo-link" href="<?= scl_escape(scl_link($photo['img'])) ?>" aria-label="Ampliar imagem <?= $index + 1 ?><?= $caption ? ': ' . scl_escape($caption) : '' ?>"><img src="<?= scl_escape(scl_link($photo['img'])) ?>" alt="<?= scl_escape($caption ?: 'Registro da Santa Casa de Lorena') ?>" width="800" height="560" loading="lazy" decoding="async"><span class="about-zoom" aria-hidden="true"><?= scl_icon('search') ?></span></a><?php if ($caption): ?><figcaption><?= scl_escape($caption) ?></figcaption><?php endif; ?></figure>
 <?php endforeach; ?>

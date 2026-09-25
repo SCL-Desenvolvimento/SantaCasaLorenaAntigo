@@ -434,3 +434,8 @@ html:has(.about-lightbox[open]) {
     max-height: 55dvh;
   }
 }
+
+.about-gallery.carousel-ready .about-gallery-track{display:block;overflow:hidden;scroll-snap-type:none}.about-gallery.carousel-ready .about-slide{width:100%;margin:0;padding:0}.about-gallery.carousel-ready .about-slide[hidden]{display:none!important}.about-gallery.carousel-ready .about-photo-link{background:#e8eff4}.about-gallery.carousel-ready .about-slide img{width:100%;height:clamp(240px,55vh,520px);object-fit:contain}.about-gallery-controls{justify-content:center;flex-wrap:wrap}
+
+/* Keep internal carousel controls independent from campaign button spacing. */
+.about-gallery.carousel-ready .about-gallery-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px;min-height:44px}.about-gallery.carousel-ready .about-gallery-controls[hidden]{display:none}.about-gallery.carousel-ready .about-gallery-controls button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;line-height:1;font-size:20px;box-sizing:border-box;cursor:pointer}.about-gallery.carousel-ready [data-gallery-count]{display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:44px;font-size:13px;line-height:1;white-space:nowrap}.about-gallery.carousel-ready .about-photo-link{display:flex;align-items:center;justify-content:center}.about-gallery.carousel-ready .about-slide img{flex:1;min-width:0}

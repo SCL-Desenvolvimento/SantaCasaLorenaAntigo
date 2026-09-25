@@ -9,7 +9,7 @@ $isTransparency = in_array($r_DIR['page'] ?? '', array('portal-transparencia', '
 $isUrgentCare = in_array($r_DIR['page'] ?? '', array('pronto-atendimento', 'pronto_atendimento'), true);
 $isHospitality = ($r_DIR['page'] ?? '') === 'hotelaria';
 $isEmilia = in_array($r_DIR['page'] ?? '', array('clinica-emilia', 'clinica_emilia'), true);
-$isFacility = in_array($r_DIR['page'] ?? '', array('centro-diagnostico-por-imagem', 'centro_diagnostico_por_imagem', 'unidades-de-internacao', 'unidades_de_internacao', 'particular-convenio', 'particular_convenio'), true);
+$isFacility = in_array($r_DIR['page'] ?? '', array('centro-diagnostico-por-imagem', 'centro_diagnostico_por_imagem', 'unidades-de-internacao', 'unidades_de_internacao'), true);
 $isService = in_array($r_DIR['page'] ?? '', array('convenios', 'especialidades', 'capacidade-instalacao-producao', 'capacidade_instalacao_producao', 'manual-do-paciente-e-visitantes', 'manual_do_paciente_e_visitantes'), true);
 $isNewsListing = ($r_DIR['page'] ?? '') === 'noticias';
 $isArticle = ($r_DIR['page'] ?? '') === 'noticia';
@@ -32,11 +32,12 @@ $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null)
 <meta property="og:image" content="<?= scl_escape(scl_asset($r_DIR['info']['imagem'])) ?>">
 <?php endif; ?>
 <link rel="icon" href="<?= scl_url('favicon.ico') ?>">
-<link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=1">
+<link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=<?= filemtime(DIR . 'resources/css/modern.css') ?>">
 <script src="<?= scl_url('resources/js/modern.js') ?>?v=2" defer></script>
+<script src="<?= scl_url('resources/js/carousel.js') ?>?v=<?= filemtime(DIR . 'resources/js/carousel.js') ?>" defer></script>
 <?php if ($isAbout || $isHumanization || $isSocialActions || $isUrgentCare || $isHospitality || $isEmilia || $isFacility || $isService || $isArticle || $isContact): ?>
-<link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
-<script src="<?= scl_url('resources/js/about.js') ?>?v=2" defer></script>
+<link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=<?= filemtime(DIR . 'resources/css/about.css') ?>">
+<script src="<?= scl_url('resources/js/about.js') ?>?v=<?= filemtime(DIR . 'resources/js/about.js') ?>" defer></script>
 <?php endif; ?>
 <?php if ($isHumanization): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/humanization.css') ?>?v=1">
@@ -45,7 +46,7 @@ $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null)
 <link rel="stylesheet" href="<?= scl_url('resources/css/social-actions.css') ?>?v=1">
 <?php endif; ?>
 <?php if ($isPatientSafety): ?>
-<link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=1">
+<link rel="stylesheet" href="<?= scl_url('resources/css/about.css') ?>?v=<?= filemtime(DIR . 'resources/css/about.css') ?>">
 <link rel="stylesheet" href="<?= scl_url('resources/css/patient-safety.css') ?>?v=1">
 <?php endif; ?>
 <?php if ($isTransparency): ?>
@@ -56,13 +57,13 @@ $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null)
 <link rel="stylesheet" href="<?= scl_url('resources/css/urgent-care.css') ?>?v=1">
 <?php endif; ?>
 <?php if ($isHospitality): ?>
-<link rel="stylesheet" href="<?= scl_url('resources/css/hospitality.css') ?>?v=1">
+<link rel="stylesheet" href="<?= scl_url('resources/css/hospitality.css') ?>?v=<?= filemtime(DIR . 'resources/css/hospitality.css') ?>">
 <?php endif; ?>
 <?php if ($isEmilia): ?>
-<link rel="stylesheet" href="<?= scl_url('resources/css/emilia.css') ?>?v=1">
+<link rel="stylesheet" href="<?= scl_url('resources/css/emilia.css') ?>?v=<?= filemtime(DIR . 'resources/css/emilia.css') ?>">
 <?php endif; ?>
 <?php if ($isFacility || $isService): ?>
-<link rel="stylesheet" href="<?= scl_url('resources/css/facilities.css') ?>?v=1">
+<link rel="stylesheet" href="<?= scl_url('resources/css/facilities.css') ?>?v=<?= filemtime(DIR . 'resources/css/facilities.css') ?>">
 <?php endif; ?>
 <?php if ($isService): ?>
 <link rel="stylesheet" href="<?= scl_url('resources/css/services.css') ?>?v=1">

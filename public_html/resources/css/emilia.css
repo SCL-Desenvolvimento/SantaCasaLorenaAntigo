@@ -63,7 +63,7 @@
   max-width: 100%;
 }
 .emilia-environments .about-slide {
-  flex-basis: 66%;
+  flex-basis: 100%;
 }
 .emilia-resources {
   padding-block: 64px 76px;

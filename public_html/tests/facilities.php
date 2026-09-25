@@ -2,7 +2,7 @@
 require __DIR__.'/emilia.php';
 $before=$count;$fixture=require __DIR__.'/fixtures/facilities.php';
 $renderFacility=function($page,$data) {Read::$fixtures=$data;$getPagina=new Read();$r_DIR=array('page'=>$page,'info'=>array('titulo'=>'Teste'));ob_start();require DIR.'includes/header.php';require DIR.'includes/topo_paginas.php';require DIR.'includes/paginas/'.str_replace('-','_',$page).'.php';require DIR.'includes/footer.php';return ob_get_clean();};
-foreach(array('centro-diagnostico-por-imagem','unidades-de-internacao','particular-convenio') as $page) {
+foreach(array('centro-diagnostico-por-imagem','unidades-de-internacao') as $page) {
  $html=$renderFacility($page,$fixture);
  verify(!str_contains($html,'jQuery') && !str_contains($html,'bootstrap.min') && !str_contains($html,'owlCarousel'),'No legacy libraries: '.$page);
  verify(str_contains($html,'facilities.css') && substr_count($html,'<h1>')===1,'Modern assets and one heading');
@@ -25,7 +25,4 @@ verify(!str_contains($safe,'onclick=') && !str_contains($safe,'<script>bad') && 
 verify(substr_count($safe,'data-about-gallery')===1,'Invalid unit identifier does not query images');
 $partial=$fixture;$partial['unidade_internacao_imagem']=array();$partialHtml=$renderFacility('unidades-de-internacao',$partial);verify(str_contains($partialHtml,'Descrição demonstrativa') && !str_contains($partialHtml,'<dialog'),'Units without photos preserve descriptions');
 $diagnosis=$renderFacility('centro-diagnostico-por-imagem',$fixture);verify(str_contains($diagnosis,'conteúdo oficial') && substr_count($diagnosis,'class="about-photo-link"')===6,'Diagnostic content and gallery');
-$private=$renderFacility('particular-convenio',$fixture);verify(str_contains($private,'brinquedoteca e cantinho do café') && !str_contains($private,'agenciamd.com'),'Original private copy without broken remote images');
-verify(substr_count($private,'class="facility-plan"')===8,'Plans from existing CMS');
-$badPlans=array('convenio'=>array(array('nome'=>'<script>bad()</script>Plano','img'=>'javascript:bad()')));$safe=$renderFacility('particular-convenio',$badPlans);verify(!str_contains($safe,'javascript:') && !str_contains($safe,'<script>bad'),'Safe plan fields');
 echo 'OK: '.($count-$before)." facilities checks.\n";
