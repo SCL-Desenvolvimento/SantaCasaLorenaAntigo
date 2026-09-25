@@ -61,7 +61,7 @@
   display: block;
   border-radius: 14px;
   overflow: hidden;
-  background: #dce8df;
+  background: #dce4e8;
 }
 .safety-image img {
   width: 100%;
@@ -107,7 +107,7 @@
 }
 .safety-resource:hover {
   background: var(--warm);
-  border-color: #a1b9ac;
+  border-color: #a1b1b9;
 }
 .safety-resource-icon {
   display: grid;

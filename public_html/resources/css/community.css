@@ -1,5 +1,5 @@
 .community-page {
-  background: #f8faf8;
+  background: #f8f9fa;
 }
 .community-layout,
 .article-layout {
@@ -94,7 +94,7 @@
 .community-field textarea {
   width: 100%;
   min-width: 0;
-  border: 1px solid #becdc5;
+  border: 1px solid #bec8cd;
   background: #fff;
   border-radius: 10px;
   padding: 13px 14px;
@@ -196,8 +196,8 @@
   line-height: 1.6;
 }
 .community-notice.success {
-  background: #e7f3ea;
-  color: #1c5c35;
+  background: #e7eff3;
+  color: #1c485c;
 }
 .community-notice.error {
   background: #fff0ea;
@@ -282,7 +282,7 @@
   display: flex;
   gap: 10px;
   padding: 6px;
-  background: #f4f7f5;
+  background: #f4f6f7;
   border-radius: 14px;
   margin: 24px 0;
 }
@@ -314,7 +314,7 @@
 }
 .article-cover {
   margin: 0 0 36px;
-  background: #f3f6f3;
+  background: #f3f5f6;
   border-radius: 22px;
   overflow: hidden;
 }
@@ -474,7 +474,7 @@
 }
 .article-lightbox {
   border: 0;
-  background: #122e29;
+  background: #12252e;
   color: white;
   border-radius: 16px;
   padding: 18px;
@@ -482,7 +482,7 @@
   max-height: 95vh;
 }
 .article-lightbox::backdrop {
-  background: #061b16df;
+  background: #06141bdf;
 }
 .article-lightbox img {
   display: block;

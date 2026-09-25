@@ -1,6 +1,6 @@
 #portal-transparencia {
-  background: #f7f9f7;
-  color: #233f39;
+  background: #f7f8f9;
+  color: #23363f;
 }
 #portal-transparencia [hidden] {
   display: none !important;
@@ -21,8 +21,8 @@
   flex: 0 0 72px;
   height: 72px;
   border-radius: 22px;
-  background: #e1eee7;
-  color: #145c50;
+  background: #e1eaee;
+  color: #14455c;
 }
 .tp-intro-icon svg {
   width: 32px;
@@ -36,7 +36,7 @@
 .tp-intro p,
 .tp-section-description,
 .tp-hint {
-  color: #536960;
+  color: #536269;
   line-height: 1.7;
   margin: 0;
 }
@@ -46,10 +46,10 @@
   gap: 16px;
   align-items: end;
   background: #fff;
-  border: 1px solid #d8e4dc;
+  border: 1px solid #d8e0e4;
   border-radius: 20px;
   padding: 24px;
-  box-shadow: 0 8px 30px #163e3210;
+  box-shadow: 0 8px 30px #16313e10;
 }
 .tp-tools label {
   display: block;
@@ -61,9 +61,9 @@
 .tp-tools select {
   width: 100%;
   min-width: 0;
-  border: 1px solid #9bb3a8;
+  border: 1px solid #9babb3;
   background: #fff;
-  color: #233f39;
+  color: #23363f;
   border-radius: 10px;
   padding: 13px 12px;
   font: inherit;
@@ -71,10 +71,10 @@
 }
 .tp-tools button,
 .tp-expand-tools button {
-  border: 1px solid #9bb3a8;
+  border: 1px solid #9babb3;
   border-radius: 10px;
   background: #fff;
-  color: #145c50;
+  color: #14455c;
   padding: 12px 16px;
   min-height: 44px;
   font: inherit;
@@ -84,7 +84,7 @@
 }
 .tp-tools button:hover,
 .tp-expand-tools button:hover {
-  background: #eaf3ee;
+  background: #eaf0f3;
 }
 .tp-results-bar {
   display: flex;
@@ -118,7 +118,7 @@
   margin: 0;
 }
 .tp-section-icon {
-  color: #145c50;
+  color: #14455c;
   display: flex;
 }
 .tp-section-icon svg {
@@ -129,7 +129,7 @@
   margin: 10px 0 20px;
 }
 .tp-disclosure {
-  border: 1px solid #d8e4dc;
+  border: 1px solid #d8e0e4;
   border-radius: 14px;
   background: #fff;
   margin: 10px 0;
@@ -149,7 +149,7 @@
   display: none;
 }
 .tp-disclosure summary:hover {
-  background: #f0f6f2;
+  background: #f0f4f6;
 }
 .tp-summary-title {
   font-weight: 700;
@@ -162,16 +162,16 @@
   flex-shrink: 0;
 }
 .tp-count {
-  color: #52685d;
+  color: #526168;
   font-size: 12px;
-  background: #edf3ee;
+  background: #edf1f3;
   padding: 5px 10px;
   border-radius: 20px;
 }
 .tp-chevron {
   width: 8px;
   height: 8px;
-  border: solid #145c50;
+  border: solid #14455c;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
   margin: 0 3px 4px;
@@ -181,7 +181,7 @@
   margin-bottom: -4px;
 }
 .tp-disclosure[open] > summary {
-  background: #edf5ef;
+  background: #edf2f5;
 }
 .tp-panel {
   padding: 6px 20px 16px;
@@ -191,13 +191,13 @@
   align-items: center;
   gap: 14px;
   padding: 16px 10px;
-  border-bottom: 1px solid #e4ece6;
+  border-bottom: 1px solid #e4e9ec;
   text-decoration: none;
-  color: #234b3e;
+  color: #233e4b;
   border-radius: 6px;
 }
 .tp-document:hover {
-  background: #f1f6f2;
+  background: #f1f4f6;
 }
 .tp-document:last-child {
   border-bottom: 0;
@@ -208,9 +208,9 @@
   width: 38px;
   height: 44px;
   flex-shrink: 0;
-  background: #edf3ee;
+  background: #edf1f3;
   border-radius: 8px;
-  color: #236653;
+  color: #235166;
 }
 .tp-document-icon svg {
   width: 21px;
@@ -229,7 +229,7 @@
 }
 .tp-document-meta {
   display: block;
-  color: #5d6f65;
+  color: #5d696f;
   font-size: 12px;
   margin-top: 5px;
 }
@@ -239,7 +239,7 @@
 .tp-no-results,
 .tp-archive-alert {
   padding: 28px;
-  border: 1px solid #d8e4dc;
+  border: 1px solid #d8e0e4;
   border-radius: 16px;
   background: #fff;
   line-height: 1.7;

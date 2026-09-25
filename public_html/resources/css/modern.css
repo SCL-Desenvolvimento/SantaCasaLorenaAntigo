@@ -1,15 +1,15 @@
 /* Santa Casa design system. Shared shell + progressively modernized CMS content. */
 :root {
-  --ink: #183f38;
-  --muted: #61736f;
-  --green: #145c50;
-  --green-dark: #103e36;
-  --mint: #edf4ef;
+  --ink: #18333f;
+  --muted: #616d73;
+  --green: #14455c;
+  --green-dark: #102f3e;
+  --mint: #edf2f4;
   --paper: #fff;
   --warm: #f8f7f2;
-  --line: #dce6df;
+  --line: #dce3e6;
   --radius: 18px;
-  --shadow: 0 16px 42px #183f3810;
+  --shadow: 0 16px 42px #18333f10;
 }
 * {
   box-sizing: border-box;
@@ -109,7 +109,7 @@ html {
 }
 .utility-bar {
   background: var(--green-dark);
-  color: #e6f1eb;
+  color: #e6eef1;
   font-size: 12px;
   letter-spacing: 0.02em;
 }
@@ -265,7 +265,7 @@ html {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #4b8a69;
+  background: #4b768a;
   margin-right: 8px;
 }
 .home-hero {
@@ -288,7 +288,7 @@ html {
 .hero-copy em,
 .about-copy em {
   font-style: normal;
-  color: #438170;
+  color: #436d81;
 }
 .hero-copy > p {
   max-width: 470px;
@@ -346,7 +346,7 @@ html {
   height: 440px !important;
   object-fit: cover;
   border-radius: 140px 18px 18px 18px;
-  background: #dce6df;
+  background: #dce3e6;
 }
 .hero-caption {
   position: absolute;
@@ -385,7 +385,7 @@ html {
   position: absolute;
   top: -26px;
   right: 26px;
-  color: #acc6ac;
+  color: #acbec6;
   font-size: 85px;
   font-weight: 200;
   line-height: 1;
@@ -448,7 +448,7 @@ html {
   position: absolute;
   right: 20px;
   top: 28px;
-  color: #869a91;
+  color: #86949a;
 }
 .card-arrow svg {
   width: 18px;
@@ -485,7 +485,7 @@ html {
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #dce6df;
+  border: 1px solid #dce3e6;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
@@ -609,7 +609,7 @@ html {
 }
 .about-values svg {
   width: 20px;
-  color: #4e8471;
+  color: #4e7384;
 }
 .plans-section {
   padding: 55px 0;
@@ -676,7 +676,7 @@ html {
   color: var(--muted);
 }
 .news-card:hover h3 {
-  color: #438170;
+  color: #436d81;
 }
 .empty-state {
   grid-column: 1/-1;
@@ -711,7 +711,7 @@ html {
   height: 35px;
 }
 .support-section .eyebrow {
-  color: #c1dbce;
+  color: #c1d3db;
   margin-bottom: 9px;
   font-size: 10px;
 }
@@ -723,7 +723,7 @@ html {
   margin: 12px 0 0;
   font-size: 13px;
   max-width: 570px;
-  color: #dfebe5;
+  color: #dfe7eb;
 }
 .support-section .scl-button {
   margin-left: auto;
@@ -735,8 +735,8 @@ html {
   border-color: #fff;
 }
 .site-footer {
-  background: #103e36;
-  color: #d2e1d8;
+  background: #102f3e;
+  color: #d2dce1;
   padding: 58px 0 0;
   font-size: 12px;
 }
@@ -797,7 +797,7 @@ html {
 }
 .newsletter-field {
   display: flex;
-  border: 1px solid #668a7c;
+  border: 1px solid #667f8a;
   border-radius: 7px;
   overflow: hidden;
   background: #ffffff0c;
@@ -813,14 +813,14 @@ html {
   border-radius: 0;
 }
 .newsletter-field input::placeholder {
-  color: #bfd1c7;
+  color: #bfcbd1;
 }
 .newsletter-field button {
   display: grid;
   place-items: center;
   width: 46px;
   flex: none;
-  background: #d7e8dd;
+  background: #d7e3e8;
   color: var(--green-dark);
   border: 0;
 }
@@ -839,7 +839,7 @@ html {
   border-top: 1px solid #ffffff20;
   margin-top: 45px;
   padding: 22px 0;
-  color: #b6ccbf;
+  color: #b6c5cc;
   font-size: 10px;
 }
 /* Existing CMS pages share the new spacing, color and typography system. */
@@ -893,7 +893,7 @@ html {
 }
 .scl-inner .form-control {
   min-height: 48px;
-  border: 1px solid #aabdb2;
+  border: 1px solid #aab7bd;
   border-radius: 8px;
   box-shadow: none;
   font: inherit;
@@ -904,7 +904,7 @@ html {
 }
 .scl-inner .form-control:focus {
   border-color: var(--green);
-  box-shadow: 0 0 0 3px #145c501a;
+  box-shadow: 0 0 0 3px #14455c1a;
 }
 .scl-inner .noticias {
   border: 1px solid var(--line);

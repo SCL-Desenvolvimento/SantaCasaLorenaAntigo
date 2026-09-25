@@ -81,7 +81,7 @@
   --priority: #bd8300;
 }
 .care-priority-green {
-  --priority: #24824d;
+  --priority: #246482;
 }
 .care-priority-blue {
   --priority: #266fbb;
@@ -92,7 +92,7 @@
   gap: 9px;
   font-size: 13px;
   font-weight: 700;
-  color: #425b50;
+  color: #42535b;
   margin-bottom: 25px;
 }
 .care-color > span {
