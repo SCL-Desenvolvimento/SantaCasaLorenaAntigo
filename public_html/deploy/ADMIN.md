@@ -60,3 +60,12 @@ Executáveis PHP 8.5.11 e 8.4.25; as suítes estão em tests/. Principais comand
 A suíte de operações cobre CRUD de banners/notícias, categorias, galerias, ordem, legendas isoladas, rejeição de referências inválidas e filtros/exportação dos cinco canais, sem dados de produção ou envio de e-mail.
 
 Resultados: 1.053 verificações em cada runtime (733 públicas, 58 de segurança, 11 de configuração, 98 HTTP de segurança, 56 de telas/recursos e 97 de operações), mais 12 do ciclo de vida do editor. Análise sintática de 161 PHP e 22 JavaScript. Conferência visual de login, editor de notícia, páginas institucionais, galerias e detalhes de atendimento; layout móvel conferido em 390 px.
+
+
+## Exclusão de arquivos anexados
+
+Ao excluir notícias, banners, usuários ou conteúdos das páginas, os uploads referenciados pelo registro são candidatos à exclusão física depois da confirmação no banco. Isso inclui arquivos inseridos no HTML, PDFs e imagens filhas de capacidade e internação. Ao excluir uma galeria ou remover fotos e salvar, vínculos e metadados sem uso também são removidos. Arquivos ainda referenciados em outros registros (inclusive históricos) são preservados; a limpeza não percorre indiscriminadamente a pasta de uploads. Se a verificação de referências ou a remoção física falhar, o arquivo é preservado e a falha é registrada no log PHP.
+
+Arquivos órfãos de exclusões anteriores precisam de auditoria separada; esta alteração não os remove retroativamente. Currículos não têm operação de exclusão disponível na interface de atendimento.
+
+Validação: php tests/attachment-cleanup.php (13 verificações de compartilhamento, rollback, anexos no HTML, galerias, filhos e limites de caminho) e node tests/mysql-http.cjs (140 verificações HTTP em cópias temporárias das tabelas, incluindo confirmação da remoção física de imagens e PDFs).

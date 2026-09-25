@@ -30,10 +30,13 @@ if (in_array($action, ['excluiUser', 'alteraStatus'], true)) {
     if ($id < 1 || $id === (int) $user['id_usuario']) scl_deny();
     $sql = $action === 'excluiUser' ? "DELETE FROM $table WHERE id_usuario = ? AND nivel = 3" : "UPDATE $table SET status = IF(status = 1, 0, 1), security_version = security_version + 1 WHERE id_usuario = ? AND nivel = 3";
     $db->beginTransaction();
+    $removed=[];
+    if ($action === 'excluiUser') { $snapshot=$db->prepare("SELECT img FROM $table WHERE id_usuario=? AND nivel=3"); $snapshot->execute([$id]); $removed=$snapshot->fetchAll(PDO::FETCH_ASSOC); }
     $q = $db->prepare($sql); $q->execute([$id]);
     $affected = $q->rowCount();
     $cleanup = $db->prepare('DELETE FROM ' . PREFIX . 'password_reset WHERE id_usuario = ?'); $cleanup->execute([$id]);
     $db->commit();
+    if ($removed) { require_once dirname(__DIR__,3).'/includes/attachment_cleanup.php'; scl_queue_attachment_cleanup($db,$removed); }
     if ($action === 'alteraStatus') {
         $q = $db->prepare("SELECT status FROM $table WHERE id_usuario = ?"); $q->execute([$id]); echo (int) $q->fetchColumn();
     } else echo $affected === 1 ? '1' : '0';
