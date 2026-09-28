@@ -509,8 +509,8 @@ $tpMunicipalStaticGroups = array(
     array(
         'title' => 'Convênio municipal e termos já publicados',
         'documents' => array(
-            array('title' => 'Convênio municipal 01/2021', 'file' => 'documentos/CONVÊNIO_MUNICIPAL/Convênio municipal e termos já publicados/convenio municipal 01_2021.pdf'),
-            array('title' => 'Termo aditivo 23 — Convênio municipal 01/2021', 'file' => 'documentos/CONVÊNIO_MUNICIPAL/Convênio municipal e termos já publicados/termo-aditivo-23-convenio-01-2021.pdf'),
+            array('title' => 'Convênio municipal 01/2021', 'file' => 'documentos/CONVENIO_MUNICIPAL/Convênio municipal e termos já publicados/convenio municipal 01_2021.pdf'),
+            array('title' => 'Termo aditivo 23 — Convênio municipal 01/2021', 'file' => 'documentos/CONVENIO_MUNICIPAL/Convênio municipal e termos já publicados/termo-aditivo-23-convenio-01-2021.pdf'),
         )
     ),
 );
