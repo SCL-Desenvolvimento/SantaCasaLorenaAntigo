@@ -52,10 +52,34 @@ if (!function_exists('tpHumanSize')) {
     }
 }
 
+if (!function_exists('tpDisplayText')) {
+    function tpDisplayText($value)
+    {
+        // Corrige apenas o texto exibido; os caminhos reais permanecem intactos.
+        if (!preg_match('//u', $value) && function_exists('iconv')) {
+            $converted = iconv('Windows-1252', 'UTF-8', $value);
+            if ($converted !== false) {
+                $value = $converted;
+            }
+        }
+
+        return preg_replace(
+            array(
+                '/(?<!\pL)CONV[^\s_\/]*?NIO(S?)(?!\pL)/ui',
+                '/(?<!\pL)RELAT[^\s_\/]*?RIO(S?)(?!\pL)/ui',
+                '/(?<!\pL)CI[^\s_\/]*?NCIA(?!\pL)/ui',
+                '/(?<!\pL)NOTIFICA[^\s_\/]*?O(?!\pL)/ui'
+            ),
+            array('Convênio$1', 'Relatório$1', 'Ciência', 'Notificação'),
+            $value
+        );
+    }
+}
+
 if (!function_exists('tpDocumentLabel')) {
     function tpDocumentLabel($fileName)
     {
-        $label = pathinfo($fileName, PATHINFO_FILENAME);
+        $label = tpDisplayText(pathinfo($fileName, PATHINFO_FILENAME));
         $label = str_replace(array('_', '  '), array(' ', ' '), $label);
         $label = preg_replace('/\s+/', ' ', trim($label));
 
@@ -101,10 +125,10 @@ if (!function_exists('tpDocumentLabel')) {
 if (!function_exists('tpDirectoryLabel')) {
     function tpDirectoryLabel($directoryName)
     {
-        $normalized = str_replace(array('_', '  '), array(' ', ' '), trim($directoryName));
+        $normalized = str_replace(array('_', '  '), array(' ', ' '), trim(tpDisplayText($directoryName)));
         $normalized = preg_replace('/\s+/', ' ', $normalized);
 
-        if (preg_match('/^CONVENIOS?\s+(20\d{2})$/iu', $normalized, $matches)) {
+        if (preg_match('/^CONV[EÊ]NIOS?\s+(20\d{2})$/iu', $normalized, $matches)) {
             return $matches[1];
         }
 
@@ -428,108 +452,68 @@ $tpInstitutionalGroups = array(
     array(
         'title' => 'Estatuto',
         'documents' => array(
-            array('title' => 'Estatuto da Santa Casa de Lorena — 2026', 'file' => 'estatuto-santa-casa-lorena-2026.pdf'),
-            array('title' => 'Estatuto da Santa Casa de Lorena — 2021', 'file' => 'Estatuto SCL 05_05_2021.pdf')
+            array('title' => 'Estatuto da Santa Casa de Lorena — 2026', 'file' => 'documentos/INSTITUCIONAL/Estatuto/estatuto-santa-casa-lorena-2026.pdf'),
+            array('title' => 'Estatuto da Santa Casa de Lorena — 2021', 'file' => 'documentos/INSTITUCIONAL/Estatuto/Estatuto SCL 05_05_2021.pdf'),
         )
     ),
     array(
         'title' => 'Atas',
         'documents' => array(
-            array('title' => 'Ata de eleição e posse — 2025', 'file' => 'ata-eleicao-posse-santa-casa-2025.pdf')
+            array('title' => 'Ata de eleição e posse — 2025', 'file' => 'documentos/INSTITUCIONAL/Atas/ata-eleicao-posse-santa-casa-2025.pdf'),
         )
     ),
     array(
         'title' => 'Quadro de dirigentes',
         'documents' => array(
-            array('title' => 'Quadro de dirigentes — 2025 a 2028', 'file' => 'quadro-dirigentes-2025-2028.pdf'),
-            array('title' => 'Quadro de dirigentes — 2023 a 2024', 'file' => 'quadro-de-dirigentes-santa-casa-de-Lorena-2023-2024.pdf'),
-            array('title' => 'Quadro de dirigentes e conselheiros — 2022 a 2023', 'file' => 'Quadro_de_Dirigentes_e_Conselheiros2022-2023.pdf'),
-            array('title' => 'Quadro de dirigentes e conselheiros — 2021 a 2022', 'file' => 'Quadro_de_Dirigentes_e_Conselheiros2021-2022.pdf'),
-            array('title' => 'Quadro de dirigentes e conselheiros — 2018 a 2021', 'file' => 'Quadro_de_Dirigentes_e_Conselheiros2018-2021.pdf')
+            array('title' => 'Quadro de dirigentes — 2025 a 2028', 'file' => 'documentos/INSTITUCIONAL/Quadro de dirigentes/quadro-dirigentes-2025-2028.pdf'),
+            array('title' => 'Quadro de dirigentes — 2023 a 2024', 'file' => 'documentos/INSTITUCIONAL/Quadro de dirigentes/quadro-de-dirigentes-santa-casa-de-Lorena-2023-2024.pdf'),
+            array('title' => 'Quadro de dirigentes e conselheiros — 2022 a 2023', 'file' => 'documentos/INSTITUCIONAL/Quadro de dirigentes/Quadro_de_Dirigentes_e_Conselheiros2022-2023.pdf'),
+            array('title' => 'Quadro de dirigentes e conselheiros — 2021 a 2022', 'file' => 'documentos/INSTITUCIONAL/Quadro de dirigentes/Quadro_de_Dirigentes_e_Conselheiros2021-2022.pdf'),
+            array('title' => 'Quadro de dirigentes e conselheiros — 2018 a 2021', 'file' => 'documentos/INSTITUCIONAL/Quadro de dirigentes/Quadro_de_Dirigentes_e_Conselheiros2018-2021.pdf'),
+            array('title' => 'Quadro De Dirigentes', 'file' => 'documentos/INSTITUCIONAL/Quadro de dirigentes/Quadro de Dirigentes.pdf'),
+            array('title' => 'Quadro De Dirigentes E Conselheiros2015-2018', 'file' => 'documentos/INSTITUCIONAL/Quadro de dirigentes/Quadro_de_Dirigentes_e_Conselheiros2015-2018.pdf'),
         )
     ),
     array(
         'title' => 'Demonstrações financeiras',
         'documents' => array(
-            array('title' => 'Demonstrações financeiras — 2024 e 2023', 'file' => 'demonstracoes-financeiras-2024-2023.pdf'),
-            array('title' => 'Demonstrações financeiras — 2023 e 2022', 'file' => 'demonstracoes-financeiras-2023-2022.pdf'),
-            array('title' => 'Demonstrações financeiras — 2022', 'file' => 'demonstracoes-financeiras-2022.pdf'),
-            array('title' => 'Demonstrações financeiras — 2021', 'file' => 'Demonstracoes_Financeiras_2021.pdf'),
-            array('title' => 'Demonstrações financeiras — 2020', 'file' => 'Demonstracoes_Financeiras_2020.pdf'),
-            array('title' => 'Demonstrações financeiras — 2019', 'file' => 'Demonstracoes_Financeiras_2019.pdf'),
-            array('title' => 'Demonstrações financeiras — 2018', 'file' => 'Demonstracoes_Financeiras_2018.pdf'),
-            array('title' => 'Demonstrações financeiras — 2017', 'file' => 'Demonstracoes_Financeiras_2017.pdf'),
-            array('title' => 'Demonstrações financeiras — 2016', 'file' => 'Demonstracoes_Financeiras_2016.pdf')
+            array('title' => 'Demonstrações financeiras — 2024 e 2023', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/demonstracoes-financeiras-2024-2023.pdf'),
+            array('title' => 'Demonstrações financeiras — 2023 e 2022', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/demonstracoes-financeiras-2023-2022.pdf'),
+            array('title' => 'Demonstrações financeiras — 2022', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/demonstracoes-financeiras-2022.pdf'),
+            array('title' => 'Demonstrações financeiras — 2021', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/Demonstracoes_Financeiras_2021.pdf'),
+            array('title' => 'Demonstrações financeiras — 2020', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/Demonstracoes_Financeiras_2020.pdf'),
+            array('title' => 'Demonstrações financeiras — 2019', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/Demonstracoes_Financeiras_2019.pdf'),
+            array('title' => 'Demonstrações financeiras — 2018', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/Demonstracoes_Financeiras_2018.pdf'),
+            array('title' => 'Demonstrações financeiras — 2017', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/Demonstracoes_Financeiras_2017.pdf'),
+            array('title' => 'Demonstrações financeiras — 2016', 'file' => 'documentos/INSTITUCIONAL/Demonstrações financeiras/Demonstracoes_Financeiras_2016.pdf'),
         )
     ),
     array(
         'title' => 'CEBAS',
         'documents' => array(
-            array('title' => 'Certificado CEBAS — validade até 31/12/2025', 'file' => 'cebas-validade-31-12-2025.pdf'),
-            array('title' => 'Declaração de tempestividade CEBAS — 2025/2026', 'file' => 'declaracao-tempestividade-cebas-2025-2026.pdf')
+            array('title' => 'Certificado CEBAS — validade até 31/12/2025', 'file' => 'documentos/INSTITUCIONAL/CEBAS/cebas-validade-31-12-2025.pdf'),
+            array('title' => 'Declaração de tempestividade CEBAS — 2025/2026', 'file' => 'documentos/INSTITUCIONAL/CEBAS/declaracao-tempestividade-cebas-2025-2026.pdf'),
         )
     ),
     array(
         'title' => 'Programa de Especialização em Medicina Intensiva (PEMI/AMIB)',
         'documents' => array(
-            array('title' => 'Programa de Especialização em Medicina Intensiva — 2026 a 2029', 'file' => 'PEMI_2026-2029.pdf')
-        )
-    )
-);
-
-$tpStateStaticGroups = array(
-    array(
-        'title' => 'Convênios estaduais já publicados',
-        'documents' => array(
-            array('title' => 'Convênio estadual 383/2020', 'file' => 'convenio-383-2020.pdf')
+            array('title' => 'Programa de Especialização em Medicina Intensiva — 2026 a 2029', 'file' => 'documentos/INSTITUCIONAL/PEMI-AMIB/PEMI_2026-2029.pdf'),
         )
     ),
-    array(
-        'title' => 'Emendas parlamentares',
-        'documents' => array(
-            array('title' => 'Emendas parlamentares 166, 512 e 927 — creditadas em 2023', 'file' => 'emendas-parlamentares-166-512-927-creditadas-em-2023.pdf'),
-            array('title' => 'Emenda parlamentar 349 — creditada em 2022', 'file' => 'emenda-parlamentar-349-creditada-em-2022.pdf'),
-            array('title' => 'Emenda parlamentar 280 — creditada em 2021', 'file' => 'Convenio 000280_2021 emenda parlamentar.pdf')
-        )
-    )
 );
+
+$tpStateStaticGroups = array();
 
 $tpMunicipalStaticGroups = array(
     array(
         'title' => 'Convênio municipal e termos já publicados',
         'documents' => array(
-            array('title' => 'Convênio municipal 01/2021', 'file' => 'convenio municipal 01_2021.pdf'),
-            array('title' => 'Termo aditivo 23 — Convênio municipal 01/2021', 'file' => 'termo-aditivo-23-convenio-01-2021.pdf')
+            array('title' => 'Convênio municipal 01/2021', 'file' => 'documentos/CONVENIO_MUNICIPAL/Convênio municipal e termos já publicados/convenio municipal 01_2021.pdf'),
+            array('title' => 'Termo aditivo 23 — Convênio municipal 01/2021', 'file' => 'documentos/CONVENIO_MUNICIPAL/Convênio municipal e termos já publicados/termo-aditivo-23-convenio-01-2021.pdf'),
         )
-    )
+    ),
 );
-
-$tpListedStaticFiles = array();
-foreach (array_merge($tpInstitutionalGroups, $tpStateStaticGroups, $tpMunicipalStaticGroups) as $group) {
-    foreach ($group['documents'] as $document) {
-        $tpListedStaticFiles[$document['file']] = true;
-    }
-}
-
-list(, $tpAvailableStaticFiles) = tpDirectoryEntries($tpPageDirectory);
-foreach ($tpAvailableStaticFiles as $file) {
-    if (isset($tpListedStaticFiles[$file])) {
-        continue;
-    }
-
-    $document = array('title' => tpDocumentLabel($file), 'file' => $file);
-    $fileKey = tpNormalizeKey($file);
-
-    if (strpos($fileKey, 'DEMONSTRACOES FINANCEIRAS') !== false) {
-        tpAppendGroupDocument($tpInstitutionalGroups, 'Demonstrações financeiras', $document);
-    } elseif (strpos($fileKey, 'QUADRO DE DIRIGENTES') !== false) {
-        tpAppendGroupDocument($tpInstitutionalGroups, 'Quadro de dirigentes', $document);
-    } elseif (strpos($fileKey, 'EMENDA PARLAMENTAR') !== false) {
-        tpAppendGroupDocument($tpStateStaticGroups, 'Emendas parlamentares', $document);
-    } else {
-        tpAppendGroupDocument($tpStateStaticGroups, 'Convênios estaduais já publicados', $document);
-    }
-}
 
 $tpStateDirectory = null;
 $tpStateRelative = null;
@@ -546,9 +530,17 @@ foreach ($tpArchiveDirectories as $directory) {
     $directoryKey = tpNormalizeKey($directory);
 
     if (strpos($directoryKey, 'MUNICIPAL') !== false) {
+        // Prefere a pasta correta caso reapareçam diretórios legados vazios.
+        if ($tpMunicipalRelative !== null && tpNormalizeKey($tpMunicipalRelative) === 'CONVENIO MUNICIPAL') {
+            continue;
+        }
         $tpMunicipalDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . $directory;
         $tpMunicipalRelative = $directory;
     } elseif (strpos($directoryKey, 'ESTADUA') !== false) {
+        // Prefere a pasta com acentuação correta quando há cópias legadas.
+        if ($tpStateRelative !== null && tpNormalizeKey($tpStateRelative) === 'CONVENIOS ESTADUAIS') {
+            continue;
+        }
         $tpStateDirectory = $tpArchiveDirectory . DIRECTORY_SEPARATOR . $directory;
         $tpStateRelative = $directory;
     }
@@ -561,6 +553,11 @@ if ($tpMunicipalDirectory) {
 }
 
 foreach ($tpMunicipalDirectories as $directory) {
+    // Este grupo possui títulos próprios e é exibido pela listagem estática.
+    if ($directory === 'Convênio municipal e termos já publicados') {
+        continue;
+    }
+
     $relativePath = $tpMunicipalRelative . '/' . $directory;
     $absolutePath = $tpMunicipalDirectory . DIRECTORY_SEPARATOR . $directory;
 
@@ -583,7 +580,11 @@ usort($tpMunicipalGroups, function ($firstGroup, $secondGroup) {
 
 $tpStaticCount = 0;
 foreach (array_merge($tpInstitutionalGroups, $tpStateStaticGroups, $tpMunicipalStaticGroups) as $group) {
-    $tpStaticCount += count(tpExistingStaticDocuments($group['documents']));
+    foreach (tpExistingStaticDocuments($group['documents']) as $document) {
+        if (strpos($document['file'], 'documentos/') !== 0) {
+            $tpStaticCount++;
+        }
+    }
 }
 $tpArchiveCount = tpCountDocuments($tpArchiveDirectory);
 $tpTotalCount = $tpStaticCount + $tpArchiveCount;
