@@ -6,6 +6,7 @@ const roots = ['.user.ini','.htaccess','index.php','favicon.ico','touch-icon-ipa
 function allowed(relative) {
   const p=relative.replace(/\\/g,'/');
   return !/(^|\/)(\.git|\.env(?:\..*)?|error_log|Thumbs\.db|desktop\.ini)(\/|$)/i.test(p)
+    && !/\.(?:php|css|js)\.\d+$/i.test(p)
     && !/^_app\/(PHPMailer-master\/|Config\.inc - Copia\.php$)/i.test(p)
     && !/^resources\/(plugins|bootstrap|dist)(\/|$)/i.test(p)
     && !/^resources\/vendor\/flatpickr(?:\/|$)/i.test(p)

@@ -32,6 +32,7 @@ $description = strip_tags(($isArticle ? ($r_DIR['noticia']['subtitulo'] ?? null)
 <meta property="og:image" content="<?= scl_escape(scl_asset($r_DIR['info']['imagem'])) ?>">
 <?php endif; ?>
 <link rel="icon" href="<?= scl_url('favicon.ico') ?>">
+<link rel="stylesheet" href="<?= scl_url('resources/css/brand.css') ?>?v=<?= filemtime(DIR . 'resources/css/brand.css') ?>">
 <link rel="stylesheet" href="<?= scl_url('resources/css/modern.css') ?>?v=<?= filemtime(DIR . 'resources/css/modern.css') ?>">
 <script src="<?= scl_url('resources/js/modern.js') ?>?v=2" defer></script>
 <script src="<?= scl_url('resources/js/carousel.js') ?>?v=<?= filemtime(DIR . 'resources/js/carousel.js') ?>" defer></script>

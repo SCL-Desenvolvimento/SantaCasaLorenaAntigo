@@ -1,13 +1,13 @@
 /* Santa Casa design system. Shared shell + progressively modernized CMS content. */
 :root {
-  --ink: #18333f;
-  --muted: #616d73;
-  --green: #14455c;
-  --green-dark: #102f3e;
-  --mint: #edf2f4;
+  --ink: var(--scl-brand-ink);
+  --muted: var(--scl-brand-muted);
+  --green: var(--scl-brand-deep);
+  --green-dark: var(--scl-brand-navy);
+  --mint: var(--scl-brand-soft);
   --paper: #fff;
-  --warm: #f8f7f2;
-  --line: #dce3e6;
+  --warm: #f5fbfe;
+  --line: var(--scl-brand-line);
   --radius: 18px;
   --shadow: 0 16px 42px #18333f10;
 }
@@ -1407,3 +1407,6 @@ html {
 
 /* Complete slides, circular navigation and visible playback controls. */
 .carousel-ready .campaign-list{display:block;overflow:hidden;padding:0;scroll-snap-type:none}.carousel-ready [hidden]{display:none!important}.campaign-item img{aspect-ratio:2/1;object-fit:contain;background:#eef4f8}.carousel-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px}.carousel-controls[hidden]{display:none}.carousel-controls button{border:1px solid #aec3d0;background:white;color:#145474;border-radius:999px;min-width:44px;min-height:44px;padding:10px 16px;cursor:pointer}.carousel-controls button:hover{background:#e6f3fb}.carousel-controls span{font-size:14px;color:#526c7a}.site-navigation{gap:18px}@media(min-width:1051px) and (max-width:1250px){.header-content{gap:16px}.site-navigation{gap:12px}.site-navigation>a{font-size:12px}.site-navigation .scl-button{padding:14px 12px}.site-brand img{width:145px}}
+
+/* Primary institutional blue with dark, readable labels. */
+.scl-site .scl-button{background:var(--scl-brand);border-color:var(--scl-brand);color:var(--scl-brand-ink)}.scl-site .scl-button:hover{background:var(--scl-brand-hover);border-color:var(--scl-brand-hover);color:var(--scl-brand-ink)}.scl-site .scl-button.light{background:white;border-color:white;color:var(--scl-brand-deep)}.scl-site .scl-button.light:hover{background:var(--scl-brand-soft);border-color:var(--scl-brand-soft)}.hero-copy em{color:var(--scl-brand-deep)}.site-navigation [aria-current="page"]{border-color:var(--scl-brand)}.status-dot{background:var(--scl-brand)}.newsletter-field button{background:var(--scl-brand);color:var(--scl-brand-ink)}.carousel-controls button:hover,.about-gallery-controls button:hover:not(:disabled){background:var(--scl-brand);border-color:var(--scl-brand);color:var(--scl-brand-ink)}
