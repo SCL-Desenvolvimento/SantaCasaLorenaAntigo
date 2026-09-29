@@ -2,3 +2,8 @@
 /.env
 /.env.*
 /.runtime/
+
+# Logs de execução e caches do Windows.
+error_log
+Thumbs.db
+desktop.ini
