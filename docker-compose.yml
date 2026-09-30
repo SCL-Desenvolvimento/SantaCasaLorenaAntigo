@@ -1,0 +1,91 @@
+name: santacasa
+
+services:
+  private-files-init:
+    container_name: init-santacasa-santacasalorena-org-br
+    image: alpine:3.22
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        if [ ! -f /data/.initialized ]; then
+          apk add --no-cache unzip
+          unzip -q /backup/private-files.zip -d /data
+          chown -R 33:33 /data
+          touch /data/.initialized
+          chown 33:33 /data/.initialized
+        fi
+    volumes:
+      - ./backups/santa-casa-private-k2host-20260925.zip:/backup/private-files.zip:ro
+      - private_files:/data
+    restart: "no"
+
+  web:
+    container_name: fe-santacasa-santacasalorena-org-br
+    build: .
+    ports:
+      - "${SCL_BIND_ADDRESS:-0.0.0.0}:${SCL_HTTP_PORT:-8080}:80"
+    environment:
+      SCL_HOME: ${SCL_HOME:?Configure SCL_HOME no .env}
+      SCL_DB_HOST: db
+      SCL_DB_NAME: ${SCL_DB_NAME:?Configure SCL_DB_NAME no .env}
+      SCL_DB_USER: ${SCL_DB_USER:?Configure SCL_DB_USER no .env}
+      SCL_DB_PASSWORD: ${SCL_DB_PASSWORD:?Configure SCL_DB_PASSWORD no .env}
+      SCL_DB_PREFIX: ${SCL_DB_PREFIX:-scl_}
+      SCL_PRIVATE_DIR: /srv/santa-casa-private
+      SCL_RECAPTCHA_SECRET: ${SCL_RECAPTCHA_SECRET:-}
+      SCL_MAIL_FROM: ${SCL_MAIL_FROM:-}
+      SCL_SMTP_HOST: ${SCL_SMTP_HOST:-}
+      SCL_SMTP_PORT: ${SCL_SMTP_PORT:-587}
+      SCL_SMTP_USER: ${SCL_SMTP_USER:-}
+      SCL_SMTP_PASSWORD: ${SCL_SMTP_PASSWORD:-}
+    volumes:
+      - uploads:/var/www/html/arquivos
+      - private_files:/srv/santa-casa-private
+    depends_on:
+      db:
+        condition: service_healthy
+      private-files-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  db:
+    container_name: db-santacasa-santacasalorena-org-br
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Configure MYSQL_ROOT_PASSWORD no .env}
+      MARIADB_DATABASE: ${SCL_DB_NAME:?Configure SCL_DB_NAME no .env}
+      MARIADB_USER: ${SCL_DB_USER:?Configure SCL_DB_USER no .env}
+      MARIADB_PASSWORD: ${SCL_DB_PASSWORD:?Configure SCL_DB_PASSWORD no .env}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./backups/santa-casa-local-20260929-143106.sql.gz:/docker-entrypoint-initdb.d/01-database.sql.gz:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 120s
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  mariadb_data:
+    name: vol-santacasa-santacasalorena-org-br-db
+  uploads:
+    name: vol-santacasa-santacasalorena-org-br-uploads
+  private_files:
+    name: vol-santacasa-santacasalorena-org-br-private
+
+networks:
+  default:
+    name: net-santacasa-santacasalorena-org-br

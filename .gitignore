@@ -2,3 +2,7 @@
 /santa-casa-private/
 /SantaCasaLorena-K2Host-*/
 /backups/
+
+/.env
+/.env.*
+!/.env.example

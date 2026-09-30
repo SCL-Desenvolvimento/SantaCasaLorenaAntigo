@@ -1,0 +1,16 @@
+.git
+**/node_modules
+**/vendor
+!public_html/resources/vendor
+!public_html/resources/vendor/**
+**/.env
+**/.env.*
+**/scl-config.php
+santa-casa-private
+backups
+SantaCasaLorena-K2Host-*
+**/*.sql
+**/*.log
+!public_html/deploy/*.sql
+public_html/arquivos/curriculuns/**
+!public_html/arquivos/curriculuns/.htaccess
