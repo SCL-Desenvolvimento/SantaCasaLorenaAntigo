@@ -174,8 +174,8 @@ class Url{
 
 				$this->Termos = "SELECT 
 									N.*, 
-									ANY_VALUE(T.nome) as tag, 
-									ANY_VALUE(T.url) as url_tag
+									MIN(T.nome) as tag, 
+									MIN(T.url) as url_tag
 								FROM ".PREFIX."noticia AS N
 								".(isset($this->noticiaTag) ? "INNER JOIN ".PREFIX."tag_noticia AS TN ON (TN.id_noticia = N.id_noticia)" : "" )."
 								LEFT JOIN ".PREFIX."tag_noticia AS TNR ON (TNR.id_noticia = N.id_noticia)

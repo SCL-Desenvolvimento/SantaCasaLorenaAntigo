@@ -68,8 +68,7 @@ class Read extends Conn{
 			$this->Result = $this->Read->fetchAll();
 		}catch (PDOException $e){
 			$this->Result = null;
-			echo $this->Select;
-			SystemErro("","<b> Erro ao realizar a leitura:</b> {$e->getMessage()}", $e->getCode());
+			error_log("Erro ao realizar a leitura: {$e->getMessage()} | SQL: {$this->Select}");
 		}
 		
 	}

@@ -4,8 +4,8 @@
 	$getNoticias->fullRead("
 		SELECT 
 			N.*, 
-			ANY_VALUE(T.nome) as tag, 
-			ANY_VALUE(T.url) as url_tag 
+			MIN(T.nome) as tag, 
+			MIN(T.url) as url_tag 
 		FROM ".PREFIX."noticia AS N
 		LEFT JOIN ".PREFIX."tag_noticia AS TN ON (TN.id_noticia = N.id_noticia)
 		LEFT JOIN ".PREFIX."tag AS T ON (T.id_tag = TN.id_tag)
